@@ -2,8 +2,8 @@
 #define RENDERER_FREE_BIRD
 
 //Rendering includes
-#include "root.h"
-#include "sceneobject.h"
+#include <graphics/root.h>
+#include <graphics/sceneobject.h>
 
 #include <input/defines.h>
 

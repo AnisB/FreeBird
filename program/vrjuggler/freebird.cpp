@@ -1,6 +1,6 @@
 #include <vrj/Kernel/Kernel.h>
 
-#include <rendering/renderer.h>
+#include <renderer/renderer.h>
 #include <common/defines.h>
 
 int main( int argc, char **argv )

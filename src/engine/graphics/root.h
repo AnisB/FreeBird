@@ -4,7 +4,7 @@
 #include "sceneobject.h"
 
 
-class Root : public SceneObject
+class Root : public SceneNode
 {
 	public:		
 		Root();

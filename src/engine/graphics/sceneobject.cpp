@@ -72,7 +72,11 @@ void SceneObject::Pitch(float parRadian, TransformationSpace::Type parTrans)
 }
 void SceneObject::Roll(float parRadian, TransformationSpace::Type parTrans)
 {
-
+	if(parTrans == TransformationSpace::TS_LOCAL)
+	{
+		// Translation dans le repère local
+		FModelTrans->preMult(osg::Matrix::rotate(parRadian,0,0,1));
+	}
 }
 
 osg::Vec3f SceneObject::GetPosition(TransformationSpace::Type parTrans)
