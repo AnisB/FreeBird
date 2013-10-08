@@ -4,19 +4,25 @@ project(FreeBird)
 
 #Setting the cmake module math
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/;${CMAKE_MODULE_PATH}")
+set(ENGINE "${PROJECT_SOURCE_DIR}/src/engine")
 
 
 #If we are generating the vrjuggler project for the cave
 IF(VRJUGGLER)
-set(SOURCES "${PROJECT_SOURCE_DIR}/src/")
 
+
+ADD_DEFINITIONS(-D VRJUGGLER)
+set(IO "${PROJECT_SOURCE_DIR}/src/io/vrjuggler")
 # Recursive file search
 file(
 	GLOB_RECURSE 
 	Source_File 
-	${SOURCES}/*.h
-	${SOURCES}/*.ih
-	${SOURCES}/*.cpp
+	${ENGINE}/*.h
+	${ENGINE}/*.ih
+	${ENGINE}/*.cpp
+	${IO}/*.h
+	${IO}/*.ih
+	${IO}/*.cpp
     )
 
 #VRJuggler path config
@@ -35,7 +41,7 @@ set(CORELIBS
   GL pthread vrj-2_2 vrj_ogl-2_2 gadget-1_2 jccl-1_2 vpr-2_0 cppdom-0_7_10 OpenThreads  osg osgDB osgUtil osgGA GLU GL m)
 
 
-include_directories(${SOURCES} ${OPENGL_INCLUDE_DIRS} ${GLFW_INCLUDE_DIR} 	${OSG_INCLUDE_DIR} ${OSGDB_INCLUDE_DIR} ${OSGVIEWER_INCLUDE_DIR}
+include_directories(${IO} ${ENGINE} ${OPENGL_INCLUDE_DIRS} ${GLFW_INCLUDE_DIR} 	${OSG_INCLUDE_DIR} ${OSGDB_INCLUDE_DIR} ${OSGVIEWER_INCLUDE_DIR}
 ${OSGGA_INCLUDE_DIR})
 
 #Specific linker flags
@@ -48,7 +54,7 @@ add_library(FreeBirdLib ${Source_File})
 LINK_DIRECTORIES( ${LINK_DIRECTORIES} ${VJ_BASE_DIR}/lib)
 
 #Adding the exefile
-add_executable(FreeBird program/freebird.cpp)
+add_executable(FreeBird program/vrjuggler/freebird.cpp)
 TARGET_LINK_LIBRARIES(FreeBird FreeBirdLib ${CORELIBS})
 
 #Config file for launching sim/cave/run
@@ -63,6 +69,50 @@ add_custom_command(
 )
 ELSE()
 
+
+ADD_DEFINITIONS(-D OSG)
+
+set(IO "${PROJECT_SOURCE_DIR}/src/io/osg")
+# Recursive file search
+file(
+	GLOB_RECURSE 
+	Source_File 
+	${ENGINE}/*.h
+	${ENGINE}/*.ih
+	${ENGINE}/*.cpp
+	${IO}/*.h
+	${IO}/*.ih
+	${IO}/*.cpp
+    )
+
+find_package(OpenSceneGraph REQUIRED)
+find_package(osgDB REQUIRED)
+find_package(osgViewer REQUIRED)
+find_package(osgGA REQUIRED)
+find_package(OpenGL REQUIRED)
+FIND_PACKAGE (X11 REQUIRED)
+
+set(CORELIBS ${GLEW_LIBRARY} ${OPENGL_LIBRARIES}  
+  ${OSG_LIBRARY} 
+  ${OSGDB_LIBRARY} 
+  ${OSGVIEWER_LIBRARY}
+  ${OSGGA_LIBRARY}
+${X11_Xxf86vm_LIB} ${X11_Xrandr_LIB} ${X11_Xi_LIB} pthread )
+
+include_directories(${ENGINE} ${IO} ${OPENGL_INCLUDE_DIRS} ${GLFW_INCLUDE_DIR}   ${OSG_INCLUDE_DIR} ${OSGDB_INCLUDE_DIR} ${OSGVIEWER_INCLUDE_DIR}
+${OSGGA_INCLUDE_DIR})
+
+add_library(FreeBirdLib ${Source_File})
+
+
+add_executable(FreeBird program/osg/freebird.cpp)
+TARGET_LINK_LIBRARIES(FreeBird FreeBirdLib ${CORELIBS})
+
+
+add_custom_command(
+    TARGET FreeBird POST_BUILD
+    COMMAND ln -sf ${PROJECT_SOURCE_DIR}/data ${PROJECT_BINARY_DIR}
+) 
 ENDIF()
 
 

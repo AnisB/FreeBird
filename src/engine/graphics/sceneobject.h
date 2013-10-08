@@ -8,7 +8,7 @@
 #include <osg/MatrixTransform>
 // Project includes
 #include <common/singleton.h>
-#include <rendering/defines.h>
+#include <graphics/defines.h>
 
 // Base includes
 #include <map>
