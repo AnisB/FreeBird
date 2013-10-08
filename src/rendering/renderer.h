@@ -1,10 +1,15 @@
 #ifndef RENDERER_FREE_BIRD
 #define RENDERER_FREE_BIRD
 
+//Rendering includes
+#include "root.h"
 #include "sceneobject.h"
 
-#include "root.h"
-#include <osgViewer/Viewer>
+#include <input/defines.h>
+
+//External icludess
+#include <vrj/Draw/OSG/OsgApp.h>
+
 
 class Renderer : public vrj::OsgApp
 {
@@ -12,7 +17,8 @@ class Renderer : public vrj::OsgApp
 		Renderer(vrj::Kernel * parVrjKernel);
 		~Renderer();
 
-		void InitRenderer();
+		void initScene();
+		osg::Group* getScene();
 
 		// Update methods
 		virtual void preFrame();
@@ -21,18 +27,21 @@ class Renderer : public vrj::OsgApp
 		virtual void postFrame();
 
 		// Time handling
-		void UpdateScene();
+		void UpdateScene(float parDelta);
 
-		//Input Methods
-		void HandleVRJInputs();
-		void HandleButton();
+
 
 	private:
 		// VRJ
 		void VRInit();
 		void HandleVRJInputs();
 		float ComputeTime();
-
+		//Input Methods
+		void HandleButton(gadget::DigitalInterface & parButton,
+			 	gadget::Digital::State parState, 
+				Button::Type parButtonID);
+		void ButtonReleased(Button::Type parButton);
+		void ButtonPressed(Button::Type parButton);
 		// Personnal
 		void Init();
 
@@ -51,11 +60,11 @@ class Renderer : public vrj::OsgApp
 		gadget::PositionInterface FWand;
 		gadget::PositionInterface FHead;
 		gadget::DigitalInterface FButton0;
-		gadget::Digital FB0State;
+		gadget::Digital::State FB0State;
 		gadget::DigitalInterface FButton1;
-		gadget::Digital FB1State;
+		gadget::Digital::State FB1State;
 		gadget::DigitalInterface FButton2;
-		gadget::Digital FB2State;
+		gadget::Digital::State FB2State;
 
 
 };

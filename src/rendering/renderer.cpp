@@ -1,8 +1,5 @@
 #include "renderer.h"
 
-
-#include <input/defines.h>
-
 Renderer::Renderer(vrj::Kernel * parKernel) 
 : vrj::OsgApp(parKernel)
 , FB0State(gadget::Digital::TOGGLE_OFF)
@@ -41,13 +38,13 @@ void Renderer::postFrame()
 float Renderer::ComputeTime()
 {
 	vpr::Interval curTime = FWand->getTimeStamp();
-	vpr::Interval diffTime (curTime - FLastPreFramTime);
+	vpr::Interval diffTime (curTime - FLastPreFrameTime);
 
-	if(FLastPreFramTime.getBaseVal() >= curTime.getBaseVal())
+	if(FLastPreFrameTime.getBaseVal() >= curTime.getBaseVal())
 	{
 		diffTime.secf(0.0);
 	}
-	FLastPreFramTime = curTime;
+	FLastPreFrameTime = curTime;
 	return diffTime.secf();
 }	
 
@@ -64,7 +61,7 @@ void Renderer::HandleVRJInputs()
 	HandleButton(FButton2, FB2State, Button::BUTTON2);
 }
 
-void HandleButton(gadget::DigitalInterface * parButton, gadget::Digital& parState, Button::Type parButtonID)
+void Renderer::HandleButton(gadget::DigitalInterface & parButton, gadget::Digital::State  parState, Button::Type parButtonID)
 {
 	if (parButton->getData() != parState)
 	{
@@ -85,16 +82,14 @@ void Renderer::ButtonReleased(Button::Type parButton)
 {
 	switch (parButton)
 	{
-		case Button:BUTTON0:
+		case Button::BUTTON0:
 		break;
 		
-		case Button:BUTTON1:
+		case Button::BUTTON1:
 		break;
 		
-		case Button:BUTTON2:
+		case Button::BUTTON2:
 		break;
-
-		default:
 		//Unhandled
 	};
 }
@@ -103,33 +98,36 @@ void Renderer::ButtonPressed(Button::Type parButton)
 {
 	switch (parButton)
 	{
-		case Button:BUTTON0:
+		case Button::BUTTON0:
 		break;
 		
-		case Button:BUTTON1:
+		case Button::BUTTON1:
 		break;
 		
-		case Button:BUTTON2:
+		case Button::BUTTON2:
 		break;
-
-		default:
 		//Unhandled
 	};
 }
 // Init methods
-void Renderer::InitRenderer()
+void Renderer::initScene()
 {
 	VRInit();
 	Init();
 }
 
+osg::Group* Renderer::getScene()
+{
+	return FRoot->GetRoot();
+}
+
 void Renderer::VRInit()
 {
-	FWand.Init(WAND_NAME_STR);
-	FHead.Init(HEAD_NAME_STRE);
-	FButton0.Init(B0_NAME_STR);
-	FButton1.Init(B1_NAME_STR);
-	FBUtton2.Init(B2_NAME_STR);
+	FWand.init(WAND_NAME_STR);
+	FHead.init(HEAD_NAME_STR);
+	FButton0.init(B0_NAME_STR);
+	FButton1.init(B1_NAME_STR);
+	FButton2.init(B2_NAME_STR);
 }
 
 

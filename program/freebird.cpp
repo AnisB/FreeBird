@@ -6,17 +6,15 @@
 int main( int argc, char **argv )
 {
     // VRJuggler init
-    vrj::Kernel * vrKernel = vrj::Kernel::Instance();
+    vrj::Kernel * vrKernel = vrj::Kernel::instance();
     Renderer *renderer = new Renderer(vrKernel);
 
-    render.Init();
-
-    if (argc <= 2)
+    if (argc < 2)
     {
-        PRINT_RED << "Il n'y a pas de fichier de configuration qui a été donné en paramètre"<<std::endl;
+        PRINT_RED << "Il n'y a pas de fichier de configuration qui a été donné en paramètre"<< "Le nombre de fichiers est"<<argc<<END_PRINT_COLOR;
+	exit(1);
     }
-
-    vrKernel->loadConfigFile(argv[2]);
+    vrKernel->loadConfigFile(argv[1]);
 
 
     vrKernel->start();
