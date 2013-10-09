@@ -16,12 +16,28 @@ void CameraMan::SetCamera(osg::Camera * parCamera)
 	FCamera = parCamera;
 }
 
+void CameraMan::Follow(SceneNode * parNode)
+{
+	FFollowedNode = parNode;
+	FFollowedNode->AddChild(this);
+}
+
+
+void CameraMan::SetDistance(osg::Vec3f parDistance)
+{
+	Translate(parDistance);
+}
 
 void CameraMan::Update()
 {
-	PRINT_RED<<"Position 1"<<VEC3_TO_STREAM(FParentNode->GetPosition(TransformationSpace::TS_WORLD))<<END_PRINT_COLOR;
-	PRINT_RED<<"Position 2"<<VEC3_TO_STREAM(GetPosition(TransformationSpace::TS_WORLD))<<END_PRINT_COLOR;
-	FCamera->setViewMatrixAsLookAt(GetPosition(TransformationSpace::TS_WORLD),FParentNode->GetPosition(TransformationSpace::TS_WORLD),osg::Vec3f(0,1,0));
+	const osg::Matrix& followedTrans  = FParentNode->GetTransformation(TransformationSpace::TS_WORLD);
+	const osg::Vec3f& lookingPoint = followedTrans.getTrans();
+	const osg::Vec3f& position = GetPosition(TransformationSpace::TS_WORLD);
+
+	osg::Vec3f UpAxis(-followedTrans(1,0),-followedTrans(1,1),0);
+	UpAxis.normalize();
+	FCamera->setViewMatrixAsLookAt(position, lookingPoint, UpAxis);
+
 }
 
 
@@ -29,7 +45,6 @@ void CameraMan::Update()
 void CameraMan::Translate(const osg::Vec3f& parVec)
 {
 	SceneNode::Translate(parVec);
-	Update();
 }
 void CameraMan::Rotate(float parAngle, const osg::Vec3f& parAxe)
 {

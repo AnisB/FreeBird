@@ -25,7 +25,7 @@ osg::Node * ResourceManager::LoadModel(const std::string& modelName)
 	tryget(it, FModels, modelName);
 	if(it != FModels.end())
 	{
-		PRINT_BLUE << MODEL_MANAGER << "Model already loaded, getting from the model database :)" << modelName << END_PRINT_COLOR; 
+		PRINT_ORANGE << MODEL_MANAGER << "Model already loaded, getting from the model database :) :" << modelName << END_PRINT_COLOR; 
 		return it->second;
 	}
 	else

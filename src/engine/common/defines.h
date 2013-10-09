@@ -10,11 +10,11 @@
 #define DEFAULT_COLOR "\033[0m"
 #define RED_COLOR "\033[0;31m"
 #define GREEN_COLOR "\033[0;32m"
-#define BLUE_COLOR "\033[0;32m"
+#define ORANGE_COLOR "\033[0;33m"
 
 #define PRINT_RED std::cout<<RED_COLOR
 #define PRINT_GREEN std::cout<<GREEN_COLOR
-#define PRINT_BLUE std::cout<<BLUE_COLOR
+#define PRINT_ORANGE std::cout<<ORANGE_COLOR
 #define END_PRINT_COLOR DEFAULT_COLOR<<std::endl
 
 

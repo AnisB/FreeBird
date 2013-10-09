@@ -13,6 +13,11 @@ namespace Key
   	LEFT = osgGA::GUIEventAdapter::KEY_Q,
   	RIGHT = osgGA::GUIEventAdapter::KEY_D,
   	BACKWARD = osgGA::GUIEventAdapter::KEY_S
+
+    //DEBUG
+    ,
+    DEBUG0 = osgGA::GUIEventAdapter::KEY_R,
+    DEBUG1 = osgGA::GUIEventAdapter::KEY_T
   };
 }
 

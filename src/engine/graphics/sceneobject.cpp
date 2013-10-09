@@ -2,6 +2,7 @@
 
 
 #include <resources/resourcemanager.h>
+#include <common/defines.h>
 
 
 

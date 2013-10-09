@@ -3,6 +3,8 @@
 
 // OSG Includes
 #include <osg/Camera>
+
+#include <entities/airplane.h>
 #include "scenenode.h"
 
 class CameraMan : public SceneNode
@@ -20,7 +22,8 @@ public:
 	virtual void Roll(float parRadian, TransformationSpace::Type parTrans = TransformationSpace::TS_LOCAL);
 
 	void SetCamera(osg::Camera * parCamera);
-	void SetNode(SceneNode* parNode);
+	void Follow(SceneNode* parNode);
+	void SetDistance(osg::Vec3f parNode);
 
 	void Update();
 
@@ -28,6 +31,9 @@ protected:
 	osg::Camera * FCamera;
 
 	bool FIsValid;
+
+	osg::Vec3f FDistance;
+	SceneNode * FFollowedNode;
 
 
 };

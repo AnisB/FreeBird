@@ -51,7 +51,7 @@ class SceneNode
 
 		osg::MatrixTransform* GetNode() {return FModelTrans;};
     public:
-		void InitObject();
+		virtual void InitObject();
 
 	protected:
 		bool FIsRoot;

@@ -9,7 +9,8 @@
 #include <input/defines.h>
 #include <input/inputeventhandler.h>
 
-
+//Inlcude Entities
+#include <entities/airplane.h>
 // Project includes
 #include <osgViewer/Viewer>
 
@@ -54,7 +55,9 @@ class Renderer : public Singleton<Renderer>
 	protected:
 		// Scene objetcs
 		Root* FRoot;
-		SceneObject * FAirplane;
+		Airplane * FAirplane;
+		SceneObject * FAirplane2;
+		SceneObject * FBuilding;
 		// OSG Viewer
 		osgViewer::Viewer FViewer;
 

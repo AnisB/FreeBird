@@ -11,9 +11,11 @@ Renderer::Renderer()
 
 Renderer::~Renderer()
 {
-	//delete FRoot;
-	//delete FAirplane;
-	//delete FCameraMan;
+	delete FRoot;
+	delete FAirplane;
+	delete FAirplane2;
+	delete FBuilding;
+	delete FCameraMan;
 }
 
 void Renderer::UpdateScene(float parDelta)
@@ -43,39 +45,55 @@ void Renderer::KeyReleased(Key::Type parKey)
 	switch (parKey)
 	{
 		case Key::FOWARD:
-			FAirplane->Pitch(-0.1);
 		break;
 		
 		case Key::BACKWARD:
-			FAirplane->Pitch(0.1);
 		break;
 		
 		case Key::LEFT:
-			FAirplane->Roll(-0.1);
 		break;
 
 		case Key::RIGHT:
-			FAirplane->Roll(0.1);
 		break;
-		//Unhandled
 	};
 }
 void Renderer::KeyPressed(Key::Type parKey)
 {
+	//PRINT_ORANGE<<"[RENDERER]Key pressed recieved"<<END_PRINT_COLOR;
 	switch (parKey)
 	{
 		case Key::FOWARD:
+			FAirplane->Pitch(AirplaneRotation::CLOCKWISE,-0.1);
+			FCameraMan->Update();
+			
 		break;
 		
 		case Key::BACKWARD:
+			FAirplane->Pitch(AirplaneRotation::ANTICLOCKWISE,0.1);
+			FCameraMan->Update();
+
 		break;
 		
 		case Key::LEFT:
+			FAirplane->Roll(AirplaneRotation::CLOCKWISE,-0.1);
+			FCameraMan->Update();
 		break;
 
 		case Key::RIGHT:
+			FAirplane->Roll(AirplaneRotation::ANTICLOCKWISE,0.1);
+			FCameraMan->Update();
+
+		case Key::DEBUG0:
+			FAirplane->Avance_Debug();
+			FCameraMan->Update();
 		break;
+
+		case Key::DEBUG1:
+
+		break;
+		//Unhandled
 	};
+	//PRINT_ORANGE<<"[RENDERER]Key pressed handeled"<<END_PRINT_COLOR;
 }
 
 void Renderer::MousePressed(Button::Type parButton)
@@ -83,6 +101,7 @@ void Renderer::MousePressed(Button::Type parButton)
 	switch (parButton)
 	{
 		case Button::LEFT:
+
 		break;
 		
 		case Button::RIGHT:
@@ -123,6 +142,7 @@ void Renderer::InitCamera()
 	FViewer.getCameras(cameraList, true);
 	FCamera = cameraList[0];
 	FCameraMan->SetCamera(FCamera);
+	FCameraMan->Update();
 }
 
 void Renderer::OSGInit()
@@ -138,17 +158,29 @@ void Renderer::SceneInit()
 	FRoot->InitRoot();
 
 
-	FAirplane= new SceneObject("data/DRC/DRC.obj");
-	FAirplane->InitObject();
-	FAirplane->Translate(osg::Vec3f(0,-3,-30));
-    FAirplane->Roll(3.14);
-    FAirplane->Yaw(3.14);
-	FRoot->AddModel(FAirplane);
+	FAirplane= new Airplane();
+	FAirplane->Build(FRoot);
+	
+	
+	FBuilding = new SceneObject("data/building/building1/building.obj");
+	FBuilding->InitObject();
+	FRoot->AddModel(FBuilding);
+
+	FBuilding->Translate(osg::Vec3f(0,-3,60));
+
+	FAirplane2 = new SceneObject("data/DRC/DRC.obj");
+	FAirplane2->InitObject();
+	FAirplane2->Translate(osg::Vec3f(0,-3,60));
+    FAirplane2->Roll(3.14);
+    FAirplane2->Yaw(3.14);
+	FRoot->AddModel(FAirplane2);
+	
 
 	FCameraMan = new CameraMan();
 	FCameraMan->InitObject();
-	//FCameraMan->Translate(osg::Vec3f(0,0,-30));
-	FAirplane->AddChild(FCameraMan);
+	FCameraMan->SetDistance(osg::Vec3f(0,-5,-25));
+	FCameraMan->Follow(FAirplane->GetNode());
+	PRINT_GREEN<<"[RENDERER] Scene successfully created"<<END_PRINT_COLOR;
 }
 
 
