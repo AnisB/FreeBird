@@ -15,26 +15,36 @@
 #include <list>
 #include <string>
 
+namespace NodeType
+{
+	enum Type
+	{
+		NORMAL,
+		ROOT
+	};
+}
+
+
 class SceneNode
 {
 	public:		
-		SceneNode();
+		SceneNode(NodeType::Type parType = NodeType::NORMAL);
 		~SceneNode();	
 
 	public:
-		void Translate(const osg::Vec3f& parVec);
-		void Rotate(float parAngle, const osg::Vec3f& parAxe);
+		virtual void Translate(const osg::Vec3f& parVec);
+		virtual void Rotate(float parAngle, const osg::Vec3f& parAxe);
 
-		void Yaw(float parRadian, TransformationSpace::Type parTrans = TransformationSpace::TS_LOCAL);
-		void Pitch(float parRadian, TransformationSpace::Type parTrans = TransformationSpace::TS_LOCAL);
-		void Roll(float parRadian, TransformationSpace::Type parTrans = TransformationSpace::TS_LOCAL);
+		virtual void Yaw(float parRadian, TransformationSpace::Type parTrans = TransformationSpace::TS_LOCAL);
+		virtual void Pitch(float parRadian, TransformationSpace::Type parTrans = TransformationSpace::TS_LOCAL);
+		virtual void Roll(float parRadian, TransformationSpace::Type parTrans = TransformationSpace::TS_LOCAL);
 
-		osg::Vec3f GetPosition(TransformationSpace::Type parTrans = TransformationSpace::TS_LOCAL);
-		osg::Matrix GetTransformation(TransformationSpace::Type parTrans = TransformationSpace::TS_LOCAL);
+		virtual osg::Vec3f GetPosition(TransformationSpace::Type parTrans = TransformationSpace::TS_LOCAL);
+		virtual osg::Matrix GetTransformation(TransformationSpace::Type parTrans = TransformationSpace::TS_LOCAL);
 
-		osg::Matrix GetLocalTransformation();
-		osg::Matrix GetParentRelativeTransformation();
-		osg::Matrix GetAbsoluteTransformation();
+		virtual osg::Matrix GetLocalTransformation();
+		virtual osg::Matrix GetParentRelativeTransformation();
+		virtual osg::Matrix GetAbsoluteTransformation();
 
 		virtual void AddChild(SceneNode * parNode);
 		void SetParent(SceneNode * parNode);

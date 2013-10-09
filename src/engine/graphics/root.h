@@ -1,7 +1,7 @@
 #ifndef ROOT_FREE_BIRD
 #define ROOT_FREE_BIRD
 
-#include "sceneobject.h"
+#include "scenenode.h"
 
 
 class Root : public SceneNode
@@ -14,7 +14,7 @@ class Root : public SceneNode
 
 		osg::Group* GetRoot(){ return FRoot;}
 
-		void AddModel(SceneObject * parNode);
+		void AddModel(SceneNode * parNode);
 		void AddLight();
 
 

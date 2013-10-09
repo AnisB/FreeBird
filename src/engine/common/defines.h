@@ -17,6 +17,10 @@
 #define PRINT_BLUE std::cout<<BLUE_COLOR
 #define END_PRINT_COLOR DEFAULT_COLOR<<std::endl
 
+
+#define VEC3_TO_STREAM(vector) vector.x()<<" "<<vector.y()<<" "<<vector.z()
+#define PRINT(message) std::cout<<message<<std::endl;
+
 #define MODEL_MANAGER "[MODEL_MANAGER]"
 
 

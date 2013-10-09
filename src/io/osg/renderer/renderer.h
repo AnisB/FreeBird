@@ -4,13 +4,18 @@
 //Rendering includes
 #include <graphics/root.h>
 #include <graphics/sceneobject.h>
+#include <graphics/cameraman.h>
 // Include defines
 #include <input/defines.h>
+#include <input/inputeventhandler.h>
+
 
 // Project includes
 #include <osgViewer/Viewer>
 
-class Renderer
+class InputEventHandler;
+
+class Renderer : public Singleton<Renderer>
 {
 	public:		
 		Renderer();
@@ -24,19 +29,41 @@ class Renderer
 		void Run();
 
 
-	private:
+
+	public:
 		//Input Methods
-		void ButtonReleased(Button::Type parButton);
-		void ButtonPressed(Button::Type parButton);
+		void KeyReleased(Key::Type parKey);
+		void KeyPressed(Key::Type parKey);
+
+		void MousePressed(Button::Type parButton);
+		void MouseReleased(Button::Type parButton);
 	
+	protected:
+		// Init
 		void OSGInit();
 		void SceneInit();
+
+		// Camera
+		void InitCamera();
+
+		void QuittingRun();
+
+
+
 
 	protected:
 		// Scene objetcs
 		Root* FRoot;
-		SceneObject * FAirPlane;
+		SceneObject * FAirplane;
 		// OSG Viewer
 		osgViewer::Viewer FViewer;
+
+		// Input Handler
+		InputEventHandler * FInputHandler;
+
+		// Camera
+		osg::Camera * FCamera;
+
+		CameraMan * FCameraMan;
 };
 #endif //RENDERER_FREE_BIRD

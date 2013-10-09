@@ -2,7 +2,7 @@
 
 int main( int argc, char **argv )
 {
-    Renderer renderer;
+    Renderer &renderer = Renderer::Instance();
     renderer.Init();
     renderer.Run();
     return 0;

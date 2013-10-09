@@ -2,7 +2,7 @@
 
 
 Root::Root()
-: SceneObject()
+: SceneNode(NodeType::ROOT)
 {
 }
 
@@ -21,7 +21,7 @@ void Root::InitRoot()
 }
 
 
-void Root::AddModel(SceneObject * parNode)
+void Root::AddModel(SceneNode * parNode)
 {
 	parNode->SetParent(this);
 	mModelGroup->addChild(parNode->GetNode());
