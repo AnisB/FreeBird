@@ -25,7 +25,8 @@ class Airplane
 		void Build(Root * parRoot);
 
 		SceneNode * GetNode() {return FNode;}
-		void Avance_Debug();
+		SceneNode * GetModel() {return FModelNode;}
+		void Avance_Debug(double time);
 		
 		// Moving methods
 		void Roll(AirplaneRotation::Type parType, float parTime);

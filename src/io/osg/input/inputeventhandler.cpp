@@ -15,22 +15,21 @@ bool InputEventHandler::handle(const osgGA::GUIEventAdapter& ea,osgGA::GUIAction
 {
 	switch(ea.getEventType())
    	{
-		case(osgGA::GUIEventAdapter::KEYDOWN):
-		{
+		case osgGA::GUIEventAdapter::KEYDOWN:
 	   		Renderer::Instance().KeyPressed((Key::Type)ea.getKey());
-		}
-    	case(osgGA::GUIEventAdapter::KEYUP):
-		{
+   		break;
+
+    	case osgGA::GUIEventAdapter::KEYUP:
 	   		Renderer::Instance().KeyReleased((Key::Type)ea.getKey());
-		}
-    	case(osgGA::GUIEventAdapter::PUSH):
-		{
+		break;
+    	case osgGA::GUIEventAdapter::PUSH:
 	   		Renderer::Instance().MousePressed((Button::Type)ea.getButton());
-		}
-    	case(osgGA::GUIEventAdapter::RELEASE):
-		{
+		break;
+    	case osgGA::GUIEventAdapter::RELEASE:
 	   		Renderer::Instance().MouseReleased((Button::Type)ea.getButton());
-		}
+		break;
+		
+
    		default:
       		return false;
    	}

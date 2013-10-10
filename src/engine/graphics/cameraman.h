@@ -27,6 +27,12 @@ public:
 
 	void Update();
 
+
+	void ChangeFocalLength(bool parVal);
+
+protected:
+	void CameraInits();
+
 protected:
 	osg::Camera * FCamera;
 
@@ -34,6 +40,14 @@ protected:
 
 	osg::Vec3f FDistance;
 	SceneNode * FFollowedNode;
+	SceneNode * FUpNode;
+
+
+	double FFocalLength;
+	double FFovy;
+	double FNear;
+	double FFar;
+	double FAspectRatio;
 
 
 };

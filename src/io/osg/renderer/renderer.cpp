@@ -20,6 +20,30 @@ Renderer::~Renderer()
 
 void Renderer::UpdateScene(float parDelta)
 {	
+	FCameraMan->Update();
+	if(FKeyHandler[Key::FOWARD])
+	{
+		FAirplane->Pitch(AirplaneRotation::ANTICLOCKWISE,parDelta);
+	}
+
+	if(FKeyHandler[Key::BACKWARD])
+	{
+		FAirplane->Pitch(AirplaneRotation::CLOCKWISE,parDelta);
+	}
+
+	if(FKeyHandler[Key::LEFT])
+	{
+		FAirplane->Roll(AirplaneRotation::ANTICLOCKWISE,parDelta);
+	}
+	if(FKeyHandler[Key::RIGHT])
+	{
+		FAirplane->Roll(AirplaneRotation::CLOCKWISE,parDelta);
+	}
+
+	if(FButtonHandler[Button::LEFT])
+	{
+		FAirplane->Avance_Debug(parDelta);
+	}
 }
 
 
@@ -30,7 +54,7 @@ void Renderer::Run()
 	InitCamera();
 	while( !FViewer.done() )
 	{
-	   UpdateScene(0.1);
+	   UpdateScene(FViewer.elapsedTime());
 	   FViewer.frame();
 	}
 	QuittingRun();
@@ -42,6 +66,22 @@ void Renderer::QuittingRun()
 }
 void Renderer::KeyReleased(Key::Type parKey)
 {
+	tryget(it,FKeyHandler, parKey);
+	if (it!=FKeyHandler.end())
+	{
+		if (!it->second)
+		{
+			return;
+		}
+		else
+		{	
+			it->second = false;
+		}
+	}
+	else
+	{
+		FKeyHandler[parKey] = false;
+	}
 	switch (parKey)
 	{
 		case Key::FOWARD:
@@ -59,11 +99,28 @@ void Renderer::KeyReleased(Key::Type parKey)
 }
 void Renderer::KeyPressed(Key::Type parKey)
 {
+	tryget(it,FKeyHandler, parKey);
+	if (it!=FKeyHandler.end())
+	{
+
+		if (it->second)
+		{
+			return;
+		}
+		else
+		{	
+			it->second = true;
+		}
+	}
+	else
+	{
+		FKeyHandler[parKey] = true;
+	}
+/*
 	//PRINT_ORANGE<<"[RENDERER]Key pressed recieved"<<END_PRINT_COLOR;
 	switch (parKey)
 	{
 		case Key::FOWARD:
-			FAirplane->Pitch(AirplaneRotation::CLOCKWISE,-0.1);
 			FCameraMan->Update();
 			
 		break;
@@ -75,29 +132,53 @@ void Renderer::KeyPressed(Key::Type parKey)
 		break;
 		
 		case Key::LEFT:
-			FAirplane->Roll(AirplaneRotation::CLOCKWISE,-0.1);
+			FAirplane->Roll(AirplaneRotation::ANTICLOCKWISE,-0.1);
 			FCameraMan->Update();
 		break;
 
 		case Key::RIGHT:
-			FAirplane->Roll(AirplaneRotation::ANTICLOCKWISE,0.1);
+			FAirplane->Roll(AirplaneRotation::CLOCKWISE,0.1);
 			FCameraMan->Update();
-
+			break;
 		case Key::DEBUG0:
 			FAirplane->Avance_Debug();
 			FCameraMan->Update();
 		break;
 
 		case Key::DEBUG1:
-
+			FCameraMan->ChangeFocalLength(true);
 		break;
+		case Key::DEBUG2:
+			FCameraMan->ChangeFocalLength(false);
+		break;
+		default:
+			PRINT("KEY UNHANDLED");
 		//Unhandled
 	};
+	*/
 	//PRINT_ORANGE<<"[RENDERER]Key pressed handeled"<<END_PRINT_COLOR;
 }
 
 void Renderer::MousePressed(Button::Type parButton)
 {
+	tryget(it,FButtonHandler, parButton);
+	if (it!=FButtonHandler.end())
+	{
+		if (it->second)
+		{
+			return;
+		}
+		else
+		{	
+			it->second = true;
+		}
+	}
+	else
+	{
+		FButtonHandler[parButton] = true;
+	}
+	PRINT_ORANGE<<"[RENDERER]BUTTON PRESSED"<<END_PRINT_COLOR;
+
 	switch (parButton)
 	{
 		case Button::LEFT:
@@ -115,6 +196,24 @@ void Renderer::MousePressed(Button::Type parButton)
 
 void Renderer::MouseReleased(Button::Type parButton)
 {
+	tryget(it,FButtonHandler, parButton);
+	if (it!=FButtonHandler.end())
+	{
+
+		if (!it->second)
+		{
+			return;
+		}
+		else
+		{	
+			it->second = false;
+		}
+	}
+	else
+	{
+		FButtonHandler[parButton] = false;
+	}
+	PRINT_ORANGE<<"[RENDERER]BUTTON RELEASED"<<END_PRINT_COLOR;
 	switch (parButton)
 	{
 		case Button::LEFT:
@@ -166,7 +265,8 @@ void Renderer::SceneInit()
 	FBuilding->InitObject();
 	FRoot->AddModel(FBuilding);
 
-	FBuilding->Translate(osg::Vec3f(0,-3,60));
+	FBuilding->Translate(osg::Vec3f(0,-10,100));
+	FBuilding->Scale(osg::Vec3f(0.1,0.1,0.1));
 
 	FAirplane2 = new SceneObject("data/DRC/DRC.obj");
 	FAirplane2->InitObject();
@@ -178,8 +278,8 @@ void Renderer::SceneInit()
 
 	FCameraMan = new CameraMan();
 	FCameraMan->InitObject();
-	FCameraMan->SetDistance(osg::Vec3f(0,-5,-25));
-	FCameraMan->Follow(FAirplane->GetNode());
+	FCameraMan->SetDistance(osg::Vec3f(0,-10,-50));
+	FCameraMan->Follow(FAirplane->GetModel());
 	PRINT_GREEN<<"[RENDERER] Scene successfully created"<<END_PRINT_COLOR;
 }
 

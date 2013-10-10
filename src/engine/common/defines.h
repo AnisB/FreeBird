@@ -23,5 +23,9 @@
 
 #define MODEL_MANAGER "[MODEL_MANAGER]"
 
-
+namespace MathTools
+{
+	static const double PI  = 3.14159265359;
+	static const double FULL_ANGLE = 360.0;
+}
 #endif //COMMON_DEFINES

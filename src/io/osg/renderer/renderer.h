@@ -64,6 +64,9 @@ class Renderer : public Singleton<Renderer>
 		// Input Handler
 		InputEventHandler * FInputHandler;
 
+		std::map<Key::Type,bool> FKeyHandler;
+		std::map<Button::Type,bool> FButtonHandler;
+
 		// Camera
 		osg::Camera * FCamera;
 

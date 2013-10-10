@@ -46,6 +46,9 @@ class SceneNode
 		virtual osg::Matrix GetParentRelativeTransformation();
 		virtual osg::Matrix GetAbsoluteTransformation();
 
+		virtual void Scale(osg::Vec3f parVectScale);
+
+
 		virtual void AddChild(SceneNode * parNode);
 		void SetParent(SceneNode * parNode);
 

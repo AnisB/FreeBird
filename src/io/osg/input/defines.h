@@ -9,15 +9,16 @@ namespace Key
 {
   enum Type
   {
-  	FOWARD = osgGA::GUIEventAdapter::KEY_Z,
-  	LEFT = osgGA::GUIEventAdapter::KEY_Q,
-  	RIGHT = osgGA::GUIEventAdapter::KEY_D,
-  	BACKWARD = osgGA::GUIEventAdapter::KEY_S
+  	 FOWARD = osgGA::GUIEventAdapter::KEY_Z
+  	,LEFT = osgGA::GUIEventAdapter::KEY_Q
+  	,RIGHT = osgGA::GUIEventAdapter::KEY_D
+  	,BACKWARD = osgGA::GUIEventAdapter::KEY_S
 
     //DEBUG
-    ,
-    DEBUG0 = osgGA::GUIEventAdapter::KEY_R,
-    DEBUG1 = osgGA::GUIEventAdapter::KEY_T
+    
+    ,DEBUG0 = osgGA::GUIEventAdapter::KEY_R
+    ,DEBUG1 = osgGA::GUIEventAdapter::KEY_T
+    ,DEBUG2 = osgGA::GUIEventAdapter::KEY_Y
   };
 }
 

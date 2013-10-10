@@ -45,6 +45,12 @@ void SceneNode::Rotate(float parAngle, const osg::Vec3f& parAxe)
 
 }
 
+void SceneNode::Scale(osg::Vec3f parVectScale)
+{
+	FModelTrans->preMult(osg::Matrix::scale(parVectScale));
+
+}
+
 
 void SceneNode::Yaw(float parRadian, TransformationSpace::Type parTrans)
 {

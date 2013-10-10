@@ -12,14 +12,14 @@ Ks 0.752941 0.752941 0.752941
 illum 2
 Ns 8
 map_Kd Dassault_Rafale_C_P01.png
-map_bump Dassault_Rafale_C_N.png
-bump Dassault_Rafale_C_N.png
-map_opacity 
-map_d 
-refl 
-map_kS 
-map_kA 
-map_Ns 
+#map_bump Dassault_Rafale_C_N.png
+#bump Dassault_Rafale_C_N.png
+#map_opacity 
+#map_d 
+#refl 
+#map_kS 
+#map_kA 
+#map_Ns 
 
 newmtl seat
 Ka 0.117647 0.117647 0.117647
@@ -28,14 +28,14 @@ Ks 0.752941 0.752941 0.752941
 illum 2
 Ns 8
 map_Kd Eject_Seat.png
-map_bump 
-bump 
-map_opacity 
-map_d 
-refl 
-map_kS 
-map_kA 
-map_Ns 
+#map_bump 
+#bump 
+#map_opacity 
+#map_d 
+#refl 
+#map_kS 
+#map_kA 
+#map_Ns 
 
 newmtl pilot
 Ka 0.117647 0.117647 0.117647
@@ -44,14 +44,14 @@ Ks 0.752941 0.752941 0.752941
 illum 2
 Ns 8
 map_Kd Pilot_usa.png
-map_bump 
-bump 
-map_opacity 
-map_d 
-refl 
-map_kS 
-map_kA 
-map_Ns 
+#map_bump 
+#bump 
+#map_opacity 
+#map_d 
+#refl 
+#map_kS 
+#map_kA 
+#map_Ns 
 
 newmtl glass
 Ka 0.117647 0.117647 0.117647
@@ -60,11 +60,11 @@ Ks 0.752941 0.752941 0.752941
 illum 2
 Ns 8
 map_Kd Glass_Cockpit.png
-map_bump 
-bump 
-map_opacity 
-map_d 
-refl 
-map_kS 
-map_kA 
-map_Ns 
+#map_bump 
+#bump 
+#map_opacity 
+#map_d 
+#refl 
+#map_kS 
+#map_kA 
+#map_Ns 
