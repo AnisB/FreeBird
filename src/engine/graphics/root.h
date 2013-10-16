@@ -4,6 +4,10 @@
 #include "scenenode.h"
 
 
+#include <graphics/terrain.h>
+
+class Terrain;
+
 class Root : public SceneNode
 {
 	public:		
@@ -22,5 +26,7 @@ class Root : public SceneNode
 		osg::Group*   FRoot;
 		osg::Group*	  mModelGroup;
 		osg::Group*	  mLightGroup;
+		Terrain * FTerrain;
+
 };
 #endif //ROOT_FREE_BIRD

@@ -22,10 +22,10 @@ void Airplane::Build(Root * parRootNode)
 	FModelNode->InitObject();
 	FNode =  new SceneNode();
 	FNode->InitObject();
-	FNode->Translate(osg::Vec3f(0,-2,-100));
+	FNode->Translate(osg::Vec3f(0,-200,0));
 	FNode->AddChild(FModelNode);
 	parRootNode->AddModel(FNode);
-    FNode->Pitch(3.14);
+    //FNode->Pitch(3.14);
     FNode->Yaw(3.14);
 }
 
@@ -46,8 +46,15 @@ void Airplane::Pitch(AirplaneRotation::Type parType, float parTime)
 		FModelNode->Pitch(-0.02);
 }
 
+void Airplane::Yaw(AirplaneRotation::Type parType, float parTime)
+{
+	if(parType == AirplaneRotation::CLOCKWISE)
+		FModelNode->Yaw(0.005);	
+	else
+		FModelNode->Yaw(-0.005);
+}
 
 void Airplane::Avance_Debug(double time)
 {
-	FNode->Translate(osg::Vec3f(0,0,0.5) * FModelNode->GetTransformation());
+	FNode->Translate(osg::Vec3f(0,0,4) * FModelNode->GetTransformation());
 }

@@ -1,6 +1,7 @@
 #include "cameraman.h"
 
 #include <common/defines.h>
+#include <osgUtil/CullVisitor>
 CameraMan::CameraMan()
 : FIsValid(false)
 {
@@ -16,6 +17,7 @@ void CameraMan::SetCamera(osg::Camera * parCamera)
 	FCamera = parCamera;
 	CameraInits();
 	FCamera->setClearColor(osg::Vec4f(0.0,0.0,0.0,0.0));
+	FCamera->setCullingMode( osg::CullSettings::NO_CULLING );
 }
 
 void CameraMan::Follow(SceneNode * parNode)
@@ -74,8 +76,15 @@ void CameraMan::CameraInits()
 {
 	FCamera->getProjectionMatrixAsPerspective(FFovy, FAspectRatio,FNear,FFar);
 	
-	FFocalLength = 900.0/(tan(FFovy*MathTools::PI/MathTools::FULL_ANGLE)*2.0);
+	PRINT(FNear);
+	PRINT(FFar);
+	FNear= 0.001f;
+	FFar= 10000.0f;
 	PRINT(FFocalLength);
+
+	FFocalLength = 900.0/(tan(FFovy*MathTools::PI/MathTools::FULL_ANGLE)*2.0);
+	FFovy = atan(900/ 2.0 / FFocalLength)*360.0/MathTools::PI; 
+	FCamera->setProjectionMatrixAsPerspective(FFovy, FAspectRatio, FNear, FFar); 
 
 }
 
@@ -84,9 +93,9 @@ void CameraMan::ChangeFocalLength(bool parVal)
 	if(parVal)
 	{
 		FFocalLength*= 0.9;
-		if(FFocalLength<=600)
+		if(FFocalLength<=800)
 		{
-			FFocalLength=600;
+			FFocalLength=800;
 		}
 	}
 	else

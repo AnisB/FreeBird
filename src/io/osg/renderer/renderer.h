@@ -14,6 +14,10 @@
 // Project includes
 #include <osgViewer/Viewer>
 
+
+#include <graphics/skybox.h>
+
+
 class InputEventHandler;
 
 class Renderer : public Singleton<Renderer>
@@ -57,7 +61,7 @@ class Renderer : public Singleton<Renderer>
 		Root* FRoot;
 		Airplane * FAirplane;
 		SceneObject * FAirplane2;
-		SceneObject * FBuilding;
+		SceneObject * FTerrain;
 		// OSG Viewer
 		osgViewer::Viewer FViewer;
 
@@ -71,5 +75,8 @@ class Renderer : public Singleton<Renderer>
 		osg::Camera * FCamera;
 
 		CameraMan * FCameraMan;
+
+		Skybox*	  FSkybox;
+
 };
 #endif //RENDERER_FREE_BIRD

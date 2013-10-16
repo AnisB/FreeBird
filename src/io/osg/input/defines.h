@@ -12,7 +12,9 @@ namespace Key
   	 FOWARD = osgGA::GUIEventAdapter::KEY_Z
   	,LEFT = osgGA::GUIEventAdapter::KEY_Q
   	,RIGHT = osgGA::GUIEventAdapter::KEY_D
-  	,BACKWARD = osgGA::GUIEventAdapter::KEY_S
+    ,BACKWARD = osgGA::GUIEventAdapter::KEY_S
+    ,DIAGONAL_LEFT = osgGA::GUIEventAdapter::KEY_A
+  	,DIAGONAL_RIGHT = osgGA::GUIEventAdapter::KEY_E
 
     //DEBUG
     

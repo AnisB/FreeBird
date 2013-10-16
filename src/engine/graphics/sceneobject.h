@@ -25,6 +25,13 @@ class SceneObject : public SceneNode
     public:
 		void InitObject();
 
+		osg::Node* GetModel() {return FModel;}
+
+		void SetDynamic() 
+		{
+			FModel->setDataVariance(osg::Object::DYNAMIC);
+		}
+
 
 	protected:
 		std::string FModelName;

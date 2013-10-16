@@ -31,6 +31,7 @@ class Airplane
 		// Moving methods
 		void Roll(AirplaneRotation::Type parType, float parTime);
  		void Pitch(AirplaneRotation::Type parType, float parTime);
+ 		void Yaw(AirplaneRotation::Type parType, float parTime);
 
 	protected:
 			SceneNode * FModelNode;			
