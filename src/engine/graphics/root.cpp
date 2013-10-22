@@ -48,6 +48,12 @@ void Root::AddModel(SceneNode * parNode)
 	FSons.push_back(parNode);
 }
 
+void Root::AddNode(osg::Node * parNode)
+{
+	mModelGroup->addChild(parNode);
+
+}
+
 void Root::AddLight()
 {
 }

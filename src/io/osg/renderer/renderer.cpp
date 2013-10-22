@@ -14,7 +14,7 @@ Renderer::~Renderer()
 	delete FRoot;
 	delete FAirplane;
 	delete FAirplane2;
-	//delete FTerrain;
+	delete FTerrain;
 	delete FCameraMan;
 }
 
@@ -100,20 +100,6 @@ void Renderer::KeyReleased(Key::Type parKey)
 	{
 		FKeyHandler[parKey] = false;
 	}
-	switch (parKey)
-	{
-		case Key::FOWARD:
-		break;
-		
-		case Key::BACKWARD:
-		break;
-		
-		case Key::LEFT:
-		break;
-
-		case Key::RIGHT:
-		break;
-	};
 }
 void Renderer::KeyPressed(Key::Type parKey)
 {
@@ -134,47 +120,6 @@ void Renderer::KeyPressed(Key::Type parKey)
 	{
 		FKeyHandler[parKey] = true;
 	}
-/*
-	//PRINT_ORANGE<<"[RENDERER]Key pressed recieved"<<END_PRINT_COLOR;
-	switch (parKey)
-	{
-		case Key::FOWARD:
-			FCameraMan->Update();
-			
-		break;
-		
-		case Key::BACKWARD:
-			FAirplane->Pitch(AirplaneRotation::ANTICLOCKWISE,0.1);
-			FCameraMan->Update();
-
-		break;
-		
-		case Key::LEFT:
-			FAirplane->Roll(AirplaneRotation::ANTICLOCKWISE,-0.1);
-			FCameraMan->Update();
-		break;
-
-		case Key::RIGHT:
-			FAirplane->Roll(AirplaneRotation::CLOCKWISE,0.1);
-			FCameraMan->Update();
-			break;
-		case Key::DEBUG0:
-			FAirplane->Avance_Debug();
-			FCameraMan->Update();
-		break;
-
-		case Key::DEBUG1:
-			FCameraMan->ChangeFocalLength(true);
-		break;
-		case Key::DEBUG2:
-			FCameraMan->ChangeFocalLength(false);
-		break;
-		default:
-			PRINT("KEY UNHANDLED");
-		//Unhandled
-	};
-	*/
-	//PRINT_ORANGE<<"[RENDERER]Key pressed handeled"<<END_PRINT_COLOR;
 }
 
 void Renderer::MousePressed(Button::Type parButton)
@@ -195,21 +140,6 @@ void Renderer::MousePressed(Button::Type parButton)
 	{
 		FButtonHandler[parButton] = true;
 	}
-	PRINT_ORANGE<<"[RENDERER]BUTTON PRESSED"<<END_PRINT_COLOR;
-
-	switch (parButton)
-	{
-		case Button::LEFT:
-
-		break;
-		
-		case Button::RIGHT:
-		break;
-		
-		case Button::MID:
-		break;
-		//Unhandled
-	};
 }
 
 void Renderer::MouseReleased(Button::Type parButton)
@@ -231,25 +161,13 @@ void Renderer::MouseReleased(Button::Type parButton)
 	{
 		FButtonHandler[parButton] = false;
 	}
-	PRINT_ORANGE<<"[RENDERER]BUTTON RELEASED"<<END_PRINT_COLOR;
-	switch (parButton)
-	{
-		case Button::LEFT:
-		break;
-		
-		case Button::RIGHT:
-		break;
-		
-		case Button::MID:
-		break;
-		//Unhandled
-	};
 }
 
 void Renderer::Init()
 {
 	SceneInit();
     OSGInit();	
+    InitRenderToTexture();
 }
 
 
@@ -264,6 +182,72 @@ void Renderer::InitCamera()
 	#endif
 }
 
+
+void Renderer::InitRenderToTexture()
+{
+	/*
+	float width  = 1440 * 0.35f;
+	float height = 900 * 0.35f;
+	// Create the texture to render to
+	osg::Texture2D* renderTexture = new osg::Texture2D;
+	renderTexture->setTextureSize(1440, 900);
+	renderTexture->setInternalFormat(GL_RGBA);
+	renderTexture->setFilter(osg::Texture2D::MIN_FILTER, osg::Texture2D::LINEAR);
+	renderTexture->setFilter(osg::Texture2D::MAG_FILTER, osg::Texture2D::LINEAR);
+
+	osg::ref_ptr<osg::Geometry> screenQuad;
+	screenQuad = osg::createTexturedQuadGeometry(osg::Vec3(),
+                                             osg::Vec3(width, 0.0, 0.0),
+                                             osg::Vec3(0.0, height, 0.0));
+	osg::ref_ptr<osg::Geode> quadGeode = new osg::Geode;
+	quadGeode->addDrawable(screenQuad.get());
+	osg::StateSet *quadState = quadGeode->getOrCreateStateSet();
+	quadState->setTextureAttributeAndModes(0, renderTexture, osg::StateAttribute::ON);
+
+
+	osg::ref_ptr<osg::Camera> textureCamera = new osg::Camera;
+	textureCamera->setReferenceFrame(osg::Transform::ABSOLUTE_RF);
+	textureCamera->setClearMask(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	textureCamera->setViewport(0, 0, 1440, 900);
+
+	// Frame buffer objects are the best option
+	textureCamera->setRenderTargetImplementation(osg::Camera::FRAME_BUFFER_OBJECT);
+
+	// We need to render to the texture BEFORE we render to the screen
+	textureCamera->setRenderOrder(osg::Camera::PRE_RENDER);
+
+	// The camera will render into the texture that we created earlier
+	textureCamera->attach(osg::Camera::COLOR_BUFFER, renderTexture);
+
+	// Add whatever children you want drawn to the texture
+	textureCamera->addChild(FAirplane->GetModel()->GetModel());
+
+
+	osg::ref_ptr<osg::Camera> orthoCamera = new osg::Camera;
+
+	// We don't want to apply perspective, just overlay using orthographic
+	orthoCamera->setProjectionMatrix(osg::Matrix::ortho2D(0, width, 0, height));
+
+	orthoCamera->setReferenceFrame(osg::Transform::ABSOLUTE_RF);
+	orthoCamera->setViewMatrix(osg::Matrix::identity());
+
+	// Choose a good spot on the screen to overlay the quad
+	float xPos = 1440 * 0.635f;
+	float yPos = 900 * 0.625f;
+
+	orthoCamera->setViewport(xPos, yPos, width, height);
+
+	// Make sure to render this after rendering the scene
+	// in order to overlay the quad on top
+	orthoCamera->setRenderOrder(osg::Camera::POST_RENDER);
+
+	// Render only the quad
+	orthoCamera->addChild(quadGeode.get());
+
+	FRoot->GetRoot()->addChild(textureCamera.get());
+	FRoot->GetRoot()->addChild(orthoCamera.get());	
+	*/
+}
 void Renderer::OSGInit()
 {
 	#ifdef TESS

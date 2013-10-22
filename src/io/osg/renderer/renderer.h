@@ -52,6 +52,8 @@ class Renderer : public Singleton<Renderer>
 		void InitCamera();
 
 		void QuittingRun();
+		void InitRenderToTexture();
+
 
 
 

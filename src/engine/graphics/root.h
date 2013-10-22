@@ -17,8 +17,10 @@ class Root : public SceneNode
 		void InitRoot();
 
 		osg::Group* GetRoot(){ return FRoot;}
+		osg::Group* GetModels(){ return mLightGroup;}
 
 		void AddModel(SceneNode * parNode);
+		void AddNode(osg::Node * parNode);
 		void AddLight();
 
 

@@ -45,6 +45,7 @@ osg::Texture2D *ResourceManager::LoadTexture(const std::string& parTextureName)
  	    newTexture->setFilter(osg::Texture::MAG_FILTER, osg::Texture::LINEAR);
  	    newTexture->setWrap(osg::Texture2D::WRAP_S,osg::Texture2D::REPEAT); 
 		newTexture->setWrap(osg::Texture2D::WRAP_T,osg::Texture2D::REPEAT); 
+		newTexture->setInternalFormat(GL_RGBA32F_ARB);
  	    FTextures[parTextureName] = newTexture;
  	    return newTexture;
 	}

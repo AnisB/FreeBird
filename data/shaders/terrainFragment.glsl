@@ -3,6 +3,7 @@ uniform sampler2D riverMap;
 uniform sampler2D rockMap;
 uniform sampler2D ground;
 uniform sampler2D grass;
+uniform sampler2D foam;
 
 
 vec4 colorVal;
@@ -102,7 +103,8 @@ void flight(in vec3 normal, in vec4 ecPosition, float alphaFade)
     Diffuse  = vec4 (0.0);
     Specular = vec4 (0.0);
 
-    pointLight(0, normal, eye, ecPosition3);
+    directionalLight(0, normal);
+    //pointLight(0, normal, eye, ecPosition3);
 
     color = gl_FrontLightModelProduct.sceneColor +
       Ambient  * gl_FrontMaterial.ambient +
@@ -120,22 +122,26 @@ void main (void)
     vec4 colorHeight = texture2D(heightMap,gl_TexCoord[0].st);
     vec4 colorRiver = texture2D(riverMap,gl_TexCoord[0].st);
     vec4 blendColor = texture2D(rockMap,gl_TexCoord[0].st);
+    
 
-    float x = mod(gl_TexCoord[0].s*20.0, 1.0);
-    float y = mod(gl_TexCoord[0].t*15.0, 1.0);
+    float x1 = mod(gl_TexCoord[0].s*50.0, 1.0);
+    float y1 = mod(gl_TexCoord[0].t*50.0, 1.0);
+    float x2 = mod(gl_TexCoord[0].s*20.0, 1.0);
+    float y2 = mod(gl_TexCoord[0].t*20.0, 1.0);
 
-    vec4 colorRock = texture2D(ground,vec2(x,y));
-    vec4 colorGrass = texture2D(grass,vec2(x,y));
+    vec4 colorRock = texture2D(ground,vec2(x1,y1));
+    vec4 colorGrass = texture2D(grass,vec2(x2,y2));
 
-    flight(transformedNormal, ecPosition, alphaFade);
-
-    if(colorRiver.r > 0.2 || colorHeight.r >= WATER_LEVEL)
+    if(colorRiver.r > 0.0 ||  isWater >= 0.5)
     {
-      vec4 blue = vec4(0.2,0.6,1.0,1.0);
+      flight(transformedNormal, ecPosition, alphaFade);
+      vec4 blue = vec4(0.2,0.6,1.0,0.2);
       gl_FragColor = colorVal*blue;
+      gl_FragColor.a = 0.0;
     }
     else
     {
+      flight(transformedNormal, ecPosition, alphaFade);
       vec4 colorBlended = (1.0-blendColor)*colorRock + 2.0*blendColor*colorGrass;
       gl_FragColor = colorVal*colorBlended;
     }

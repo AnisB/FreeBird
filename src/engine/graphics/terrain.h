@@ -7,6 +7,7 @@
 #include <graphics/sceneobject.h>
 
 #include <osg/Texture2D>
+#include <osg/Geode>
 
 class Root;
 
@@ -19,8 +20,7 @@ class Terrain
 		void createTerrain(std::string parFolderName,  Root * parNode);	
 
 	protected:
-		SceneObject * FTerrain2;
-		SceneObject * FTerrain;
+		SceneObject* FTerrain;
 		int FShaderId;
 
 };
