@@ -305,12 +305,14 @@ void Renderer::SceneInit()
 	//FTerrain->Translate(osg::Vec3f(0,-20,0));
 	//FTerrain->Scale(osg::Vec3f(100,100,100));
 
+	/*
 	FAirplane2 = new SceneObject("data/DRC/DRC.obj");
 	FAirplane2->InitObject();
 	FAirplane2->Translate(osg::Vec3f(0,-200,00));
     FAirplane2->Roll(3.14);
     FAirplane2->Yaw(3.14);
 	FRoot->AddModel(FAirplane2);
+	*/
 	
 
 	FCameraMan = new CameraMan();
