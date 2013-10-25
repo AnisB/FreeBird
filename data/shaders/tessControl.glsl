@@ -1,5 +1,5 @@
 // TessControl
-#version 400
+#version 410
 layout(vertices = 3) out;
 in vec3 vPosition[];
 out vec3 tcPosition[];
