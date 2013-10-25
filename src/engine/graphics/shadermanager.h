@@ -17,8 +17,9 @@ public:
 
 public:
 	int CreateShader(std::string parVertexShader, std::string parFragmentShader);
+#ifdef TESS
 	int CreateShaderTess(std::string parVertexShader, std::string parTSCShader, std::string parTSEShader, std::string parFragmentShader);
-
+#endif
 	void ActivateShader(osg::Node * Node, int parShaderRef);
 	void DisableShader(osg::Node * Node, int parShaderRef);
 
