@@ -46,10 +46,10 @@ int ShaderManager::CreateShader(std::string parVertexShader, std::string parFrag
 	ShaderCounter++;
     return (ShaderCounter-1);
 }
-
+#ifdef TESS
 int ShaderManager::CreateShaderTess(std::string parVertexShader, std::string parTSCShader, std::string parTSEShader, std::string parFragmentShader)
 {
-	osg::Program* program = new osg::Program;
+    osg::Program* program = new osg::Program;
     osg::Shader* vertexObject =  new osg::Shader( osg::Shader::VERTEX );
     osg::Shader* fragmentObject = new osg::Shader( osg::Shader::FRAGMENT );
     osg::Shader* tessControlObject = new osg::Shader( osg::Shader::TESSCONTROL );
@@ -67,3 +67,4 @@ int ShaderManager::CreateShaderTess(std::string parVertexShader, std::string par
 	ShaderCounter++;
     return (ShaderCounter-1);
 }
+#endif

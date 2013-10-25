@@ -10,7 +10,6 @@ set(ENGINE "${PROJECT_SOURCE_DIR}/src/engine")
 #If we are generating the vrjuggler project for the cave
 IF(VRJUGGLER)
 
-
 ADD_DEFINITIONS(-D VRJUGGLER)
 set(IO "${PROJECT_SOURCE_DIR}/src/io/vrjuggler")
 # Recursive file search
@@ -29,29 +28,38 @@ file(
 set(INSTDIR "/net/bonne/exports/stk_bonne_fedora")
 set(JUGGLER_DIR "${INSTDIR}/packages")
 set(VJ_BASE_DIR "${JUGGLER_DIR}/usr")
+set(VJ_PLUGIN_DIR "${JUGGLER_DIR}/usr/lib/osgPlugins-2.6.0")
+set(COMPAT_LIB "${INSTDIR}/config/libcompat/")
+set(TIFF_LIB "/net/bonne/exports/stk_bonne_fedora/demos/Rollercoaster/src")
 
-#message(STATUS ${VJ_BASE_DIR})
+set(OSG_PLUGINS "${VJ_PLUGIN_DIR}/osgdb_png.so ${VJ_PLUGIN_DIR}/osgdb_tiff.so")
+set(PNG "${INSTDIR}/config/libcompat/libpng12.so.0")
+set(TIFF "/net/bonne/exports/stk_bonne_fedora/demos/Rollercoaster/src/libtiff.so.3")
+
+#Link to data file
+add_custom_command(
+    TARGET FreeBird PRE_BUILD
+    COMMAND ln -sf ${VJ_PLUGIN_DIR}/osgdb_png.so ${PROJECT_BINARY_DIR}/libosgdb_png.so
+)
 
 #Speciefic compiling flags
 ADD_DEFINITIONS("-m32 -g -Wall -fexceptions -pthread -Wall -DHAVE_CONFIG_H -DJUGGLER_DEBUG -Wno-unused-local-typedefs -Wno-deprecated -I${VJ_BASE_DIR}/include/ -I${VJ_BASE_DIR}/include/vrjuggler-2.2/ -I${VJ_BASE_DIR}/include/gadgeteer-1.2/ -I${VJ_BASE_DIR}/include/jccl-1.2/ -I${VJ_BASE_DIR}/include/vpr-2.0/ -I${VJ_BASE_DIR}/include/cppdom-0.7.10/ -I${VJ_BASE_DIR}/include/gmtl-0.5.4/")
 
 
 #Setting the libs to link
-set(CORELIBS 
-  GL pthread vrj-2_2 vrj_ogl-2_2 gadget-1_2 jccl-1_2 vpr-2_0 cppdom-0_7_10 OpenThreads  osg osgDB osgUtil osgGA GLU GL m)
+set(CORELIBS GL GLU m pthread vrj-2_2 vrj_ogl-2_2 gadget-1_2 jccl-1_2 vpr-2_0 cppdom-0_7_10 OpenThreads  osg osgDB osgUtil osgGA)
 
 
-include_directories(${IO} ${ENGINE} ${OPENGL_INCLUDE_DIRS} ${GLFW_INCLUDE_DIR} 	${OSG_INCLUDE_DIR} ${OSGDB_INCLUDE_DIR} ${OSGVIEWER_INCLUDE_DIR}
-${OSGGA_INCLUDE_DIR})
+include_directories(${IO} ${ENGINE})
 
 #Specific linker flags
-set(CMAKE_EXE_LINKER_FLAGS "-m32 -L -Wall")
+set(CMAKE_EXE_LINKER_FLAGS "-m32 -Wall ${OSG_PLUGINS} ${PNG} ${TIFF}")
 
 #Creating the library
 add_library(FreeBirdLib ${Source_File})
 
 #Adding the specific link directory
-LINK_DIRECTORIES( ${LINK_DIRECTORIES} ${VJ_BASE_DIR}/lib)
+LINK_DIRECTORIES( ${LINK_DIRECTORIES} ${VJ_BASE_DIR}/lib ${VJ_PLUGIN_DIR} ${COMPAT_LIB} ${TIFF_LIB})
 
 #Adding the exefile
 add_executable(FreeBird program/vrjuggler/freebird.cpp)
