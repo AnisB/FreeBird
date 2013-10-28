@@ -70,6 +70,8 @@ void Renderer::Run()
 	if(!FViewer.isRealized())
 	    FViewer.realize();
 	InitCamera();
+    PRINT_GREEN<< "GLSL current context is: "<<(char*)glGetString(GL_SHADING_LANGUAGE_VERSION)<< END_PRINT_COLOR;
+
 	while( !FViewer.done() )
 	{
 	   UpdateScene(FViewer.elapsedTime());
@@ -252,7 +254,7 @@ void Renderer::OSGInit()
 {
 	#ifdef TESS
 	const int width( 1280 ), height( 720 );
-    const std::string version( "3.2" );
+    const std::string version( "4.1" );
     osg::ref_ptr< osg::GraphicsContext::Traits > traits = new osg::GraphicsContext::Traits();
     traits->x = 20; traits->y = 30;
     traits->width = width; traits->height = height;
@@ -268,6 +270,7 @@ void Renderer::OSGInit()
     else
     {
         PRINT_GREEN<< "OpenGL current context is: " << version << END_PRINT_COLOR;
+
     }
 
     // Create a Camera that uses the above OpenGL context.

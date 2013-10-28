@@ -27,7 +27,7 @@ void directionalLight(in int i, in vec3 normal)
    float nDotHV;         // normal . light half vector
    float pf;             // power factor
 
-   nDotVP = max(0.0, dot(normal, normalize(gl_LightSource[i].position.xyz)));
+   nDotVP = max(0.0, dot(normal, normalize(vec3(0.0, -1.0, 0.0))));
    nDotHV = max(0.0, dot(normal, vec3 (gl_LightSource[i].halfVector)));
 
    if (nDotVP == 0.0)
@@ -89,7 +89,7 @@ void pointLight(in int i, in vec3 normal, in vec3 eye, in vec3 ecPosition3)
 
 
 
-void flight(in vec3 normal, in vec4 ecPosition, float alphaFade)
+void flight(in vec3 normal, in vec4 ecPosition, bool isSpec)
 {
     vec4 color;
     vec3 ecPosition3;
@@ -101,7 +101,10 @@ void flight(in vec3 normal, in vec4 ecPosition, float alphaFade)
     // Clear the light intensity accumulators
     Ambient  = vec4 (0.0);
     Diffuse  = vec4 (0.0);
-    Specular = vec4 (0.0);
+    if(isSpec)
+    {
+      Specular = vec4 (0.2);
+    }
 
     directionalLight(0, normal);
     //pointLight(0, normal, eye, ecPosition3);
@@ -119,31 +122,38 @@ void flight(in vec3 normal, in vec4 ecPosition, float alphaFade)
 
 void main (void) 
 {
-    vec4 colorHeight = texture2D(heightMap,gl_TexCoord[0].st);
-    vec4 colorRiver = texture2D(riverMap,gl_TexCoord[0].st);
-    vec4 blendColor = texture2D(rockMap,gl_TexCoord[0].st);
-    
-
-    float x1 = mod(gl_TexCoord[0].s*50.0, 1.0);
-    float y1 = mod(gl_TexCoord[0].t*50.0, 1.0);
-    float x2 = mod(gl_TexCoord[0].s*20.0, 1.0);
-    float y2 = mod(gl_TexCoord[0].t*20.0, 1.0);
-
-    vec4 colorRock = texture2D(ground,vec2(x1,y1));
-    vec4 colorGrass = texture2D(grass,vec2(x2,y2));
-
-    if(colorRiver.r > 0.0 ||  isWater >= 0.5)
+    if (gl_FrontFacing)
     {
-      flight(transformedNormal, ecPosition, alphaFade);
-      vec4 blue = vec4(0.2,0.6,1.0,0.2);
-      gl_FragColor = colorVal*blue;
-      gl_FragColor.a = 0.0;
+      vec4 colorHeight = texture2D(heightMap,gl_TexCoord[0].st);
+      vec4 colorRiver = texture2D(riverMap,gl_TexCoord[0].st);
+      vec4 blendColor = texture2D(rockMap,gl_TexCoord[0].st);
+      
+
+      float x1 = mod(gl_TexCoord[0].s*50.0, 1.0);
+      float y1 = mod(gl_TexCoord[0].t*50.0, 1.0);
+      float x2 = mod(gl_TexCoord[0].s*20.0, 1.0);
+      float y2 = mod(gl_TexCoord[0].t*20.0, 1.0);
+
+      vec4 colorRock = texture2D(ground,vec2(x1,y1));
+      vec4 colorGrass = texture2D(grass,vec2(x2,y2));
+
+      if(colorRiver.r > 0.0 ||  isWater >= 0.5)
+      {
+
+        flight(transformedNormal, ecPosition, true);
+        vec4 blue = vec4(0.2,0.6,1.0,1.0);
+        gl_FragColor = colorVal*blue;
+      }
+      else
+      {
+        flight(transformedNormal, ecPosition, false);
+        vec4 colorBlended = (1.0-blendColor)*colorRock + 2.0*blendColor*colorGrass;
+        gl_FragColor = colorVal*colorBlended;
+      }
     }
     else
     {
-      flight(transformedNormal, ecPosition, alphaFade);
-      vec4 colorBlended = (1.0-blendColor)*colorRock + 2.0*blendColor*colorGrass;
-      gl_FragColor = colorVal*colorBlended;
+      gl_FragColor = vec4(0.0,0.0,0.0,0.0);
     }
 }
 

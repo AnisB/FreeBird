@@ -21,6 +21,7 @@ class Terrain
 
 	protected:
 		SceneObject* FTerrain;
+		SceneNode* FLowerTerrain;
 		int FShaderId;
 
 };

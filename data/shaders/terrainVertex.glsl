@@ -17,7 +17,7 @@ const float WATER_LEVEL = 0.65;
 const float WATER_STEPX = 10.0;
 const float WATER_STEPY = 10.0;
 const float WATER_HEIGHT = WATER_LEVEL*MAX_HEIGHT;
-const float WAVE_LENGTH = 2.0;
+const float WAVE_LENGTH = 10.0;
 varying vec3  transformedNormal;
 varying vec4 ecPosition;
 
@@ -66,17 +66,14 @@ void animation(inout vec4 position, inout vec3 normal)
     const float waterStepRadX = WATER_STEPX*2.0*PI;
     const float waterStepRadY = WATER_STEPY*2.0*PI;
 
-    deltaPos = WATER_HEIGHT + WAVE_LENGTH*cos( currentTime + gl_MultiTexCoord0.y*waterStepRadY + gl_MultiTexCoord0.x*waterStepRadX);
+    deltaPos = WATER_HEIGHT + WAVE_LENGTH*cos(currentTime + gl_MultiTexCoord0.y*waterStepRadY)
+                                          +cos( currentTime+ gl_MultiTexCoord0.x*waterStepRadX);
 
-    deltaPosPX = WATER_HEIGHT + WAVE_LENGTH*cos( currentTime + gl_MultiTexCoord0.y*waterStepRadY + (gl_MultiTexCoord0.x+STEP)*waterStepRadX);
-    deltaPosNX = WATER_HEIGHT + WAVE_LENGTH*cos( currentTime + gl_MultiTexCoord0.y*waterStepRadY + (gl_MultiTexCoord0.x-STEP)*waterStepRadX);
-    deltaPosPY = WATER_HEIGHT + WAVE_LENGTH*cos( currentTime + (gl_MultiTexCoord0.y+STEP)*waterStepRadY + gl_MultiTexCoord0.x*waterStepRadX);
-    deltaPosNY = WATER_HEIGHT + WAVE_LENGTH*cos( currentTime + (gl_MultiTexCoord0.y-STEP) *waterStepRadY + gl_MultiTexCoord0.x*waterStepRadX);
     isWater = 1.0;
-    positionPX = gl_Vertex.xyz+ + vec3(1, 0.0,-deltaPosPX);
-    positionNX = gl_Vertex.xyz + vec3(-1, 0.0,-deltaPosNX);
-    positionPY = gl_Vertex.xyz + vec3(0.0, 1,-deltaPosPY);
-    positionNY = gl_Vertex.xyz + vec3(0.0, -1,-deltaPosNY);
+
+    normal = vec3(-WAVE_LENGTH*waterStepRadX*sin(currentTime+gl_MultiTexCoord0.x*waterStepRadX), WAVE_LENGTH*waterStepRadY*sin( currentTime + gl_MultiTexCoord0.y*waterStepRadY),-1);
+    normal = normalize(normal);
+    position += vec4(0.0, 0.0,-deltaPos,0.0);
   }
   else
   {
@@ -84,28 +81,27 @@ void animation(inout vec4 position, inout vec3 normal)
     positionNX = gl_Vertex.xyz + vec3(-1, 0.0,-deltaPosNX);
     positionPY = gl_Vertex.xyz + vec3(0.0, 1,-deltaPosPY);
     positionNY = gl_Vertex.xyz + vec3(0.0, -1,-deltaPosNY);
+    position += vec4(0.0, 0.0,-deltaPos,0.0);
+
+    vec3 vecPX = normalize(position.xyz-positionPX);
+    vec3 vecNX = normalize(position.xyz-positionNX);
+    vec3 vecPY = normalize(position.xyz-positionPY);
+    vec3 vecNY = normalize(position.xyz-positionNY);
+
+    vec3 tgPX = cross(vecPX, vec3(0.0,0.0,1.0));
+    vec3 tgNX = cross(vecNX,  vec3(0.0,0.0,1.0));
+    vec3 tgPY = cross(vecPY,  vec3(0.0,0.0,1.0));
+    vec3 tgNY = cross(vecNY,  vec3(0.0,0.0,1.0));
+
+
+    vec3 normalPX = cross(tgPX, vecPX);
+    vec3 normalNX = cross(tgNX, vecNX);
+    vec3 normalPY = cross(tgPY, vecPY);
+    vec3 normalNY = cross(tgNY, vecNY);
+
+    normal = (normalPX+normalNX+normalPY+normalNY)/4.0;
+    normal = -normalize(normal);
   }
-
-  position += vec4(0.0, 0.0,-deltaPos,0.0);
-
-  vec3 vecPX = normalize(position.xyz-positionPX);
-  vec3 vecNX = normalize(position.xyz-positionNX);
-  vec3 vecPY = normalize(position.xyz-positionPY);
-  vec3 vecNY = normalize(position.xyz-positionNY);
-
-  vec3 tgPX = cross(vecPX, vec3(0.0,0.0,1.0));
-  vec3 tgNX = cross(vecNX,  vec3(0.0,0.0,1.0));
-  vec3 tgPY = cross(vecPY,  vec3(0.0,0.0,1.0));
-  vec3 tgNY = cross(vecNY,  vec3(0.0,0.0,1.0));
-
-
-  vec3 normalPX = cross(tgPX, vecPX);
-  vec3 normalNX = cross(tgNX, vecNX);
-  vec3 normalPY = cross(tgPY, vecPY);
-  vec3 normalNY = cross(tgNY, vecNY);
-
-  normal = (normalPX+normalNX+normalPY+normalNY)/4.0;
-  normal = -normalize(normal);
 }
 
 

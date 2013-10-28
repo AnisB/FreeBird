@@ -136,7 +136,6 @@ void Renderer::Init()
 	FRoot = new Root();
 	FRoot->InitRoot();
 
-	//FRoot->AddLight();
 	FAirPlane = new SceneObject("data/DRC/DRC.obj");
 	FAirPlane->InitObject();
 	FRoot->AddModel(FAirPlane);

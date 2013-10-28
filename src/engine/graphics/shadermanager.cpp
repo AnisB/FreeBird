@@ -1,8 +1,9 @@
 
 #include "shadermanager.h"
 
+#include <resources/resourcemanager.h>
 #include <osgDB/ReadFile>
-
+#include <osg/Texture2D>
 
 int ShaderManager::ShaderCounter = 0;
 
@@ -68,3 +69,11 @@ int ShaderManager::CreateShaderTess(std::string parVertexShader, std::string par
     return (ShaderCounter-1);
 }
 #endif
+
+void BindTexture(osg::Node * parNode, const std::string& parVarName, const std::string& parImg, size_t parIndex)
+{
+    osg::StateSet* brickState = parNode->getOrCreateStateSet();
+    osg::Texture2D * texture = ResourceManager::Instance().LoadTexture(parImg);
+    ShaderManager::Instance().InitUniform_Texture(parVarName,parNode, parIndex);
+    brickState->setTextureAttributeAndModes(parIndex, texture, osg::StateAttribute::ON);
+}

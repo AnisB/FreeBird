@@ -22,16 +22,14 @@ public:
 #endif
 	void ActivateShader(osg::Node * Node, int parShaderRef);
 	void DisableShader(osg::Node * Node, int parShaderRef);
-
 	void InitUniform_Texture(std::string name, osg::Node * parGeode, int parTexID);
-
-
-
 protected:
 	std::map<int, osg::Program *> FShaders;
 public:
 	static int ShaderCounter;
 
 };
+
+void BindTexture(osg::Node * parNode, const std::string& parVarName, const std::string& parImg, size_t parIndex);
 
 #endif //SHADER_MANAGER_FREE_BIRD

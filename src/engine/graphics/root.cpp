@@ -27,9 +27,9 @@ void Root::InitRoot()
 	
 	osg::LightSource * lightsource = new osg::LightSource();
 	osg::Light* light = new osg::Light();
-	light->setAmbient(osg::Vec4(0.2,0.2,0.2,1.0));
+	light->setAmbient(osg::Vec4(0.0,0.0,0.0,1.0));
 	light->setDiffuse(osg::Vec4(1.0,1.0,1.0,1.0));
-	light->setDirection(osg::Vec3(1.0,0.0,0.0));
+	light->setDirection(osg::Vec3(0.0,0.0,1.0));
 	light->setConstantAttenuation(1.0);
 	lightsource->setLight(light);
 

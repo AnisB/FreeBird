@@ -6,6 +6,7 @@
 
 
 #include <osg/Geometry>
+#include <osg/BlendFunc>
 
  
 
@@ -21,6 +22,45 @@ Terrain::Terrain()
 
 Terrain::~Terrain()
 {
+
+}
+
+
+osg::Geometry * GenerateLower()
+{
+    osg::Vec3Array *vertexArray = new osg::Vec3Array();
+
+    vertexArray->push_back(osg::Vec3f(10000.0, 0.0,-10000.0));
+    vertexArray->push_back(osg::Vec3f(10000.0, 0.0,10000.0));
+    vertexArray->push_back(osg::Vec3f(-10000.0, 0.0,10000.0));
+    vertexArray->push_back(osg::Vec3f(-10000.0, 0.0,-10000.0));
+
+
+    // face array
+    osg::DrawElementsUInt *faceArray = new osg::DrawElementsUInt(osg::PrimitiveSet::QUADS, 0);
+     
+    // bottom
+    faceArray->push_back(0); // face 1
+    faceArray->push_back(1);
+    faceArray->push_back(2);
+    faceArray->push_back(3);
+
+    // normal array
+    osg::Vec3Array *normalArray = new osg::Vec3Array();
+    normalArray->push_back(osg::Vec3f(0, 1, 0));
+    osg::Vec2Array* texcoords = new osg::Vec2Array(4);
+    (*texcoords)[0].set(0.0,0.0);
+    (*texcoords)[1].set(0.0,1.0);
+    (*texcoords)[2].set(1.0,1.0);
+    (*texcoords)[3].set(1.0,0.0);
+
+    osg::Geometry *geometry = new osg::Geometry();
+    geometry->setVertexArray(vertexArray);
+    geometry->setNormalArray(normalArray);
+    geometry->addPrimitiveSet(faceArray);
+    geometry->setTexCoordArray(0,texcoords);
+
+    return geometry;
 
 }
 
@@ -67,8 +107,19 @@ osg::Geometry * GenerateGrid(size_t parGridResolution, size_t parGridUnitSize)
 
     void Terrain::createTerrain(std::string parFolderName, Root * parNode)
     {
-
     
+
+    osg::Geometry * grid = GenerateLower();
+    osg::Geode *node = new osg::Geode;
+    node->addDrawable(grid);
+    FLowerTerrain = new SceneNode();
+    FLowerTerrain->InitObject();
+    FLowerTerrain->GetNode()->addChild(node);
+    FLowerTerrain->Translate(osg::Vec3f(0,1000,0));
+    BindTexture(node, "ground","data/terrain/base/ground.jpg",0);
+
+
+    parNode->AddModel(FLowerTerrain);
     FTerrain = new SceneObject(TERRAIN_MODEL);
   	FTerrain->InitObject();
     //FTerrain->Scale(osg::Vec3f(0.01,0.01,0.01));
@@ -89,31 +140,23 @@ osg::Geometry * GenerateGrid(size_t parGridResolution, size_t parGridUnitSize)
     
     ShaderManager::Instance().ActivateShader(FTerrain->GetNode(), FShaderId);
 
-    osg::StateSet* brickState = FTerrain->GetNode()->getOrCreateStateSet();
+    BindTexture(FTerrain->GetNode(), "heightMap","data/terrain/base/heightmap.tif",0);
+    BindTexture(FTerrain->GetNode(), "riverMap","data/terrain/base/river.bmp",1);
+    BindTexture(FTerrain->GetNode(), "rockMap","data/terrain/base/rock.bmp",2);
+    BindTexture(FTerrain->GetNode(), "ground","data/terrain/base/ground.jpg",3);
+    BindTexture(FTerrain->GetNode(), "grass","data/terrain/base/grass.png",4);
+    BindTexture(FTerrain->GetNode(), "foam","data/terrain/base/foam.png",5);
 
-    osg::Texture2D * heighmap = ResourceManager::Instance().LoadTexture("data/terrain/base/heightmap.tif");
-    ShaderManager::Instance().InitUniform_Texture("heightMap",FTerrain->GetNode(), 0);
-    brickState->setTextureAttributeAndModes(0, heighmap, osg::StateAttribute::ON);
-
-    osg::Texture2D * river = ResourceManager::Instance().LoadTexture("data/terrain/base/river.bmp");
-    ShaderManager::Instance().InitUniform_Texture("riverMap",FTerrain->GetNode(), 1);
-    brickState->setTextureAttributeAndModes(1, river, osg::StateAttribute::ON);
-
-    osg::Texture2D * rock = ResourceManager::Instance().LoadTexture("data/terrain/base/rock.bmp");
-    ShaderManager::Instance().InitUniform_Texture("rockMap",FTerrain->GetNode(), 2);
-    brickState->setTextureAttributeAndModes(2, rock, osg::StateAttribute::ON);
-
-    osg::Texture2D * ground = ResourceManager::Instance().LoadTexture("data/terrain/base/ground.jpg");
-    ShaderManager::Instance().InitUniform_Texture("ground",FTerrain->GetNode(), 3);
-    brickState->setTextureAttributeAndModes(3, ground, osg::StateAttribute::ON);
-
-    osg::Texture2D * grass = ResourceManager::Instance().LoadTexture("data/terrain/base/grass.png");
-    ShaderManager::Instance().InitUniform_Texture("grass",FTerrain->GetNode(), 4);
-    brickState->setTextureAttributeAndModes(4, grass, osg::StateAttribute::ON);
-
-    osg::Texture2D * foam = ResourceManager::Instance().LoadTexture("data/terrain/base/foam.png");
-    ShaderManager::Instance().InitUniform_Texture("foam",FTerrain->GetNode(), 5);
-    brickState->setTextureAttributeAndModes(5, foam, osg::StateAttribute::ON);
-
+    osg::BlendFunc *fuct = new osg::BlendFunc(); 
+    fuct->setFunction(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
+    FTerrain->GetNode()->getStateSet()->setAttributeAndModes(fuct); 
+    // osg::StateSet* ss = FTerrain->GetNode()->getOrCreateStateSet(); 
+    // ss->setMode(GL_BLEND, osg::StateAttribute:Shocked); 
+    // ss->setRenderingHint(osg::StateSet::TRANSPARENT_BIN); 
+    // ss->setRenderBinDetails(1, "DepthSortedBin"); 
+    //FTerrain->GetNode()->getOrCreateStateSet()->setMode( GL_CULL_FACE, osg::StateAttribute::OFF | osg::StateAttribute::OVERRIDE);
     parNode->AddModel(FTerrain);
+
+
+
 }

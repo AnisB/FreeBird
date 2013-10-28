@@ -16,8 +16,10 @@ void CameraMan::SetCamera(osg::Camera * parCamera)
 {
 	FCamera = parCamera;
 	CameraInits();
-	FCamera->setClearColor(osg::Vec4f(0.0,0.0,0.0,0.0));
+	FCamera->setClearColor(osg::Vec4f(1.0,0.4,0.0,0.0));
 	FCamera->setCullingMode( osg::CullSettings::NO_CULLING );
+	glDisable(GL_CULL_FACE);
+
 }
 
 void CameraMan::Follow(SceneNode * parNode)
