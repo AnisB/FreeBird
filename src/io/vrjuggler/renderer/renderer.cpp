@@ -1,5 +1,8 @@
 #include "renderer.h"
 
+
+#include "helper.h"
+
 Renderer::Renderer(vrj::Kernel * parKernel) 
 : vrj::OsgApp(parKernel)
 , FB0State(gadget::Digital::TOGGLE_OFF)
@@ -24,6 +27,22 @@ void Renderer::preFrame()
 void Renderer::latePreFrame()
 {
 
+	// Obtenir la transformation courante (gérée dans nav.h): room to world
+    gmtl::Matrix44f curPos_Twr = mNavigator.getCurPos();
+   
+    // Obtenir la transformation inverse: world to room
+    gmtl::Matrix44f world_transform_Trw;
+    gmtl::invert( world_transform_Trw, curPos_Twr ); // inverse la seconde matrice dans la première
+
+    // Obtenir un pointeur sur le tableaux des 16 valeurs
+    const float *mat_Trw = world_transform_Trw.getData();
+
+    // Mettre à jour la MatrixTransform du graphe de scène avec le pointeur sur ces valeurs
+    osg::Matrix osg_current_matrix_Trw( mat_Trw );
+    mNavTrans->setMatrix( osg_current_matrix_Trw );
+
+    // Finish updating the scene graph.
+    vrj::OsgApp::latePreFrame();
 }
 void Renderer::intraFrame()
 {
@@ -50,7 +69,14 @@ float Renderer::ComputeTime()
 
 void Renderer::UpdateScene(float parDelta)
 {
+  // Get the wand matrix in the units of this application.
+  const gmtl::Matrix44f wand_mat( mWand->getData(getDrawScaleFactor()));
+  const gmtl::Matrix44f head_matrix( mHead->getData(getDrawScaleFactor()));
 
+  osg::Matrix airplaneTransform = GmtlToOsg_RotationOnly(wand_mat)*GmtlToOsg_TranslationOnly(head_matrix);
+
+
+  FAirPlane
 }
 
 // Input Methods
