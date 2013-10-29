@@ -50,9 +50,9 @@ osg::Geometry * GenerateLower()
     normalArray->push_back(osg::Vec3f(0, 1, 0));
     osg::Vec2Array* texcoords = new osg::Vec2Array(4);
     (*texcoords)[0].set(0.0,0.0);
-    (*texcoords)[1].set(0.0,1.0);
-    (*texcoords)[2].set(1.0,1.0);
-    (*texcoords)[3].set(1.0,0.0);
+    (*texcoords)[1].set(0.0,10.0);
+    (*texcoords)[2].set(10.0,10.0);
+    (*texcoords)[3].set(10.0,0.0);
 
     osg::Geometry *geometry = new osg::Geometry();
     geometry->setVertexArray(vertexArray);
@@ -140,7 +140,7 @@ osg::Geometry * GenerateGrid(size_t parGridResolution, size_t parGridUnitSize)
     
     ShaderManager::Instance().ActivateShader(FTerrain->GetNode(), FShaderId);
 
-    BindTexture(FTerrain->GetNode(), "heightMap","data/terrain/base/heightmap.tif",0);
+    BindTexture(FTerrain->GetNode(), "heightMap","data/terrain/base/heightmap.png",0);
     BindTexture(FTerrain->GetNode(), "riverMap","data/terrain/base/river.bmp",1);
     BindTexture(FTerrain->GetNode(), "rockMap","data/terrain/base/rock.bmp",2);
     BindTexture(FTerrain->GetNode(), "ground","data/terrain/base/ground.jpg",3);

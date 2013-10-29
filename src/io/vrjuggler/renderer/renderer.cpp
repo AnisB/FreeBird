@@ -138,6 +138,8 @@ void Renderer::Init()
 
 	FAirPlane = new SceneObject("data/DRC/DRC.obj");
 	FAirPlane->InitObject();
+	FAirPlane->Scale(0.1, 0.1, 0.1);
+	FAirPlane->Roll(90.0);
 	FRoot->AddModel(FAirPlane);
 }
 

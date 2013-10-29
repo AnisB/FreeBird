@@ -27,7 +27,7 @@ void directionalLight(in int i, in vec3 normal)
    float nDotHV;         // normal . light half vector
    float pf;             // power factor
 
-   nDotVP = max(0.0, dot(normal, normalize(vec3(0.0, -1.0, 0.0))));
+   nDotVP = max(0.0, dot(normal, normalize(gl_LightSource[i].position.xyz)));
    nDotHV = max(0.0, dot(normal, vec3 (gl_LightSource[i].halfVector)));
 
    if (nDotVP == 0.0)
@@ -105,6 +105,10 @@ void flight(in vec3 normal, in vec4 ecPosition, bool isSpec)
     {
       Specular = vec4 (0.2);
     }
+    else
+    {
+      Specular  = vec4 (0.0);
+    }
 
     directionalLight(0, normal);
     //pointLight(0, normal, eye, ecPosition3);
@@ -141,7 +145,7 @@ void main (void)
       {
 
         flight(transformedNormal, ecPosition, true);
-        vec4 blue = vec4(0.2,0.6,1.0,1.0);
+        vec4 blue = vec4(0.2,0.6,1.0,0.8);
         gl_FragColor = colorVal*blue;
       }
       else

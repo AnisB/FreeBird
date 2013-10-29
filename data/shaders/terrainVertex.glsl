@@ -17,7 +17,7 @@ const float WATER_LEVEL = 0.65;
 const float WATER_STEPX = 10.0;
 const float WATER_STEPY = 10.0;
 const float WATER_HEIGHT = WATER_LEVEL*MAX_HEIGHT;
-const float WAVE_LENGTH = 10.0;
+const float WAVE_LENGTH = 2.0;
 varying vec3  transformedNormal;
 varying vec4 ecPosition;
 
@@ -100,7 +100,7 @@ void animation(inout vec4 position, inout vec3 normal)
     vec3 normalNY = cross(tgNY, vecNY);
 
     normal = (normalPX+normalNX+normalPY+normalNY)/4.0;
-    normal = -normalize(normal);
+    normal = normalize(normal);
   }
 }
 
