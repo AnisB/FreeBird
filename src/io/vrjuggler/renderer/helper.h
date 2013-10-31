@@ -1,6 +1,12 @@
 #ifndef MATRIX_HELPER
 #define MATRIX_HELPER
 
+#include <osg/Matrix>
+
+#include <gmtl/Vec.h> 
+#include <gmtl/Coord.h> 
+#include <gmtl/Xforms.h> 
+#include <gmtl/Math.h>
 
 
 osg::Matrix GmtlToOsg(const gmtl::Matrix44f& parMatrix);

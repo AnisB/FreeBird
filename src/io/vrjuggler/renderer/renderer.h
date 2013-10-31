@@ -1,14 +1,21 @@
 #ifndef RENDERER_FREE_BIRD
 #define RENDERER_FREE_BIRD
 
+#include <stdio.h>
+#include <string.h>
+
 //Rendering includes
 #include <graphics/root.h>
 #include <graphics/sceneobject.h>
 
 #include <input/defines.h>
 
+#include <input/nav.h>
+
 //External icludess
 #include <vrj/Draw/OSG/OsgApp.h>
+
+
 
 
 class Renderer : public vrj::OsgApp
@@ -46,11 +53,13 @@ class Renderer : public vrj::OsgApp
 		void Init();
 
 	protected:
-
+		// Generic
 		Root* FRoot;
-		
-
 		SceneObject * FAirPlane;
+
+		//VRJ
+		osg::MatrixTransform*   mNavTrans;
+		OsgNavigator mNavigator;
 
 	protected:
 		// Time handeling

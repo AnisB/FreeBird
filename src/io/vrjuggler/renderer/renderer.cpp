@@ -26,8 +26,7 @@ void Renderer::preFrame()
 }
 void Renderer::latePreFrame()
 {
-
-	// Obtenir la transformation courante (gérée dans nav.h): room to world
+    // Obtenir la transformation courante (gérée dans nav.h): room to world
     gmtl::Matrix44f curPos_Twr = mNavigator.getCurPos();
    
     // Obtenir la transformation inverse: world to room
@@ -39,7 +38,7 @@ void Renderer::latePreFrame()
 
     // Mettre à jour la MatrixTransform du graphe de scène avec le pointeur sur ces valeurs
     osg::Matrix osg_current_matrix_Trw( mat_Trw );
-    mNavTrans->setMatrix( osg_current_matrix_Trw );
+    FRoot->GetDynamicModels()->setMatrix( osg_current_matrix_Trw );
 
     // Finish updating the scene graph.
     vrj::OsgApp::latePreFrame();
@@ -70,13 +69,12 @@ float Renderer::ComputeTime()
 void Renderer::UpdateScene(float parDelta)
 {
   // Get the wand matrix in the units of this application.
-  const gmtl::Matrix44f wand_mat( mWand->getData(getDrawScaleFactor()));
-  const gmtl::Matrix44f head_matrix( mHead->getData(getDrawScaleFactor()));
+  const gmtl::Matrix44f wand_mat( FWand->getData(getDrawScaleFactor()));
+  const gmtl::Matrix44f head_matrix( FHead->getData(getDrawScaleFactor()));
 
-  osg::Matrix airplaneTransform = GmtlToOsg_RotationOnly(wand_mat)*GmtlToOsg_TranslationOnly(head_matrix);
+  osg::Matrix airplaneTrans = GmtlToOsg_RotationOnly(wand_mat)*GmtlToOsg_TranslationOnly(head_matrix);
+  FRoot->GetStaticModels()->setMatrix( airplaneTrans);
 
-
-  FAirPlane
 }
 
 // Input Methods
@@ -161,12 +159,22 @@ void Renderer::Init()
 {
 	FRoot = new Root();
 	FRoot->InitRoot();
+	FRoot->CreateTerrain();
+
+	mNavigator.init();
+
+
+	SceneObject* FAirPlane2 = new SceneObject("data/DRC/DRC.obj");
+	FAirPlane2->InitObject();
+	//FAirPlane->Scale(osg::Vec3f(0.1, 0.1, 0.1));
+	FAirPlane2->Roll(180.0);
+	FRoot->AddModel(FAirPlane2);
 
 	FAirPlane = new SceneObject("data/DRC/DRC.obj");
 	FAirPlane->InitObject();
-	FAirPlane->Scale(0.1, 0.1, 0.1);
-	FAirPlane->Roll(90.0);
-	FRoot->AddModel(FAirPlane);
+	//FAirPlane->Scale(osg::Vec3f(0.1, 0.1, 0.1));
+	FAirPlane->Roll(180.0);
+	FRoot->AddStaticModel(FAirPlane);
 }
 
 

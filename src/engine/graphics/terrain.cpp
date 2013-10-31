@@ -112,6 +112,7 @@ osg::Geometry * GenerateGrid(size_t parGridResolution, size_t parGridUnitSize)
     osg::Geometry * grid = GenerateLower();
     osg::Geode *node = new osg::Geode;
     node->addDrawable(grid);
+	
     FLowerTerrain = new SceneNode();
     FLowerTerrain->InitObject();
     FLowerTerrain->GetNode()->addChild(node);
@@ -120,8 +121,9 @@ osg::Geometry * GenerateGrid(size_t parGridResolution, size_t parGridUnitSize)
 
 
     parNode->AddModel(FLowerTerrain);
+
     FTerrain = new SceneObject(TERRAIN_MODEL);
-  	FTerrain->InitObject();
+    FTerrain->InitObject();
     //FTerrain->Scale(osg::Vec3f(0.01,0.01,0.01));
     FTerrain->Scale(osg::Vec3f(10,10,10));
     FTerrain->Pitch(MathTools::PI/2);
@@ -150,11 +152,6 @@ osg::Geometry * GenerateGrid(size_t parGridResolution, size_t parGridUnitSize)
     osg::BlendFunc *fuct = new osg::BlendFunc(); 
     fuct->setFunction(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
     FTerrain->GetNode()->getStateSet()->setAttributeAndModes(fuct); 
-    // osg::StateSet* ss = FTerrain->GetNode()->getOrCreateStateSet(); 
-    // ss->setMode(GL_BLEND, osg::StateAttribute:Shocked); 
-    // ss->setRenderingHint(osg::StateSet::TRANSPARENT_BIN); 
-    // ss->setRenderBinDetails(1, "DepthSortedBin"); 
-    //FTerrain->GetNode()->getOrCreateStateSet()->setMode( GL_CULL_FACE, osg::StateAttribute::OFF | osg::StateAttribute::OVERRIDE);
     parNode->AddModel(FTerrain);
 
 

@@ -15,19 +15,24 @@ class Root : public SceneNode
 		~Root();
 
 		void InitRoot();
+		void CreateTerrain();
 
 		osg::Group* GetRoot(){ return FRoot;}
-		osg::Group* GetModels(){ return mLightGroup;}
+		osg::MatrixTransform* GetDynamicModels(){ return mNavModelGroup;}
+		osg::MatrixTransform* GetStaticModels(){ return mNoNavModelGroup;}
 
 		void AddModel(SceneNode * parNode);
+		void AddStaticModel(SceneNode * parNode);
 		void AddNode(osg::Node * parNode);
 		void AddLight();
 
 
 	protected:
 		osg::Group*   FRoot;
-		osg::Group*	  mModelGroup;
-		osg::Group*	  mLightGroup;
+		osg::MatrixTransform*   mNavModelGroup;
+		osg::MatrixTransform*   mNoNavModelGroup;
+		osg::Group*   mLightGroup;
+
 		Terrain * FTerrain;
 
 };
