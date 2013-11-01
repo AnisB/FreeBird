@@ -80,8 +80,6 @@ void CameraMan::CameraInits()
 	
 	PRINT(FNear);
 	PRINT(FFar);
-	FNear= 0.001f;
-	FFar= 10000.0f;
 	PRINT(FFocalLength);
 
 	FFocalLength = 900.0/(tan(FFovy*MathTools::PI/MathTools::FULL_ANGLE)*2.0);

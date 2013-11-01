@@ -5,8 +5,10 @@
 
 
 #include <graphics/terrain.h>
+#include <graphics/skybox.h>
 
 class Terrain;
+class Skybox;
 
 class Root : public SceneNode
 {
@@ -16,6 +18,7 @@ class Root : public SceneNode
 
 		void InitRoot();
 		void CreateTerrain();
+		void CreateSkybox(SceneNode* toFollow);
 
 		osg::Group* GetRoot(){ return FRoot;}
 		osg::MatrixTransform* GetDynamicModels(){ return mNavModelGroup;}
@@ -34,6 +37,7 @@ class Root : public SceneNode
 		osg::Group*   mLightGroup;
 
 		Terrain * FTerrain;
+		Skybox* FSkybox;
 
 };
 #endif //ROOT_FREE_BIRD

@@ -296,14 +296,12 @@ void Renderer::SceneInit()
 	FRoot->InitRoot();
 
 
+
 	FAirplane= new Airplane();
 	FAirplane->Build(FRoot);
 	
-	
-	//FTerrain = new SceneObject("data/terrain/snow/snow.obj");
-	//FTerrain->InitObject();
-	//FTerrain->Pitch(MathTools::PI);
-	//FRoot->AddModel(FTerrain);
+	FRoot->CreateSkybox(FAirplane->GetNode());
+	FRoot->CreateTerrain();
 
 	//FTerrain->Translate(osg::Vec3f(0,-20,0));
 	//FTerrain->Scale(osg::Vec3f(100,100,100));
@@ -323,8 +321,6 @@ void Renderer::SceneInit()
 	FCameraMan->SetDistance(osg::Vec3f(0,-10,-50));
 	FCameraMan->Follow(FAirplane->GetModel());
 
-	FSkybox = new Skybox();
-	FSkybox->createSkybox("data/skybox/sky4", FAirplane->GetNode());
 	PRINT_GREEN<<"[RENDERER] Scene successfully created"<<END_PRINT_COLOR;
 }
 

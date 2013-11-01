@@ -16,7 +16,7 @@ Root::~Root()
 
 void Root::InitRoot()
 {
-        FRoot = new osg::Group();
+    FRoot = new osg::Group();
 
 	mLightGroup = new osg::Group();
 	FRoot->addChild( mLightGroup );
@@ -29,9 +29,10 @@ void Root::InitRoot()
 
 	osg::LightSource * lightsource = new osg::LightSource();
 	osg::Light* light = new osg::Light();
+	light->setLightNum(0);
 	light->setAmbient(osg::Vec4(0.2,0.2,0.2,1.0));
-	light->setDiffuse(osg::Vec4(1.0,1.0,1.0,1.0));
-	light->setDirection(osg::Vec3(0.0,-1.0,0.0));
+	light->setDiffuse(osg::Vec4(1.0,0.2,0.2,1.0));
+	light->setDirection(osg::Vec3(-1.0,-1.0,0.0));
 	light->setConstantAttenuation(1.0);
 	lightsource->setLight(light);
 	mLightGroup->addChild(lightsource);
@@ -40,6 +41,13 @@ void Root::InitRoot()
 	lightsource->setStateSetModes(*stateset, osg::StateAttribute::ON);
 	PRINT_GREEN<<"[ROOT] Root is ok."<<END_PRINT_COLOR;
 }
+
+void Root::CreateSkybox(SceneNode* toFollow)
+{
+	FSkybox = new Skybox();
+	FSkybox->createSkybox("data/skybox/sky4", toFollow);
+}
+
 void Root::CreateTerrain()
 {
 	FTerrain = new Terrain();

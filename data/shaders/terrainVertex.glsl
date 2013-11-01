@@ -14,10 +14,10 @@ const float PI = 3.1415926535897932385;  // Pi
 const float STEP = 0.001;
 const float MAX_HEIGHT = 100.0;
 const float WATER_LEVEL = 0.65;
-const float WATER_STEPX = 10.0;
+const float WATER_STEPX = 0.0;
 const float WATER_STEPY = 10.0;
 const float WATER_HEIGHT = WATER_LEVEL*MAX_HEIGHT;
-const float WAVE_LENGTH = 2.0;
+const float WAVE_LENGTH = 5.0;
 varying vec3  transformedNormal;
 varying vec4 ecPosition;
 
@@ -40,43 +40,40 @@ void animation(inout vec4 position, inout vec3 normal)
 
   vec4 heightColor = texture2D(heightMap,gl_MultiTexCoord0.xy);
   isWater = 0.0;
-
-  vec4 heightColorPX = texture2D(heightMap,gl_MultiTexCoord0.xy+vec2(STEP,0));
-  vec4 heightColorNX = texture2D(heightMap,gl_MultiTexCoord0.xy+vec2(-STEP,0));
-  vec4 heightColorPY = texture2D(heightMap,gl_MultiTexCoord0.xy+vec2(0,STEP));
-  vec4 heightColorNY = texture2D(heightMap,gl_MultiTexCoord0.xy+vec2(0,-STEP));
-
-
-
-  // Déformation sur l'axe des X selon la position X
-
-  deltaPos = heightColor.r * MAX_HEIGHT;
-  deltaPosPX = heightColorPX.r * MAX_HEIGHT;
-  deltaPosNX = heightColorNX.r * MAX_HEIGHT;
-  deltaPosPY = heightColorPY.r * MAX_HEIGHT;
-  deltaPosNY = heightColorNY.r * MAX_HEIGHT;
-
-  vec3 positionPX ;
-  vec3 positionNX ;
-  vec3 positionPY ;
-  vec3 positionNY;
   if(heightColor.r >= WATER_LEVEL)
   {
+    isWater = 1.0;  
     float currentTime = mod(osg_FrameTime,2.0*PI);
     const float waterStepRadX = WATER_STEPX*2.0*PI;
     const float waterStepRadY = WATER_STEPY*2.0*PI;
 
-    deltaPos = WATER_HEIGHT + WAVE_LENGTH*cos(currentTime + gl_MultiTexCoord0.y*waterStepRadY)
-                                          +cos( currentTime+ gl_MultiTexCoord0.x*waterStepRadX);
+    deltaPos = WATER_HEIGHT + WAVE_LENGTH*cos(currentTime + gl_MultiTexCoord0.y*waterStepRadY)+cos( currentTime+ gl_MultiTexCoord0.x*waterStepRadX);
 
-    isWater = 1.0;
-
-    normal = vec3(-WAVE_LENGTH*waterStepRadX*sin(currentTime+gl_MultiTexCoord0.x*waterStepRadX), WAVE_LENGTH*waterStepRadY*sin( currentTime + gl_MultiTexCoord0.y*waterStepRadY),-1);
+    normal = vec3(-WAVE_LENGTH*waterStepRadX*sin(currentTime+gl_MultiTexCoord0.x*waterStepRadX), WAVE_LENGTH*waterStepRadY*sin( currentTime + gl_MultiTexCoord0.y*waterStepRadY),0);
     normal = normalize(normal);
     position += vec4(0.0, 0.0,-deltaPos,0.0);
   }
   else
   {
+    vec4 heightColorPX = texture2D(heightMap,gl_MultiTexCoord0.xy+vec2(STEP,0));
+    vec4 heightColorNX = texture2D(heightMap,gl_MultiTexCoord0.xy+vec2(-STEP,0));
+    vec4 heightColorPY = texture2D(heightMap,gl_MultiTexCoord0.xy+vec2(0,STEP));
+    vec4 heightColorNY = texture2D(heightMap,gl_MultiTexCoord0.xy+vec2(0,-STEP));
+
+
+
+    // Déformation sur l'axe des X selon la position X
+
+    deltaPos = heightColor.r * MAX_HEIGHT;
+    deltaPosPX = heightColorPX.r * MAX_HEIGHT;
+    deltaPosNX = heightColorNX.r * MAX_HEIGHT;
+    deltaPosPY = heightColorPY.r * MAX_HEIGHT;
+    deltaPosNY = heightColorNY.r * MAX_HEIGHT;
+
+    vec3 positionPX ;
+    vec3 positionNX ;
+    vec3 positionPY ;
+    vec3 positionNY ;
     positionPX = gl_Vertex.xyz+ + vec3(1, 0.0,-deltaPosPX);
     positionNX = gl_Vertex.xyz + vec3(-1, 0.0,-deltaPosNX);
     positionPY = gl_Vertex.xyz + vec3(0.0, 1,-deltaPosPY);
