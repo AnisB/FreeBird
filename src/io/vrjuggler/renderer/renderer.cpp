@@ -70,16 +70,18 @@ float Renderer::ComputeTime()
 
 void Renderer::UpdateScene(float parDelta)
 {
-  // Get the wand matrix in the units of this application.
-  const gmtl::Matrix44f wand_mat( FWand->getData(getDrawScaleFactor()));
-  const gmtl::Matrix44f head_matrix( FHead->getData(getDrawScaleFactor()));
+	const gmtl::Matrix44f wand_mat( FWand->getData(getDrawScaleFactor()));
+	const gmtl::Matrix44f head_matrix( FHead->getData(getDrawScaleFactor()));
 
-  osg::Matrix airplaneTrans = GmtlToOsg(wand_mat);
-  airplaneTrans = osg::Matrix::inverse(airplaneTrans);
-  FRoot->GetTerrain()->GetNode()->GetNode()->setMatrix(airplaneTrans);
-  FRoot->GetTerrain()->GetNode()->Pitch(-MathTools::PI/2);
-  //FAirPlane->GetNode()->setMatrix(GmtlToOsg(head_matrix));
-
+	osg::Matrix airplaneTrans = GmtlToOsg_RotationOnly(wand_mat);
+	airplaneTrans = osg::Matrix::inverse(airplaneTrans);
+	airplaneTrans.preMult(osg::Matrix::rotate(-MathTools::PI/2,osg::Vec3f(1.0,0.0,0.0)));
+	osg::Matrix currentMatrix = FRoot->GetTerrain()->GetNode()->GetNode()->getMatrix();
+	airplaneTrans.postMult(osg::Matrix::translate(osg::Vec3f(0.0,0.0,1.0)));
+	airplaneTrans.postMult(osg::Matrix::translate(FPosition.getTrans()));
+	FRoot->GetTerrain()->GetNode()->GetNode()->setMatrix(airplaneTrans);
+	FPosition = airplaneTrans;
+	//FRoot->GetTerrain()->GetNode()->Pitch(-MathTools::PI/2);
 }
 
 // Input Methods
@@ -112,6 +114,9 @@ void Renderer::ButtonReleased(Button::Type parButton)
 	switch (parButton)
 	{
 		case Button::BUTTON0:
+		{
+		std::cout<<"Buttno0 pressed"<<std::endl;
+		}
 		break;
 		
 		case Button::BUTTON1:
@@ -173,15 +178,13 @@ void Renderer::Init()
 
 	mNavigator.init();
 
-	FAirPlane = new SceneObject("data/DRC/DRC.obj");
-	FAirPlane->InitObject();
-
 	const gmtl::Matrix44f head_matrix( FHead->getData(getDrawScaleFactor()));
         mHeadInitPos = GmtlToOsg(head_matrix);
         FAirPlane->GetNode()->setMatrix(mHeadInitPos);
         FAirPlane->Pitch(MathTools::PI);
-        FAirPlane->Translate(osg::Vec3f(-0.11,1.25,-2.5));
-
+        FAirPlane->Translate(osg::Vec3f(-0.11,1.1,-2.5));
+	FRoot->GetTerrain()->GetNode()->Yaw(-MathTools::PI/2);
+	FPosition = FRoot->GetTerrain()->GetNode()->GetNode()->getMatrix();
 	//FAirPlane->Scale(osg::Vec3f(0.1, 0.1, 0.1));
 	FRoot->AddStaticModel(FAirPlane);
 }

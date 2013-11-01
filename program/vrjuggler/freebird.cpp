@@ -12,9 +12,18 @@ int main( int argc, char **argv )
     if (argc < 2)
     {
         PRINT_RED << "Il n'y a pas de fichier de configuration qui a été donné en paramètre"<< "Le nombre de fichiers est"<<argc<<END_PRINT_COLOR;
-	exit(1);
+	
+	//exit(1);
     }
-    vrKernel->loadConfigFile(argv[1]);
+    else
+    {
+	vrKernel->loadConfigFile(argv[1]);
+	for ( int i = 2; i < argc; ++i )
+	{
+	    vrKernel->loadConfigFile( argv[i] );
+	}
+    }
+    
 
 
     vrKernel->start();

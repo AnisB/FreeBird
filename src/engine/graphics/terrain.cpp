@@ -115,8 +115,6 @@ osg::Geometry * GenerateGrid(size_t parGridResolution, size_t parGridUnitSize)
     FLowerTerrain->GetNode()->addChild(node);
     FLowerTerrain->Translate(osg::Vec3f(0,1000,0));
     BindTexture(node, "ground","data/terrain/base/ground.jpg",0);
-
-
     parNode->AddModel(FLowerTerrain);
     */
     FTerrain = new SceneObject(TERRAIN_MODEL);
@@ -151,7 +149,7 @@ osg::Geometry * GenerateGrid(size_t parGridResolution, size_t parGridUnitSize)
     fuct->setFunction(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
     FTerrain->GetNode()->getStateSet()->setAttributeAndModes(fuct); 
     parNode->AddModel(FTerrain);
-
+   
 
 
 }

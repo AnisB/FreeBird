@@ -33,8 +33,7 @@ set(COMPAT_LIB "${INSTDIR}/config/libcompat/")
 set(TIFF_LIB "/net/bonne/exports/stk_bonne_fedora/demos/Rollercoaster/src")
 
 set(OSG_PLUGINS "${VJ_PLUGIN_DIR}/osgdb_png.so ${VJ_PLUGIN_DIR}/osgdb_tiff.so")
-set(PNG "${INSTDIR}/config/libcompat/libpng12.so.0")
-set(TIFF "/net/bonne/exports/stk_bonne_fedora/demos/Rollercoaster/src/libtiff.so.3")
+set(PNG "${JUGGLER_DIR}/usr/lib/libpng12.so.0")
 
 #Link to data file
 add_custom_command(
@@ -53,7 +52,7 @@ set(CORELIBS GL GLU m pthread vrj-2_2 vrj_ogl-2_2 gadget-1_2 jccl-1_2 vpr-2_0 cp
 include_directories(${IO} ${ENGINE})
 
 #Specific linker flags
-set(CMAKE_EXE_LINKER_FLAGS "-m32 -Wall ${OSG_PLUGINS} ${PNG} ${TIFF}")
+set(CMAKE_EXE_LINKER_FLAGS "-m32 -Wall ${OSG_PLUGINS} ${PNG}")
 
 #Creating the library
 add_library(FreeBirdLib ${Source_File})

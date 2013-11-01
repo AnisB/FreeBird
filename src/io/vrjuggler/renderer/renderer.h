@@ -58,6 +58,8 @@ class Renderer : public vrj::OsgApp
 		Root* FRoot;
 		SceneObject * FAirPlane;
 		Skybox * FSkybox;
+		// Displacement
+		osg::Matrixd FPosition;
 
 		//VRJ
 		osg::Matrix mHeadInitPos;

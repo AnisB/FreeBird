@@ -29,7 +29,7 @@ class SceneObject : public SceneNode
 
 		void SetDynamic() 
 		{
-			FModel->setDataVariance(osg::Object::DYNAMIC);
+		    FModel->setDataVariance(osg::Object::DYNAMIC);
 		}
 
 
