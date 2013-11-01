@@ -6,6 +6,7 @@
 
 //Rendering includes
 #include <graphics/root.h>
+#include <graphics/skybox.h>
 #include <graphics/sceneobject.h>
 
 #include <input/defines.h>
@@ -56,8 +57,10 @@ class Renderer : public vrj::OsgApp
 		// Generic
 		Root* FRoot;
 		SceneObject * FAirPlane;
+		Skybox * FSkybox;
 
 		//VRJ
+		osg::Matrix mHeadInitPos;
 		osg::MatrixTransform*   mNavTrans;
 		OsgNavigator mNavigator;
 

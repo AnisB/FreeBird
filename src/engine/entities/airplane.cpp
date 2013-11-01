@@ -22,11 +22,11 @@ void Airplane::Build(Root * parRootNode)
 	FModelNode->InitObject();
 	FNode =  new SceneNode();
 	FNode->InitObject();
-	FNode->Translate(osg::Vec3f(0,-200,0));
+	//FNode->Translate(osg::Vec3f(0,-200,0));
 	FNode->AddChild(FModelNode);
 	parRootNode->AddModel(FNode);
-    //FNode->Pitch(3.14);
-    FNode->Yaw(3.14);
+        
+    //FNode->Yaw(3.14);
 }
 
 // Moving methods
@@ -54,6 +54,10 @@ void Airplane::Yaw(AirplaneRotation::Type parType, float parTime)
 		FModelNode->Yaw(-0.005);
 }
 
+void Airplane::ForceTransformation(osg::Matrix parForceTransformation)
+{
+	FModelNode->GetNode()->setMatrix(parForceTransformation);
+}
 void Airplane::Avance_Debug(double time)
 {
 	FNode->Translate(osg::Vec3f(0,0,4) * FModelNode->GetTransformation());

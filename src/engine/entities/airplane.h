@@ -33,6 +33,9 @@ class Airplane
  		void Pitch(AirplaneRotation::Type parType, float parTime);
  		void Yaw(AirplaneRotation::Type parType, float parTime);
 
+
+		// Debug methods
+		void ForceTransformation(osg::Matrix parForceTransformation);
 	protected:
 			SceneNode * FModelNode;			
 			SceneNode * FNode;			

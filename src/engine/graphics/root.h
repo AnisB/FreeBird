@@ -21,6 +21,7 @@ class Root : public SceneNode
 		void CreateSkybox(SceneNode* toFollow);
 
 		osg::Group* GetRoot(){ return FRoot;}
+		Terrain* GetTerrain(){ return FTerrain;}
 		osg::MatrixTransform* GetDynamicModels(){ return mNavModelGroup;}
 		osg::MatrixTransform* GetStaticModels(){ return mNoNavModelGroup;}
 

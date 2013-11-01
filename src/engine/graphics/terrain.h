@@ -18,6 +18,7 @@ class Terrain
 		~Terrain();
 
 		void createTerrain(std::string parFolderName,  Root * parNode);	
+		SceneNode *  GetNode() {return FTerrain;};
 
 	protected:
 		SceneObject* FTerrain;

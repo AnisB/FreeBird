@@ -108,11 +108,8 @@ osg::Geometry * GenerateGrid(size_t parGridResolution, size_t parGridUnitSize)
     void Terrain::createTerrain(std::string parFolderName, Root * parNode)
     {
     
-
-    osg::Geometry * grid = GenerateLower();
-    osg::Geode *node = new osg::Geode;
-    node->addDrawable(grid);
 	
+    /*
     FLowerTerrain = new SceneNode();
     FLowerTerrain->InitObject();
     FLowerTerrain->GetNode()->addChild(node);
@@ -121,13 +118,14 @@ osg::Geometry * GenerateGrid(size_t parGridResolution, size_t parGridUnitSize)
 
 
     parNode->AddModel(FLowerTerrain);
-
+    */
     FTerrain = new SceneObject(TERRAIN_MODEL);
     FTerrain->InitObject();
-    //FTerrain->Scale(osg::Vec3f(0.01,0.01,0.01));
-    FTerrain->Scale(osg::Vec3f(10,10,10));
-    FTerrain->Pitch(MathTools::PI/2);
+    FTerrain->Scale(osg::Vec3f(0.1,0.1,0.1));
+    //FTerrain->Scale(osg::Vec3f(10,10,10));
+    FTerrain->Roll(-MathTools::PI/2);
   	FTerrain->SetDynamic();
+    //FLowerTerrain->Translate(osg::Vec3f(0,1000,0));
     
     
     

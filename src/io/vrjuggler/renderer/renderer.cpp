@@ -2,6 +2,8 @@
 
 
 #include "helper.h"
+#include <common/defines.h>
+
 
 Renderer::Renderer(vrj::Kernel * parKernel) 
 : vrj::OsgApp(parKernel)
@@ -72,8 +74,11 @@ void Renderer::UpdateScene(float parDelta)
   const gmtl::Matrix44f wand_mat( FWand->getData(getDrawScaleFactor()));
   const gmtl::Matrix44f head_matrix( FHead->getData(getDrawScaleFactor()));
 
-  osg::Matrix airplaneTrans = GmtlToOsg_RotationOnly(wand_mat)*GmtlToOsg_TranslationOnly(head_matrix);
-  FRoot->GetStaticModels()->setMatrix( airplaneTrans);
+  osg::Matrix airplaneTrans = GmtlToOsg(wand_mat);
+  airplaneTrans = osg::Matrix::inverse(airplaneTrans);
+  FRoot->GetTerrain()->GetNode()->GetNode()->setMatrix(airplaneTrans);
+  FRoot->GetTerrain()->GetNode()->Pitch(-MathTools::PI/2);
+  //FAirPlane->GetNode()->setMatrix(GmtlToOsg(head_matrix));
 
 }
 
@@ -159,21 +164,25 @@ void Renderer::Init()
 {
 	FRoot = new Root();
 	FRoot->InitRoot();
+
+	FAirPlane = new SceneObject("data/DRC/DRC.obj");
+	FAirPlane->InitObject();
+	FRoot->CreateSkybox(FAirPlane);
+	
 	FRoot->CreateTerrain();
 
 	mNavigator.init();
 
-
-	SceneObject* FAirPlane2 = new SceneObject("data/DRC/DRC.obj");
-	FAirPlane2->InitObject();
-	//FAirPlane->Scale(osg::Vec3f(0.1, 0.1, 0.1));
-	FAirPlane2->Roll(180.0);
-	FRoot->AddModel(FAirPlane2);
-
 	FAirPlane = new SceneObject("data/DRC/DRC.obj");
 	FAirPlane->InitObject();
+
+	const gmtl::Matrix44f head_matrix( FHead->getData(getDrawScaleFactor()));
+        mHeadInitPos = GmtlToOsg(head_matrix);
+        FAirPlane->GetNode()->setMatrix(mHeadInitPos);
+        FAirPlane->Pitch(MathTools::PI);
+        FAirPlane->Translate(osg::Vec3f(-0.11,1.25,-2.5));
+
 	//FAirPlane->Scale(osg::Vec3f(0.1, 0.1, 0.1));
-	FAirPlane->Roll(180.0);
 	FRoot->AddStaticModel(FAirPlane);
 }
 
