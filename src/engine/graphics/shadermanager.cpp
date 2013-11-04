@@ -77,3 +77,25 @@ void BindTexture(osg::Node * parNode, const std::string& parVarName, const std::
     ShaderManager::Instance().InitUniform_Texture(parVarName,parNode, parIndex);
     brickState->setTextureAttributeAndModes(parIndex, texture, osg::StateAttribute::ON);
 }
+
+void BindCubeMap(osg::Node * parNode, const std::string& parVarName, const std::string& parImg, size_t parIndex)
+{
+    osg::StateSet* brickState = parNode->getOrCreateStateSet();
+    osg::TextureCubeMap * texture = ResourceManager::Instance().LoadTextureCubeMap(parImg);
+    ShaderManager::Instance().InitUniform_Texture(parVarName,parNode, parIndex);
+    brickState->setTextureAttributeAndModes(parIndex, texture, osg::StateAttribute::ON);
+}
+
+void InjectVec3(osg::Node * parNode, osg::Vec3f parPosition, const std::string& parVarName)
+{
+    osg::StateSet* brickState = parNode->getOrCreateStateSet();
+    osg::Uniform* position = new osg::Uniform(parVarName.c_str(),parPosition);
+    brickState->addUniform(position);
+}
+
+void InjectVec2(osg::Node * parNode, osg::Vec2f parPosition, const std::string& parVarName)
+{
+    osg::StateSet* brickState = parNode->getOrCreateStateSet();
+    osg::Uniform* position = new osg::Uniform(parVarName.c_str(),parPosition);
+    brickState->addUniform(position);
+}

@@ -7,6 +7,7 @@
 SceneNode::SceneNode(NodeType::Type parTypeNode)
 : FIsRoot(parTypeNode)
 , FIsValid(false)
+, FScaleVect(1,1,1)
 {
 
 }
@@ -14,6 +15,12 @@ SceneNode::SceneNode(NodeType::Type parTypeNode)
 SceneNode::~SceneNode()
 {
 
+}
+
+void SceneNode::SetPosition(osg::Vec3f parPosition)
+{
+	FModelTrans->setMatrix(osg::Matrix::translate(parPosition));
+	FModelTrans->preMult(osg::Matrix::scale(FScaleVect));
 }
 
 
@@ -47,8 +54,8 @@ void SceneNode::Rotate(float parAngle, const osg::Vec3f& parAxe)
 
 void SceneNode::Scale(osg::Vec3f parVectScale)
 {
+	FScaleVect=osg::Vec3f(parVectScale.x()*FScaleVect.x(),parVectScale.y()*FScaleVect.y(),parVectScale.z()*FScaleVect.z());
 	FModelTrans->preMult(osg::Matrix::scale(parVectScale));
-
 }
 
 

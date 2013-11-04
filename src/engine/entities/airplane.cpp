@@ -25,8 +25,6 @@ void Airplane::Build(Root * parRootNode)
 	//FNode->Translate(osg::Vec3f(0,-200,0));
 	FNode->AddChild(FModelNode);
 	parRootNode->AddModel(FNode);
-        
-    //FNode->Yaw(3.14);
 }
 
 // Moving methods
@@ -60,5 +58,5 @@ void Airplane::ForceTransformation(osg::Matrix parForceTransformation)
 }
 void Airplane::Avance_Debug(double time)
 {
-	FNode->Translate(osg::Vec3f(0,0,4) * FModelNode->GetTransformation());
+	FNode->Translate(osg::Vec3f(0,0,10) * FModelNode->GetTransformation());
 }

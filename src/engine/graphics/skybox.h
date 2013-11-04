@@ -4,9 +4,8 @@
 
 #include <string>
 #include <graphics/root.h>
+#include <resources/resourcemanager.h>
 
-#include <osg/TextureCubeMap>
-#include <osg/Texture2D>
 #include <osgDB/ReadFile>
 #include <osg/ClearNode>
 #include <osg/Geometry>
@@ -23,7 +22,6 @@ class Skybox
 		void createSkybox(std::string parFolderName,  SceneNode * parNode);	
 
 	protected:
-		osg::TextureCubeMap* LoadTextureCubeMap(std::string parFolder);
 		osg::Geometry * GenerateBox();
 
 

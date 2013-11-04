@@ -19,9 +19,12 @@
 
 
 #define VEC3_TO_STREAM(vector) vector.x()<<" "<<vector.y()<<" "<<vector.z()
+#define VEC2_TO_STREAM(vector) vector.x()<<" "<<vector.y()
 #define PRINT(message) std::cout<<message<<std::endl;
 
 #define MODEL_MANAGER "[MODEL_MANAGER]"
+
+#define DEBUG_PRINT(message) PRINT(message)
 
 namespace MathTools
 {

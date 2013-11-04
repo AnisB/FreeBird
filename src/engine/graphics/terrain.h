@@ -20,10 +20,13 @@ class Terrain
 		void createTerrain(std::string parFolderName,  Root * parNode);	
 		SceneNode *  GetNode() {return FTerrain;};
 
+		void Update(osg::Vec3f parAirplanePos);
+		
 	protected:
 		SceneObject* FTerrain;
-		SceneNode* FLowerTerrain;
+		SceneObject* FWater;
 		int FShaderId;
+		int FWaterShaderId;
 
 };
 

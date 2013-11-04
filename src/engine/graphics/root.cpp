@@ -29,11 +29,9 @@ void Root::InitRoot()
 
 	osg::LightSource * lightsource = new osg::LightSource();
 	osg::Light* light = new osg::Light();
-	light->setLightNum(0);
 	light->setAmbient(osg::Vec4(0.2,0.2,0.2,1.0));
 	light->setDiffuse(osg::Vec4(1.0,1.0,1.0,1.0));
-	light->setDirection(osg::Vec3(-1.0,-1.0,0.0));
-	light->setConstantAttenuation(1.0);
+	light->setSpecular(osg::Vec4(1,1,1,1));
 	lightsource->setLight(light);
 	mLightGroup->addChild(lightsource);
 
@@ -79,4 +77,9 @@ void Root::AddNode(osg::Node * parNode)
 void Root::AddLight()
 {
 
+}
+
+void Root::UpdateTerrain(osg::Vec3f parPosition)
+{
+	FTerrain->Update(parPosition);
 }

@@ -4,6 +4,7 @@
 
 // Osg includes
 #include <osg/Node>
+#include <osg/TextureCubeMap>
 #include <osg/Texture2D>
 // Project includes
 #include <common/singleton.h>
@@ -21,10 +22,13 @@ class ResourceManager : public Singleton<ResourceManager>
 		osg::Node * LoadModel(const std::string& parModelName);
 
 		osg::Texture2D* LoadTexture(const std::string& parTexture);
+		osg::TextureCubeMap* LoadTextureCubeMap(std::string parFolder);
+		
 
 	protected:
 		std::map<std::string, osg::Node*> FModels;
 		std::map<std::string, osg::Texture2D*> FTextures;
+		std::map<std::string, osg::TextureCubeMap*> FCubeMaps;
 
 };
 #endif //RESOURCE_MANAGER_FREE_BIRD

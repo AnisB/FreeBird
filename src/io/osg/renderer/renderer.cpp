@@ -61,6 +61,9 @@ void Renderer::UpdateScene(float parDelta)
 	{
 		FCameraMan->ChangeFocalLength(false);
 	}
+
+
+	FRoot->UpdateTerrain(FAirplane->GetNode()->GetPosition());
 }
 
 
@@ -294,8 +297,6 @@ void Renderer::SceneInit()
 	
 	FRoot = new Root();
 	FRoot->InitRoot();
-
-
 
 	FAirplane= new Airplane();
 	FAirplane->Build(FRoot);

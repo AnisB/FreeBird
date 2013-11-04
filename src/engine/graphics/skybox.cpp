@@ -6,51 +6,6 @@
 
 #define SKYBOXSIZE 10000
 
-namespace SkyboxDir
-{
-	enum Type
-	{
-		POSITIVE_X,
-		POSITIVE_Y,
-		POSITIVE_Z,
-		NEGATIVE_X,
-		NEGATIVE_Y,
-		NEGATIVE_Z
-	};
-}
-
-std::string getFileName(std::string parFolder, SkyboxDir::Type parDir)
-{
-	std::string fullPath = parFolder;
-	switch(parDir)
-	{
-		case SkyboxDir::POSITIVE_X:
-			fullPath+="/xp.png";
-		break;
-
-		case SkyboxDir::POSITIVE_Y:
-			fullPath+="/yp.png";
-		break;
-
-		case SkyboxDir::POSITIVE_Z:
-			fullPath+="/zp.png";
-		break;
-		
-		case SkyboxDir::NEGATIVE_X:
-			fullPath+="/xn.png";
-		break;
-		
-		case SkyboxDir::NEGATIVE_Y:
-			fullPath+="/yn.png";
-		break;
-		
-		case SkyboxDir::NEGATIVE_Z:
-			fullPath+="/zn.png";
-		break;
-	};
-	return fullPath;
-}
-
 Skybox::Skybox()
 : FShaderId(-1)
 {
@@ -161,7 +116,7 @@ osg::Geometry * Skybox::GenerateBox()
 }
 void Skybox::createSkybox(std::string parFolderName, SceneNode * parNode)
 {
-     osg::TextureCubeMap* skymap = LoadTextureCubeMap(parFolderName);
+     osg::TextureCubeMap* skymap = ResourceManager::Instance().LoadTextureCubeMap(parFolderName);
  
  
     osg::Geometry* box = GenerateBox();
@@ -176,38 +131,4 @@ void Skybox::createSkybox(std::string parFolderName, SceneNode * parNode)
  
     parNode->GetNode()->addChild(geode);
  
-}
-
-
-osg::TextureCubeMap* Skybox::LoadTextureCubeMap(std::string parFolder)
-{
-	osg::TextureCubeMap* cubemap = new osg::TextureCubeMap; 
-	cubemap->setInternalFormat(GL_RGBA16F_ARB); 
-	cubemap->setSourceType(GL_FLOAT); 
-	cubemap->setSourceFormat(GL_RGBA); 
-
-	osg::Image* imagePosX = osgDB::readImageFile(getFileName(parFolder,SkyboxDir::POSITIVE_X)); 
-	osg::Image* imageNegX = osgDB::readImageFile(getFileName(parFolder,SkyboxDir::NEGATIVE_X)); 
-	osg::Image* imagePosY = osgDB::readImageFile(getFileName(parFolder,SkyboxDir::POSITIVE_Y)); 
-	osg::Image* imageNegY = osgDB::readImageFile(getFileName(parFolder,SkyboxDir::NEGATIVE_Y)); 
-	osg::Image* imagePosZ = osgDB::readImageFile(getFileName(parFolder,SkyboxDir::POSITIVE_Z)); 
-	osg::Image* imageNegZ = osgDB::readImageFile(getFileName(parFolder,SkyboxDir::NEGATIVE_Z)); 
-
-	if (imagePosX && imageNegX && imagePosY && imageNegY && imagePosZ && imageNegZ) 
-	{ 
-		cubemap->setImage(osg::TextureCubeMap::POSITIVE_X, imagePosX); 
-		cubemap->setImage(osg::TextureCubeMap::NEGATIVE_X, imageNegX); 
-		cubemap->setImage(osg::TextureCubeMap::POSITIVE_Y, imagePosY); 
-		cubemap->setImage(osg::TextureCubeMap::NEGATIVE_Y, imageNegY); 
-		cubemap->setImage(osg::TextureCubeMap::POSITIVE_Z, imagePosZ); 
-		cubemap->setImage(osg::TextureCubeMap::NEGATIVE_Z, imageNegZ); 
-
-		cubemap->setWrap(osg::Texture::WRAP_S, osg::Texture::CLAMP_TO_EDGE); 
-		cubemap->setWrap(osg::Texture::WRAP_T, osg::Texture::CLAMP_TO_EDGE); 
-		cubemap->setWrap(osg::Texture::WRAP_R, osg::Texture::CLAMP_TO_EDGE); 
-
-		cubemap->setFilter(osg::Texture::MIN_FILTER, osg::Texture::LINEAR); 
-		cubemap->setFilter(osg::Texture::MAG_FILTER, osg::Texture::LINEAR); 
-	} 
-	return cubemap;
 }

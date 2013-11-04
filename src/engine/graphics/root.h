@@ -31,6 +31,7 @@ class Root : public SceneNode
 		void AddLight();
 
 
+		void UpdateTerrain(osg::Vec3f parPosition);
 	protected:
 		osg::Group*   FRoot;
 		osg::MatrixTransform*   mNavModelGroup;

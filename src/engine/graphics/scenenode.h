@@ -39,6 +39,8 @@ class SceneNode
 		virtual void Pitch(float parRadian, TransformationSpace::Type parTrans = TransformationSpace::TS_LOCAL);
 		virtual void Roll(float parRadian, TransformationSpace::Type parTrans = TransformationSpace::TS_LOCAL);
 
+		virtual void SetPosition(osg::Vec3f parPosition);
+
 		virtual osg::Vec3f GetPosition(TransformationSpace::Type parTrans = TransformationSpace::TS_LOCAL);
 		virtual osg::Matrix GetTransformation(TransformationSpace::Type parTrans = TransformationSpace::TS_LOCAL);
 
@@ -59,6 +61,7 @@ class SceneNode
 	protected:
 		bool FIsRoot;
 		bool FIsValid;
+		osg::Vec3f FScaleVect;
 
 	protected:
 		osg::MatrixTransform* FModelTrans;
