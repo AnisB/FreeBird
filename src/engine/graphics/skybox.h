@@ -20,12 +20,14 @@ class Skybox
 		~Skybox();
 
 		void createSkybox(std::string parFolderName,  SceneNode * parNode);	
+		SceneNode* GetNode(){return FNode;};
 
 	protected:
 		osg::Geometry * GenerateBox();
 
 
 	protected:
+		SceneNode* FNode;
 		int FShaderId;
 
 };

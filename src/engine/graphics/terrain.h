@@ -19,6 +19,7 @@ class Terrain
 
 		void createTerrain(std::string parFolderName,  Root * parNode);	
 		SceneNode *  GetNode() {return FTerrain;};
+		SceneNode *  GetWater() {return FWater;};
 
 		void Update(osg::Vec3f parAirplanePos);
 		

@@ -33,7 +33,6 @@ Terrain::~Terrain()
 
 void Terrain::Update(osg::Vec3f parAirplanePos)
 {
-    
     osg::Vec3f TerrainPos(parAirplanePos.x(),0.0, parAirplanePos.z());
     FWater->SetPosition(TerrainPos);
 
@@ -50,6 +49,7 @@ void Terrain::createTerrain(std::string parFolderName, Root * parNode)
     FTerrain = new SceneObject(TERRAIN_MODEL);
     FTerrain->InitObject();
     FTerrain->Scale(osg::Vec3f(10,10,10));
+    //FTerrain->Scale(osg::Vec3f(0.10,0.10,0.10));
     FTerrain->Translate(osg::Vec3f(0.0,120,0.0));
   	FTerrain->SetDynamic();
     //FLowerTerrain->Translate(osg::Vec3f(0,1000,0));
@@ -69,6 +69,7 @@ void Terrain::createTerrain(std::string parFolderName, Root * parNode)
 
     parNode->AddModel(FTerrain);
     
+	
     FWater = new SceneObject(TERRAIN_MODEL);
     FWater->InitObject();
     FWater->Scale(osg::Vec3f(10,10,10));
@@ -83,5 +84,7 @@ void Terrain::createTerrain(std::string parFolderName, Root * parNode)
     fuct->setFunction(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
     FWater->GetNode()->getStateSet()->setAttributeAndModes(fuct); 
     parNode->AddModel(FWater);
+	
+
     
 }

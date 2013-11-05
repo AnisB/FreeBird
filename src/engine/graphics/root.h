@@ -22,6 +22,7 @@ class Root : public SceneNode
 
 		osg::Group* GetRoot(){ return FRoot;}
 		Terrain* GetTerrain(){ return FTerrain;}
+		Skybox* GetSkybox(){ return FSkybox;}
 		osg::MatrixTransform* GetDynamicModels(){ return mNavModelGroup;}
 		osg::MatrixTransform* GetStaticModels(){ return mNoNavModelGroup;}
 

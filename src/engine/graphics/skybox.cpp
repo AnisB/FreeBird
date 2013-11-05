@@ -4,7 +4,7 @@
 #include "shadermanager.h"
  
 
-#define SKYBOXSIZE 10000
+#define SKYBOXSIZE 7000
 
 Skybox::Skybox()
 : FShaderId(-1)
@@ -121,14 +121,15 @@ void Skybox::createSkybox(std::string parFolderName, SceneNode * parNode)
  
     osg::Geometry* box = GenerateBox();
  
-    osg::Geode* geode = new osg::Geode;
-    geode->addDrawable(box);
+    osg::Geode * node = new osg::Geode();
+    node->addDrawable(box);
     FShaderId = ShaderManager::Instance().CreateShader("data/shaders/skyBoxVertex.glsl","data/shaders/skyBoxFragments.glsl");
 
-	osg::StateSet* brickState = geode->getOrCreateStateSet();
+    osg::StateSet* brickState = node->getOrCreateStateSet();
     brickState->setTextureAttributeAndModes(0, skymap, osg::StateAttribute::ON);
-    ShaderManager::Instance().ActivateShader(geode, FShaderId);
- 
-    parNode->GetNode()->addChild(geode);
+    ShaderManager::Instance().ActivateShader(node, FShaderId);
+    //FNode = new SceneNode();
+    //FNode->GetNode()->addChild(node);
+    parNode->GetNode()->addChild(node);
  
 }
