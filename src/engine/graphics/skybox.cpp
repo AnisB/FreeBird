@@ -4,7 +4,7 @@
 #include "shadermanager.h"
  
 
-#define SKYBOXSIZE 7000
+#define SKYBOXSIZE 5000
 
 Skybox::Skybox()
 : FShaderId(-1)
