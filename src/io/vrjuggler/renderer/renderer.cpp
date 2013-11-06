@@ -9,13 +9,17 @@
 
 Renderer::Renderer(vrj::Kernel * parKernel) 
 : vrj::OsgApp(parKernel)
-, FB0State(gadget::Digital::TOGGLE_OFF)
-, FB1State(gadget::Digital::TOGGLE_OFF)
-, FB2State(gadget::Digital::TOGGLE_OFF)
+, FB0State(gadget::Digital::OFF)
+, FB1State(gadget::Digital::OFF)
+, FB2State(gadget::Digital::OFF)
+, frameCounter(0)
+, timePassed(0.0)
 {
 	
 }
 
+static float PLANE_SPEED =  100.0;
+#define HYPER_SPEED 5.0
 Renderer::~Renderer()
 {
 	
@@ -24,8 +28,14 @@ Renderer::~Renderer()
 // Update methods
 void Renderer::preFrame()
 {
+	
 	HandleVRJInputs();
 	float delta = ComputeTime();
+	timePassed+=delta;
+	//std::cout<<"FRAME : "<<frameCounter<<"Time"<<timePassed<<std::endl;
+	frameCounter++;
+	if(frameCounter<10)	
+		return;
 	UpdateScene(delta);
 }
 void Renderer::latePreFrame()
@@ -67,44 +77,53 @@ float Renderer::ComputeTime()
 		diffTime.secf(0.0);
 	}
 	FLastPreFrameTime = curTime;
-	return diffTime.secf();
+	float time =  diffTime.secf();
+	if(time>1000)
+	{
+		time = 0.0;
+	}
+	return time;
 }	
 
+
+osg::Matrixd Interpolate(const osg::Matrix& parWand, float parTime)
+{
+	
+	osg::Matrixd ident;
+	ident.makeIdentity ();
+	osg::Quat actualRotation = ident.getRotate();
+	osg::Quat finalRotation = parWand.getRotate();
+	osg::Quat result;
+	result.slerp(1*parTime,actualRotation,finalRotation);
+	return osg::Matrix(result);
+	
+}
 void Renderer::UpdateScene(float parDelta)
 {
 	
 	const gmtl::Matrix44f wand_mat( FWand->getData(getDrawScaleFactor()));
 	const gmtl::Matrix44f head_matrix( FHead->getData(getDrawScaleFactor()));
 
-	osg::Matrix airplaneTrans = GmtlToOsg_RotationOnly(wand_mat);
-	airplaneTrans = osg::Matrix::inverse(airplaneTrans);
-	//airplaneTrans.preMult(osg::Matrix::rotate(MathTools::PI,osg::Vec3f(0.0,0.0,1.0)));
-	//airplaneTrans.preMult(osg::Matrix::translate(osg::Vec3f(0.0,200.0,0.0)));
-	//airplaneTrans.postMult(osg::Matrix::translate(osg::Vec3f(0.0,0.0,1.0)));
-	osg::Quat rotation = airplaneTrans.getRotate();
-	rotation.w() = rotation.w()*100;
-	osg::Matrix rotationMatrix(rotation);
+	osg::Matrix wandRotation = GmtlToOsg_RotationOnly(wand_mat);
+	wandRotation = osg::Matrix::inverse(wandRotation);
+
+	osg::Matrix rotationMatrix = Interpolate(wandRotation, parDelta);
+
 	osg::Matrix currentMatrix = FRoot->GetTerrain()->GetNode()->GetNode()->getMatrix();
-	//airplaneTrans.postMult(osg::Matrix::translate(osg::Vec3f(0.0,0.0,1.0)));
-	//airplaneTrans.postMult(osg::Matrix::translate(FPosition.getTrans()));
-	//currentMatrix.postMult(osg::Matrix::translate(osg::Vec3f(0.0,0.0,1.0)));
-	//airplaneTrans.preMult(osg::Matrix::translate(FPosition));
 	currentMatrix.postMult(rotationMatrix);
-	currentMatrix.postMult(osg::Matrix::translate(osg::Vec3f(0.0,0.0,2.0)));
+	currentMatrix.postMult(osg::Matrix::translate(osg::Vec3f(0.0,0.0,PLANE_SPEED*parDelta)));
 	FRoot->GetTerrain()->GetNode()->GetNode()->setMatrix(currentMatrix);
-	//FRoot->UpdateTerrain(FRoot->GetTerrain()->GetNode()->GetPosition());
-	//FRoot->GetTerrain()->GetWater()->Pitch(MathTools::PI);
+
+
 	osg::Matrix currentWaterMatrix = FRoot->GetTerrain()->GetWater()->GetNode()->getMatrix();
 	currentWaterMatrix.postMult(rotationMatrix);
-	currentWaterMatrix.postMult(osg::Matrix::translate(osg::Vec3f(0.0,0.0,3.0)));
+	currentWaterMatrix.postMult(osg::Matrix::translate(osg::Vec3f(0.0,0.0,PLANE_SPEED*parDelta)));
+	//FRoot->GetTerrain()->UpdateVR(currentWaterMatrix);
 	FRoot->GetTerrain()->GetWater()->GetNode()->setMatrix(currentWaterMatrix);
-
-
-
-	osg::Matrix currentSkyboxMatrix = FRoot->GetSkybox()->GetNode()->getMatrix();
+	
+	osg::Matrix currentSkyboxMatrix = FRoot->GetSkybox()->GetNode()->GetNode()->getMatrix();
 	currentSkyboxMatrix.postMult(rotationMatrix);
-	FRoot->GetSkybox()->GetNode()->setMatrix(currentSkyboxMatrix);
-	//FRoot->GetTerrain()->GetNode()->Pitch(-MathTools::PI/2);
+	FRoot->GetSkybox()->GetNode()->GetNode()->setMatrix(currentSkyboxMatrix);
 
 }
 
@@ -116,17 +135,17 @@ void Renderer::HandleVRJInputs()
 	HandleButton(FButton2, FB2State, Button::BUTTON2);
 }
 
-void Renderer::HandleButton(gadget::DigitalInterface & parButton, gadget::Digital::State  parState, Button::Type parButtonID)
+void Renderer::HandleButton(gadget::DigitalInterface & parButton, gadget::Digital::State&  parState, Button::Type parButtonID)
 {
 	if (parButton->getData() != parState)
 	{
 		if (parState == gadget::Digital::ON)
 		{
-			parState = gadget::Digital::TOGGLE_OFF;
+			parState = gadget::Digital::OFF;
 			ButtonReleased(parButtonID);
 		}
 		else
-		{
+		{	
 			parState = gadget::Digital::ON;
 			ButtonPressed(parButtonID);
 		}
@@ -139,7 +158,7 @@ void Renderer::ButtonReleased(Button::Type parButton)
 	{
 		case Button::BUTTON0:
 		{
-		std::cout<<"Buttno0 pressed"<<std::endl;
+			PLANE_SPEED/=HYPER_SPEED;
 		}
 		break;
 		
@@ -157,6 +176,9 @@ void Renderer::ButtonPressed(Button::Type parButton)
 	switch (parButton)
 	{
 		case Button::BUTTON0:
+		{
+			PLANE_SPEED*=HYPER_SPEED;
+		}
 		break;
 		
 		case Button::BUTTON1:
@@ -206,11 +228,12 @@ void Renderer::Init()
         mHeadInitPos = GmtlToOsg(head_matrix);
         FAirPlane->GetNode()->setMatrix(mHeadInitPos);
         FAirPlane->Pitch(MathTools::PI);
-        FAirPlane->Translate(osg::Vec3f(-0.11,1.1,-2.5));
+        //FAirPlane->Translate(osg::Vec3f(-0.11,1.1,-2.5));
+	FAirPlane->Translate(osg::Vec3f(-0.11,0.0,12));
 	FRoot->GetTerrain()->GetNode()->Pitch(MathTools::PI);
 	FRoot->GetTerrain()->GetNode()->Translate(osg::Vec3f(0.0,250,0.0));
 	FRoot->GetTerrain()->GetWater()->Pitch(MathTools::PI);
-	FRoot->GetTerrain()->GetWater()->Translate(osg::Vec3f(0.0,-50,0.0));
+	FRoot->GetTerrain()->GetWater()->Translate(osg::Vec3f(0.0,120.0,0.0));
 	FPosition = FRoot->GetTerrain()->GetNode()->GetNode()->getMatrix().getTrans();
 	//FAirPlane->Scale(osg::Vec3f(0.1, 0.1, 0.1));
 	FRoot->AddStaticModel(FAirPlane);

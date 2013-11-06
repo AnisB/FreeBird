@@ -33,6 +33,7 @@ class Root : public SceneNode
 
 
 		void UpdateTerrain(osg::Vec3f parPosition);
+		void UpdateSkybox();
 	protected:
 		osg::Group*   FRoot;
 		osg::MatrixTransform*   mNavModelGroup;

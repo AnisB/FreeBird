@@ -43,7 +43,7 @@ void Root::InitRoot()
 void Root::CreateSkybox(SceneNode* toFollow)
 {
 	FSkybox = new Skybox();
-	FSkybox->createSkybox("data/skybox/sky4", toFollow);
+	FSkybox->createSkybox("data/skybox/sky4", toFollow, this);
 }
 
 void Root::CreateTerrain()
@@ -82,4 +82,9 @@ void Root::AddLight()
 void Root::UpdateTerrain(osg::Vec3f parPosition)
 {
 	FTerrain->Update(parPosition);
+}
+
+void Root::UpdateSkybox()
+{
+	FSkybox->Update();
 }

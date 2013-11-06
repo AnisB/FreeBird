@@ -64,6 +64,7 @@ void Renderer::UpdateScene(float parDelta)
 
 
 	FRoot->UpdateTerrain(FAirplane->GetNode()->GetPosition());
+	FRoot->UpdateSkybox();
 }
 
 

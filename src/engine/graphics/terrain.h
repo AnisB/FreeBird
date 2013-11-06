@@ -22,6 +22,7 @@ class Terrain
 		SceneNode *  GetWater() {return FWater;};
 
 		void Update(osg::Vec3f parAirplanePos);
+		void UpdateVR(osg::Matrixd parWaterMatrix);
 		
 	protected:
 		SceneObject* FTerrain;

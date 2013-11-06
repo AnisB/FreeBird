@@ -4,7 +4,7 @@
 #include "shadermanager.h"
  
 
-#define SKYBOXSIZE 7000
+#define SKYBOXSIZE 5000
 
 Skybox::Skybox()
 : FShaderId(-1)
@@ -114,7 +114,7 @@ osg::Geometry * Skybox::GenerateBox()
 	return geometry;
 
 }
-void Skybox::createSkybox(std::string parFolderName, SceneNode * parNode)
+void Skybox::createSkybox(std::string parFolderName, SceneNode * parNode, Root* parRoot)
 {
      osg::TextureCubeMap* skymap = ResourceManager::Instance().LoadTextureCubeMap(parFolderName);
  
@@ -128,8 +128,16 @@ void Skybox::createSkybox(std::string parFolderName, SceneNode * parNode)
     osg::StateSet* brickState = node->getOrCreateStateSet();
     brickState->setTextureAttributeAndModes(0, skymap, osg::StateAttribute::ON);
     ShaderManager::Instance().ActivateShader(node, FShaderId);
-    //FNode = new SceneNode();
-    //FNode->GetNode()->addChild(node);
-    parNode->GetNode()->addChild(node);
- 
+    FNode = new SceneNode();
+    FNode->InitObject();
+    FNode->GetNode()->addChild(node);
+    FFollowedNode = parNode;
+    parRoot->AddModel(FNode);
+}
+
+
+void Skybox::Update()
+{
+    osg::Vec3f pos = FFollowedNode->GetNode()->getMatrix().getTrans();
+    FNode->SetPosition(pos);
 }

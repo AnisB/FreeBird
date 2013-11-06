@@ -46,7 +46,7 @@ class Renderer : public vrj::OsgApp
 		float ComputeTime();
 		//Input Methods
 		void HandleButton(gadget::DigitalInterface & parButton,
-			 	gadget::Digital::State parState, 
+			 	gadget::Digital::State& parState, 
 				Button::Type parButtonID);
 		void ButtonReleased(Button::Type parButton);
 		void ButtonPressed(Button::Type parButton);
@@ -69,6 +69,9 @@ class Renderer : public vrj::OsgApp
 	protected:
 		// Time handeling
 		vpr::Interval FLastPreFrameTime;
+		
+		int frameCounter;
+		double timePassed;
 		
 		// Input handeling
 		gadget::PositionInterface FWand;

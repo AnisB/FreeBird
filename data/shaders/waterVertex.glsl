@@ -37,9 +37,6 @@ void animation(inout vec4 position, inout vec3 normal)
     float currentTime = 0.0;
     const float waterStepRadX = WATER_STEPX*2.0*PI;
     const float waterStepRadY = WATER_STEPY*2.0*PI;
-
-    float deltaPos = WATER_HEIGHT;
-    position += vec4(0.0,deltaPos,0.0,0.0);
 }
 
 
@@ -51,7 +48,7 @@ void main (void)
     //coordinates = vec2(gl_MultiTexCoord0.x + planePosition.x,gl_MultiTexCoord0.y+planePosition.y);
     coordinates = clamp(coordinates, 0.0, 1.0);
     // Transformation du vertex selon le temps
-    animation(position, normal);
+    //animation(position, normal);
 
     // Eye-coordinate position of vertex, needed in various calculations
     ecPosition = gl_ModelViewMatrix * position;

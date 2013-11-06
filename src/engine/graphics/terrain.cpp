@@ -31,9 +31,25 @@ Terrain::~Terrain()
 
 }
 
+
+void Terrain::UpdateVR(osg::Matrixd parWaterMatrix)
+{
+    osg::Vec3f waterHeight(parWaterMatrix.getTrans());
+    osg::Quat rotation = parWaterMatrix.getRotate();
+    osg::Matrix finalMatrix(rotation);
+    finalMatrix.postMult(osg::Matrix::translate(waterHeight));
+    DEBUG_PRINT("Airplane"<<VEC3_TO_STREAM(waterHeight));
+    FWater->GetNode()->setMatrix(finalMatrix);
+    //FWater->GetNode()->postMult(osg::Matrix(parWaterMatrix.getRotate()));
+
+    //osg::Vec3f waterPos(parWaterMatrix.getTrans().x(),0.0,parWaterMatrix.getTrans().z());
+    //osg::Vec2f relativePos = ComputeRelativePosition(waterPos);
+    //InjectVec2(FWater->GetNode(), relativePos, "planePosition");
+}
+
 void Terrain::Update(osg::Vec3f parAirplanePos)
 {
-    osg::Vec3f TerrainPos(parAirplanePos.x(),0.0, parAirplanePos.z());
+    osg::Vec3f TerrainPos(parAirplanePos.x(),600, parAirplanePos.z());
     FWater->SetPosition(TerrainPos);
 
     osg::Vec2f relativePos = ComputeRelativePosition(TerrainPos);
@@ -48,10 +64,10 @@ void Terrain::createTerrain(std::string parFolderName, Root * parNode)
 
     FTerrain = new SceneObject(TERRAIN_MODEL);
     FTerrain->InitObject();
-    FTerrain->Scale(osg::Vec3f(10,10,10));
+    FTerrain->Scale(osg::Vec3f(5,5,5));
     //FTerrain->Scale(osg::Vec3f(0.10,0.10,0.10));
     FTerrain->Translate(osg::Vec3f(0.0,120,0.0));
-  	FTerrain->SetDynamic();
+    FTerrain->SetDynamic();
     //FLowerTerrain->Translate(osg::Vec3f(0,1000,0));
     
     FShaderId = ShaderManager::Instance().CreateShader("data/shaders/terrainVertex.glsl","data/shaders/terrainFragment.glsl");
@@ -72,7 +88,8 @@ void Terrain::createTerrain(std::string parFolderName, Root * parNode)
 	
     FWater = new SceneObject(TERRAIN_MODEL);
     FWater->InitObject();
-    FWater->Scale(osg::Vec3f(10,10,10));
+    FWater->Scale(osg::Vec3f(5,5,5));
+    FWater->SetDynamic();
 
     FWaterShaderId = ShaderManager::Instance().CreateShader("data/shaders/waterVertex.glsl","data/shaders/waterFragment.glsl");
     ShaderManager::Instance().ActivateShader(FWater->GetNode(), FWaterShaderId);
