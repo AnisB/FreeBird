@@ -20,6 +20,10 @@ void animation(inout vec4 position)
     position += vec4(0.0, 1.0-deltaPos,0.0,0.0);
 }
 
+float ffog(in float ecDistance)
+{
+    return(abs(ecDistance));
+}
 
 void main (void)
 { 
@@ -39,4 +43,6 @@ void main (void)
     gl_ClipVertex = gl_ModelViewMatrix * position;
 
     gl_TexCoord[0].xy = coordinates; 
+    gl_FogFragCoord = ffog(ecPosition.z);
+    
 }

@@ -140,30 +140,37 @@ void main (void)
       vec4 colorRock = texture2D(ground,vec2(x2,y2));
       vec3 normal = texture2D(normalMap,gl_TexCoord[0].st).xzy;
       normal = -fnormal(normal);
+
+      vec4 finalColor;
       if(grassMap.r >= 0.70 )
       {
         MaterialSpec = vec4(1.0,1.0,1.0,1.0);
         flight( normal, ecPosition);
-        gl_FragColor = colorVal*snow;
+        finalColor = colorVal*snow;
       }
       else if(grassMap.r < 0.70 && grassMap.r > 0.45 )
       {
         MaterialSpec = vec4(0.8,0.8,0.8,1.0);
         flight( normal, ecPosition);
-        gl_FragColor = colorVal*colorRock;
+        finalColor = colorVal*colorRock;
       }
       else if(grassMap.r < 0.45 && grassMap.r > 0.10 )
       {
         MaterialSpec = vec4(0.8,0.8,1.0,1.0);
         flight( normal, ecPosition);
-        gl_FragColor = colorVal*grassTex;
+        finalColor = colorVal*grassTex;
       }
       else if(grassMap.r < 0.10 )
       {
         MaterialSpec = vec4(1.0,1.0,1.0,1.0);
         flight( normal, ecPosition);
-        gl_FragColor = colorVal*sandTex;
+        finalColor = colorVal*sandTex;
       }
+      float fog;
+      fog = (gl_Fog.end - gl_FogFragCoord) * gl_Fog.scale;
+      fog = clamp(fog, 0.0, 1.0);
+      finalColor = vec4(mix( vec3(gl_Fog.color), vec3(finalColor), fog), finalColor.a);
+      gl_FragColor = finalColor;
     }
     else
     {
