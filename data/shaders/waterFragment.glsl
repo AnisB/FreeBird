@@ -30,7 +30,7 @@ void main (void)
         vec4 normal = texture2D(normalMap,lol);
         vec4 blue = vec4(0.4,0.6,0.8,1.0);
         vec3 inci = normalize(-ecPosition.xyz);
-        vec3 n = fnormal(normal.xyz);
+        vec3 n = fnormal(normal.yzx);
         vec3 r = inci-2.0*(dot(inci,n)*n);
         vec4 skyboxMap = textureCube(skybox,-r);
         gl_FragColor = skyboxMap*blue;

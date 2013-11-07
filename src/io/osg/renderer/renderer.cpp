@@ -301,22 +301,11 @@ void Renderer::SceneInit()
 
 	FAirplane= new Airplane();
 	FAirplane->Build(FRoot);
+	FAirplane->GetNode()->SetPosition(osg::Vec3f(6000,950,600.0));
+	FAirplane->GetNode()->Yaw(MathTools::PI);
 	
 	FRoot->CreateSkybox(FAirplane->GetNode());
 	FRoot->CreateTerrain();
-
-	//FTerrain->Translate(osg::Vec3f(0,-20,0));
-	//FTerrain->Scale(osg::Vec3f(100,100,100));
-
-	/*
-	FAirplane2 = new SceneObject("data/DRC/DRC.obj");
-	FAirplane2->InitObject();
-	FAirplane2->Translate(osg::Vec3f(0,-200,00));
-    FAirplane2->Roll(3.14);
-    FAirplane2->Yaw(3.14);
-	FRoot->AddModel(FAirplane2);
-	*/
-	
 
 	FCameraMan = new CameraMan();
 	FCameraMan->InitObject();

@@ -21,17 +21,17 @@ void Root::InitRoot()
 	mLightGroup = new osg::Group();
 	FRoot->addChild( mLightGroup );
 
-        mNavModelGroup = new osg::MatrixTransform();
+    mNavModelGroup = new osg::MatrixTransform();
 	mNoNavModelGroup = new osg::MatrixTransform();
 	
 	mLightGroup->addChild( mNavModelGroup );
 	mLightGroup->addChild( mNoNavModelGroup );
-
 	osg::LightSource * lightsource = new osg::LightSource();
 	osg::Light* light = new osg::Light();
-	light->setAmbient(osg::Vec4(0.2,0.2,0.2,1.0));
-	light->setDiffuse(osg::Vec4(1.0,1.0,1.0,1.0));
-	light->setSpecular(osg::Vec4(1,1,1,1));
+	light->setAmbient(osg::Vec4(0.1,0.1,0.1,1.0));
+	light->setDiffuse(osg::Vec4(0.5,0.5,0.5,1.0));
+	light->setPosition(osg::Vec4(-1.0,-1.0,-1.0,0.0));
+	light->setSpecular(osg::Vec4(1,0.8,0.8,1));
 	lightsource->setLight(light);
 	mLightGroup->addChild(lightsource);
 

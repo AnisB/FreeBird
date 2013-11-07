@@ -26,8 +26,14 @@ class Terrain
 		void UpdateVR(osg::Matrixd parWaterMatrix, float parDisplacement);
 		void InitVR();
 		
+		protected:
+			void Palmiers();
+			void House();
+
 	protected:
 		SceneObject* FTerrain;
+		SceneNode* FDecors;
+		SceneObject* FPorteAvion;
 		SceneObject* FWater;
 		SceneNode* FWaterVR;
 		int FShaderId;
