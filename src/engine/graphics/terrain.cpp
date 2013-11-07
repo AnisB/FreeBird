@@ -114,7 +114,7 @@ void Terrain::createTerrainVR(std::string parFolderName, Root * parNode)
     FWater->InitObject();
     //FWater->Scale(osg::Vec3f(5,5,5));
     FWater->Pitch(MathTools::PI);
-    FWater->Translate(osg::Vec3f(0.0,120.0,0.0));
+    FWater->Translate(osg::Vec3f(0.0,80.0,0.0));
 
     FWaterShaderId = ShaderManager::Instance().CreateShader("data/shaders/waterVertex.glsl","data/shaders/waterFragment.glsl");
     ShaderManager::Instance().ActivateShader(FWater->GetNode(), FWaterShaderId);
