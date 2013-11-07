@@ -18,6 +18,7 @@ class Root : public SceneNode
 
 		void InitRoot();
 		void CreateTerrain();
+		void CreateTerrainVR();
 		void CreateSkybox(SceneNode* toFollow);
 
 		osg::Group* GetRoot(){ return FRoot;}

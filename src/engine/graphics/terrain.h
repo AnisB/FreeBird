@@ -17,16 +17,19 @@ class Terrain
 		Terrain();
 		~Terrain();
 
-		void createTerrain(std::string parFolderName,  Root * parNode);	
+		void createTerrain(std::string parFolderName,  Root * parNode);
+		void createTerrainVR(std::string parFolderName,  Root * parNode);
 		SceneNode *  GetNode() {return FTerrain;};
 		SceneNode *  GetWater() {return FWater;};
 
 		void Update(osg::Vec3f parAirplanePos);
-		void UpdateVR(osg::Matrixd parWaterMatrix);
+		void UpdateVR(osg::Matrixd parWaterMatrix, float parDisplacement);
+		void InitVR();
 		
 	protected:
 		SceneObject* FTerrain;
 		SceneObject* FWater;
+		SceneNode* FWaterVR;
 		int FShaderId;
 		int FWaterShaderId;
 

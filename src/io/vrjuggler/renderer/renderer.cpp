@@ -18,7 +18,7 @@ Renderer::Renderer(vrj::Kernel * parKernel)
 	
 }
 
-static float PLANE_SPEED =  100.0;
+static float PLANE_SPEED =  20.0;
 #define HYPER_SPEED 5.0
 Renderer::~Renderer()
 {
@@ -94,7 +94,7 @@ osg::Matrixd Interpolate(const osg::Matrix& parWand, float parTime)
 	osg::Quat actualRotation = ident.getRotate();
 	osg::Quat finalRotation = parWand.getRotate();
 	osg::Quat result;
-	result.slerp(1*parTime,actualRotation,finalRotation);
+	result.slerp(0.5*parTime,actualRotation,finalRotation);
 	return osg::Matrix(result);
 	
 }
@@ -109,17 +109,7 @@ void Renderer::UpdateScene(float parDelta)
 
 	osg::Matrix rotationMatrix = Interpolate(wandRotation, parDelta);
 
-	osg::Matrix currentMatrix = FRoot->GetTerrain()->GetNode()->GetNode()->getMatrix();
-	currentMatrix.postMult(rotationMatrix);
-	currentMatrix.postMult(osg::Matrix::translate(osg::Vec3f(0.0,0.0,PLANE_SPEED*parDelta)));
-	FRoot->GetTerrain()->GetNode()->GetNode()->setMatrix(currentMatrix);
-
-
-	osg::Matrix currentWaterMatrix = FRoot->GetTerrain()->GetWater()->GetNode()->getMatrix();
-	currentWaterMatrix.postMult(rotationMatrix);
-	currentWaterMatrix.postMult(osg::Matrix::translate(osg::Vec3f(0.0,0.0,PLANE_SPEED*parDelta)));
-	//FRoot->GetTerrain()->UpdateVR(currentWaterMatrix);
-	FRoot->GetTerrain()->GetWater()->GetNode()->setMatrix(currentWaterMatrix);
+	FRoot->GetTerrain()->UpdateVR(rotationMatrix,PLANE_SPEED*parDelta );
 	
 	osg::Matrix currentSkyboxMatrix = FRoot->GetSkybox()->GetNode()->GetNode()->getMatrix();
 	currentSkyboxMatrix.postMult(rotationMatrix);
@@ -220,7 +210,7 @@ void Renderer::Init()
 	FAirPlane->InitObject();
 	FRoot->CreateSkybox(FAirPlane);
 	
-	FRoot->CreateTerrain();
+	FRoot->CreateTerrainVR();
 
 	mNavigator.init();
 
@@ -228,14 +218,7 @@ void Renderer::Init()
         mHeadInitPos = GmtlToOsg(head_matrix);
         FAirPlane->GetNode()->setMatrix(mHeadInitPos);
         FAirPlane->Pitch(MathTools::PI);
-        //FAirPlane->Translate(osg::Vec3f(-0.11,1.1,-2.5));
 	FAirPlane->Translate(osg::Vec3f(-0.11,0.0,12));
-	FRoot->GetTerrain()->GetNode()->Pitch(MathTools::PI);
-	FRoot->GetTerrain()->GetNode()->Translate(osg::Vec3f(0.0,250,0.0));
-	FRoot->GetTerrain()->GetWater()->Pitch(MathTools::PI);
-	FRoot->GetTerrain()->GetWater()->Translate(osg::Vec3f(0.0,120.0,0.0));
-	FPosition = FRoot->GetTerrain()->GetNode()->GetNode()->getMatrix().getTrans();
-	//FAirPlane->Scale(osg::Vec3f(0.1, 0.1, 0.1));
 	FRoot->AddStaticModel(FAirPlane);
 }
 

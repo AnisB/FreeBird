@@ -52,6 +52,12 @@ void Root::CreateTerrain()
 	FTerrain->createTerrain("data/terrain/test", this);
 }
 
+void Root::CreateTerrainVR()
+{
+	FTerrain = new Terrain();
+	FTerrain->createTerrainVR("data/terrain/test", this);
+}
+
 
 void Root::AddModel(SceneNode * parNode)
 {
