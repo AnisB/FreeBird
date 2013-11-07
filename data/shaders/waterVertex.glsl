@@ -8,7 +8,7 @@ uniform float osg_FrameTime;
 const float PI = 3.1415926535897932385;  // Pi
 
 const float STEP = 0.001;
-const float MAX_HEIGHT = 120.0;
+const float MAX_HEIGHT = 90.0;
 const float WATER_LEVEL = 1.0;
 const float WATER_STEPX = 0.0;
 const float WATER_STEPY = 10.0;

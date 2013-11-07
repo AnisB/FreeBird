@@ -12,11 +12,18 @@
 #define TERRAIN_MODEL "data/terrain/base/terrain.obj"
 #define WATER_MODEL "data/terrain/base/water.obj"
 #define GET_HEIGHTMAP(textureName, parFolderName) std::string textureName = parFolderName; textureName+="/heightmap.png";
-#define TERRAIN_SIZE 1000
+#define TERRAIN_SIZE_VR 1000
+#define TERRAIN_SIZE 5000
 
 osg::Vec2f ComputeRelativePosition(const osg::Vec3f& parPosition)
 {
     osg::Vec2f realPos(fmod(parPosition.x()/TERRAIN_SIZE,1.0), fmod(parPosition.z()/TERRAIN_SIZE,1.0));
+    return realPos;
+}
+
+osg::Vec2f ComputeRelativePositionVR(const osg::Vec3f& parPosition)
+{
+    osg::Vec2f realPos(fmod(parPosition.x()/TERRAIN_SIZE_VR,1.0), fmod(parPosition.z()/TERRAIN_SIZE_VR,1.0));
     return realPos;
 }
 
@@ -43,7 +50,6 @@ void Terrain::UpdateVR(osg::Matrixd parRotationMatrix, float parDisplacement)
 	currentWaterMatrix.postMult(parRotationMatrix);
 	currentWaterMatrix.postMult(osg::Matrix::translate(osg::Vec3f(0.0,0.0,parDisplacement)));
 	FWaterVR->GetNode()->setMatrix(currentWaterMatrix);
-	//FWater->GetNode()->setMatrix(currentWaterMatrix);
 
 	osg::Vec3f scale = currentWaterMatrix.getScale();
 	osg::Vec3f transPrime = -(osg::Matrix::inverse(currentWaterMatrix).getTrans());
@@ -54,8 +60,8 @@ void Terrain::UpdateVR(osg::Matrixd parRotationMatrix, float parDisplacement)
 	finalMatrix.preMult(osg::Matrix::scale(scale));
 	FWater->GetNode()->setMatrix(finalMatrix);
 
-        osg::Vec2f relativePos = ComputeRelativePosition(-transPrime);
-        InjectVec2(FWater->GetNode(), relativePos, "planePosition");
+    osg::Vec2f relativePos = ComputeRelativePositionVR(-transPrime);
+    InjectVec2(FWater->GetNode(), relativePos, "planePosition");
   
 }
 
@@ -66,7 +72,7 @@ void Terrain::InitVR()
 
 void Terrain::Update(osg::Vec3f parAirplanePos)
 {
-    osg::Vec3f TerrainPos(parAirplanePos.x(),600, parAirplanePos.z());
+    osg::Vec3f TerrainPos(parAirplanePos.x(),590, parAirplanePos.z());
     FWater->SetPosition(TerrainPos);
 
     osg::Vec2f relativePos = ComputeRelativePosition(TerrainPos);
@@ -85,7 +91,7 @@ void Terrain::createTerrainVR(std::string parFolderName, Root * parNode)
    
     FTerrain->SetDynamic();
     FTerrain->Pitch(MathTools::PI);
-    FTerrain->Translate(osg::Vec3f(0.0,125,0.0));
+    FTerrain->Translate(osg::Vec3f(0.0,100,0.0));
 
     
     FShaderId = ShaderManager::Instance().CreateShader("data/shaders/terrainVertex.glsl","data/shaders/terrainFragment.glsl");
@@ -137,10 +143,9 @@ void Terrain::createTerrain(std::string parFolderName, Root * parNode)
 
     FTerrain = new SceneObject(TERRAIN_MODEL);
     FTerrain->InitObject();
-    //FTerrain->Scale(osg::Vec3f(5,5,5));
+    FTerrain->Scale(osg::Vec3f(5,5,5));
     FTerrain->Translate(osg::Vec3f(0.0,120,0.0));
     FTerrain->SetDynamic();
-    //FLowerTerrain->Translate(osg::Vec3f(0,1000,0));
     
     FShaderId = ShaderManager::Instance().CreateShader("data/shaders/terrainVertex.glsl","data/shaders/terrainFragment.glsl");
     
@@ -158,9 +163,9 @@ void Terrain::createTerrain(std::string parFolderName, Root * parNode)
     parNode->AddModel(FTerrain);
     
 	
-    FWater = new SceneObject(TERRAIN_MODEL);
+    FWater = new SceneObject(WATER_MODEL);
     FWater->InitObject();
-    //FWater->Scale(osg::Vec3f(5,5,5));
+    FWater->Scale(osg::Vec3f(5,5,5));
 
     FWaterShaderId = ShaderManager::Instance().CreateShader("data/shaders/waterVertex.glsl","data/shaders/waterFragment.glsl");
     ShaderManager::Instance().ActivateShader(FWater->GetNode(), FWaterShaderId);
