@@ -29,6 +29,8 @@ class Terrain
 		protected:
 			void Palmiers();
 			void House();
+			void PalmiersVR();
+			void HouseVR();
 
 	protected:
 		SceneObject* FTerrain;

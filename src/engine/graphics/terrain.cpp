@@ -21,6 +21,10 @@
 #define TERRAIN_SIZE_VR 1000
 #define TERRAIN_SIZE 10000
 
+
+
+#define WATER_HEIGHT_VR 101
+
 osg::Vec2f ComputeRelativePosition(const osg::Vec3f& parPosition)
 {
     osg::Vec2f realPos(fmod(parPosition.x()/TERRAIN_SIZE,1.0), fmod(parPosition.z()/TERRAIN_SIZE,1.0));
@@ -56,6 +60,11 @@ void Terrain::UpdateVR(osg::Matrixd parRotationMatrix, float parDisplacement)
 	currentWaterMatrix.postMult(parRotationMatrix);
 	currentWaterMatrix.postMult(osg::Matrix::translate(osg::Vec3f(0.0,0.0,parDisplacement)));
 	FWaterVR->GetNode()->setMatrix(currentWaterMatrix);
+
+	osg::Matrix currentDecorsMatrix = FDecors->GetNode()->getMatrix();
+	currentDecorsMatrix.postMult(parRotationMatrix);
+	currentDecorsMatrix.postMult(osg::Matrix::translate(osg::Vec3f(0.0,0.0,parDisplacement)));
+	FDecors->GetNode()->setMatrix(currentDecorsMatrix);
 
 	osg::Vec3f scale = currentWaterMatrix.getScale();
 	osg::Vec3f transPrime = -(osg::Matrix::inverse(currentWaterMatrix).getTrans());
@@ -111,12 +120,25 @@ void Terrain::createTerrainVR(std::string parFolderName, Root * parNode)
 
     parNode->AddModel(FTerrain);
     
-	
+    FDecors = new SceneNode();
+    FDecors->InitObject();
+    parNode->AddModel(FDecors);
+    PalmiersVR();
+    HouseVR();
+
+
+    FPorteAvion = new SceneObject(PORTE_AVION);
+    FPorteAvion->InitObject();
+    FPorteAvion->Translate(osg::Vec3f(600,-WATER_HEIGHT_VR,0.0));
+    FPorteAvion->Pitch(-MathTools::PI/2);
+    FPorteAvion->Scale(osg::Vec3f(20,20,20));
+    FDecors->AddChild(FPorteAvion);
+
     FWater = new SceneObject(TERRAIN_MODEL);
     FWater->InitObject();
     //FWater->Scale(osg::Vec3f(5,5,5));
     FWater->Pitch(MathTools::PI);
-    FWater->Translate(osg::Vec3f(0.0,80.0,0.0));
+    FWater->Translate(osg::Vec3f(0.0,WATER_HEIGHT_VR,0.0));
 
     FWaterShaderId = ShaderManager::Instance().CreateShader("data/shaders/waterVertex.glsl","data/shaders/waterFragment.glsl");
     ShaderManager::Instance().ActivateShader(FWater->GetNode(), FWaterShaderId);
@@ -172,6 +194,44 @@ void Terrain::House()
         randVal /=10;
         maison->Roll(1*randVal);
         maison->Scale(osg::Vec3f(2,2,2));
+        FDecors->AddChild(maison);
+    }
+}
+
+void Terrain::PalmiersVR()
+{
+    std::ifstream infile("data/terrain/base/palmiers.txt");
+    int a, b, c;
+    while (infile >> a >> b >> c)
+    {
+        PRINT_ORANGE<<"Un nouveau palmier à "<< a<<" "<<b<<" "<<c<<" "<<END_PRINT_COLOR;
+        SceneObject* palmier = new SceneObject(PALMIER);
+        palmier->InitObject();
+        palmier->Translate(osg::Vec3f(-(c-1024)/2.0,-((1.0-(float)b/255.0))*WATER_HEIGHT_VR,-(a-1024)/2.0));
+        palmier->Pitch(-MathTools::PI/2);
+        float randVal = (float)(rand() % 5 +5);
+        randVal /=100;
+        palmier->Roll(1*randVal);
+        palmier->Scale(osg::Vec3f(randVal,randVal,randVal));
+
+        FDecors->AddChild(palmier);
+    }
+}
+void Terrain::HouseVR()
+{
+    std::ifstream infile("data/terrain/base/maisons.txt");
+    int a, b, c;
+    while (infile >> a >> b >> c)
+    {
+        PRINT_ORANGE<<"Une  maison à "<< a<<" "<<b<<" "<<c<<" "<<END_PRINT_COLOR;
+        SceneObject* maison = new SceneObject(HOUSE);
+        maison->InitObject();
+        maison->Translate(osg::Vec3f(-(c-1024)/2.0,-((1.0-(float)b/255.0))*WATER_HEIGHT_VR,-(a-1024)/2.0));
+        maison->Pitch(-MathTools::PI/2);
+        float randVal = (float)(rand() % 5 +5);
+        randVal /=10;
+        maison->Roll(1*randVal);
+        maison->Scale(osg::Vec3f(0.5,0.5,0.5));
         FDecors->AddChild(maison);
     }
 }

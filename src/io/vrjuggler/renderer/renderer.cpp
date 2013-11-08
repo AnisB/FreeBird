@@ -110,7 +110,6 @@ void Renderer::UpdateScene(float parDelta)
 	osg::Matrix rotationMatrix = Interpolate(wandRotation, parDelta);
 
 	FRoot->GetTerrain()->UpdateVR(rotationMatrix,PLANE_SPEED*parDelta );
-	
 	osg::Matrix currentSkyboxMatrix = FRoot->GetSkybox()->GetNode()->GetNode()->getMatrix();
 	currentSkyboxMatrix.postMult(rotationMatrix);
 	FRoot->GetSkybox()->GetNode()->GetNode()->setMatrix(currentSkyboxMatrix);

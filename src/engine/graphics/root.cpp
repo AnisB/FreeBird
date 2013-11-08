@@ -44,10 +44,17 @@ void Root::InitRoot()
 	mLightGroup->addChild( mNoNavModelGroup );
 	osg::LightSource * lightsource = new osg::LightSource();
 	osg::Light* light = new osg::Light();
-	light->setAmbient(osg::Vec4(0.1,0.1,0.1,1.0));
+	#ifndef VRJUGGLER
+	light->setAmbient(osg::Vec4(0.4,0.4,0.4,1.0));
 	light->setDiffuse(osg::Vec4(0.5,0.5,0.5,1.0));
 	light->setPosition(osg::Vec4(-1.0,-1.0,-1.0,0.0));
 	light->setSpecular(osg::Vec4(1,0.8,0.8,1));
+	#else
+	light->setAmbient(osg::Vec4(0.7,0.7,0.7,1.0));
+	light->setDiffuse(osg::Vec4(0.5,0.5,0.5,1.0));
+	light->setPosition(osg::Vec4(0.0,0.0,1.0,0.0));
+	light->setSpecular(osg::Vec4(1,0.8,0.8,1));
+	#endif
 	lightsource->setLight(light);
 	mLightGroup->addChild(lightsource);
 

@@ -85,7 +85,7 @@ void main (void)
     {
         vec2 lol = vec2(mod(planePosition.x + gl_TexCoord[0].x, 1.0), mod(planePosition.y +gl_TexCoord[0].y, 1.0));
         vec4 normal = texture2D(normalMap,lol);
-        vec4 blue = vec4(0.4,0.6,0.8,1.0);
+        vec4 blue = vec4(0.3,0.4,0.6,1.0);
         vec3 inci = normalize(-ecPosition.xyz);
         vec3 n = -fnormal(normal.yzx);
         vec3 r = inci-2.0*(dot(inci,n)*n);
