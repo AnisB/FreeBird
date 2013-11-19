@@ -7,6 +7,8 @@
 #include <osg/Quat>
 
 
+
+#define FIRST_FRAME
 Renderer::Renderer(vrj::Kernel * parKernel) 
 : vrj::OsgApp(parKernel)
 , FB0State(gadget::Digital::OFF)
@@ -28,14 +30,19 @@ Renderer::~Renderer()
 // Update methods
 void Renderer::preFrame()
 {
-	
+	// Input handeling
 	HandleVRJInputs();
+
+	// Computing passed time
 	float delta = ComputeTime();
 	timePassed+=delta;
-	//std::cout<<"FRAME : "<<frameCounter<<"Time"<<timePassed<<std::endl;
-	frameCounter++;
-	if(frameCounter<10)	
+
+	// Waiting first Ok Frame
+	if(frameCounter<FIRST_FRAME)	
+	{
+		frameCounter++;
 		return;
+	}
 	UpdateScene(delta);
 }
 void Renderer::latePreFrame()
@@ -49,10 +56,6 @@ void Renderer::latePreFrame()
 
     // Obtenir un pointeur sur le tableaux des 16 valeurs
     const float *mat_Trw = world_transform_Trw.getData();
-
-    // Mettre à jour la MatrixTransform du graphe de scène avec le pointeur sur ces valeurs
-    osg::Matrix osg_current_matrix_Trw( mat_Trw );
-    FRoot->GetDynamicModels()->setMatrix( osg_current_matrix_Trw );
 
     // Finish updating the scene graph.
     vrj::OsgApp::latePreFrame();
@@ -85,10 +88,9 @@ float Renderer::ComputeTime()
 	return time;
 }	
 
-
+// Interpole une rotation 
 osg::Matrixd Interpolate(const osg::Matrix& parWand, float parTime)
 {
-	
 	osg::Matrixd ident;
 	ident.makeIdentity ();
 	osg::Quat actualRotation = ident.getRotate();
@@ -102,7 +104,6 @@ void Renderer::UpdateScene(float parDelta)
 {
 	
 	const gmtl::Matrix44f wand_mat( FWand->getData(getDrawScaleFactor()));
-	const gmtl::Matrix44f head_matrix( FHead->getData(getDrawScaleFactor()));
 
 	osg::Matrix wandRotation = GmtlToOsg_RotationOnly(wand_mat);
 	wandRotation = osg::Matrix::inverse(wandRotation);
@@ -209,14 +210,14 @@ void Renderer::Init()
 	FAirPlane->InitObject();
 	FRoot->CreateSkybox(FAirPlane);
 	
-	FRoot->CreateTerrainVR();
+	FRoot->CreateTerrain();
 
 	mNavigator.init();
 
 	const gmtl::Matrix44f head_matrix( FHead->getData(getDrawScaleFactor()));
-        mHeadInitPos = GmtlToOsg(head_matrix);
-        FAirPlane->GetNode()->setMatrix(mHeadInitPos);
-        FAirPlane->Pitch(MathTools::PI);
+    mHeadInitPos = GmtlToOsg(head_matrix);
+    FAirPlane->GetNode()->setMatrix(mHeadInitPos);
+    FAirPlane->Pitch(MathTools::PI);
 	FAirPlane->Translate(osg::Vec3f(-0.11,0.0,12));
 	FRoot->AddStaticModel(FAirPlane);
 }

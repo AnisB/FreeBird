@@ -6,6 +6,9 @@
 #include <graphics/sceneobject.h>
 #include <graphics/root.h>
 
+#include <fx/explosion.h>
+
+
 
 
 namespace AirplaneRotation
@@ -38,7 +41,8 @@ class Airplane
 		void ForceTransformation(osg::Matrix parForceTransformation);
 	protected:
 			SceneNode * FModelNode;			
-			SceneNode * FNode;			
+			SceneNode * FNode;	
+			FXExplosion * FBoum;		
 };
 
 

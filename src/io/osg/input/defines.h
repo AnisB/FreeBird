@@ -21,6 +21,8 @@ namespace Key
     ,DEBUG0 = osgGA::GUIEventAdapter::KEY_R
     ,DEBUG1 = osgGA::GUIEventAdapter::KEY_T
     ,DEBUG2 = osgGA::GUIEventAdapter::KEY_Y
+    ,DEBUG3 = osgGA::GUIEventAdapter::KEY_O
+    ,DEBUG4 = osgGA::GUIEventAdapter::KEY_P
   };
 }
 

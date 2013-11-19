@@ -30,6 +30,7 @@ public:
 
 };
 
+void LoadBaseShader(osg::Node * parNode);
 void BindTexture(osg::Node * parNode, const std::string& parVarName, const std::string& parImg, size_t parIndex);
 void BindCubeMap(osg::Node * parNode, const std::string& parVarName, const std::string& parImg, size_t parIndex);
 void InjectVec3(osg::Node * parNode, osg::Vec3f parPosition, const std::string& parVarName);

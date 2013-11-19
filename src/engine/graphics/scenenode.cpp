@@ -14,7 +14,6 @@ SceneNode::SceneNode(NodeType::Type parTypeNode)
 
 SceneNode::~SceneNode()
 {
-
 }
 
 void SceneNode::SetPosition(osg::Vec3f parPosition)
@@ -50,6 +49,11 @@ void SceneNode::SetParent(SceneNode * parNode)
 void SceneNode::Rotate(float parAngle, const osg::Vec3f& parAxe)
 {
 
+}
+
+void SceneNode::Rotate(const osg::Matrix& parRotationMatrix)
+{
+	FModelTrans->postMult(parRotationMatrix);
 }
 
 void SceneNode::Scale(osg::Vec3f parVectScale)
@@ -89,7 +93,10 @@ osg::Vec3f SceneNode::GetPosition(TransformationSpace::Type parTrans)
 	return GetTransformation(parTrans).getTrans();
 }
 
-
+void SceneNode::SetTransformation(const osg::Matrix& parMatrix)
+{	
+	FModelTrans->setMatrix(parMatrix);
+}
 osg::Matrix SceneNode::GetTransformation(TransformationSpace::Type parTrans)
 {
 	if(parTrans == TransformationSpace::TS_LOCAL)

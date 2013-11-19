@@ -143,7 +143,7 @@ osg::TextureCubeMap* ResourceManager::LoadTextureCubeMap(std::string parFolder)
 	}
 }
 
-osg::Node * ResourceManager::LoadModel(const std::string& modelName)
+osg::ref_ptr<osg::Node>  ResourceManager::LoadModel(const std::string& modelName)
 {
 	PRINT_GREEN << MODEL_MANAGER << "Loading model" << modelName << END_PRINT_COLOR; 
 	tryget(it, FModels, modelName);
@@ -154,7 +154,7 @@ osg::Node * ResourceManager::LoadModel(const std::string& modelName)
 	}
 	else
 	{
-		osg::Node * newModel = osgDB::readNodeFile(modelName);
+		osg::Node* newModel = osgDB::readNodeFile(modelName);
 		if(newModel)
 		{
 			FModels[modelName] = newModel;

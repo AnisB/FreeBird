@@ -70,7 +70,6 @@ void flight(in vec3 normal, in vec4 ecPosition)
 
 
     directionalLight(0, normal);
-    //pointLight(0, normal,eye,ecPosition3);
 
     color = gl_FrontLightModelProduct.sceneColor +
       Ambient  * gl_FrontMaterial.ambient +

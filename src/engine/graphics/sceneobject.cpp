@@ -14,7 +14,6 @@ SceneObject::SceneObject(const std::string& parModelName)
 
 SceneObject::~SceneObject()
 {
-
 }
 
 void SceneObject::InitObject()
@@ -23,8 +22,12 @@ void SceneObject::InitObject()
 	if(FModel != NULL)
 	{
 		FIsValid = true;
-
 		FModelTrans = new osg::MatrixTransform();
 		FModelTrans->addChild(FModel);
+
+	}
+	else
+	{
+		PRINT_RED<<"Erreur de chargement de modèle, crash imminent"<<END_PRINT_COLOR;
 	}
 }

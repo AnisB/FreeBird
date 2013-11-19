@@ -19,14 +19,14 @@ class ResourceManager : public Singleton<ResourceManager>
 		ResourceManager();
 		~ResourceManager();	
 
-		osg::Node * LoadModel(const std::string& parModelName);
+		osg::ref_ptr<osg::Node> LoadModel(const std::string& parModelName);
 
 		osg::Texture2D* LoadTexture(const std::string& parTexture);
 		osg::TextureCubeMap* LoadTextureCubeMap(std::string parFolder);
 		
 
 	protected:
-		std::map<std::string, osg::Node*> FModels;
+		std::map<std::string, osg::ref_ptr<osg::Node> > FModels;
 		std::map<std::string, osg::Texture2D*> FTextures;
 		std::map<std::string, osg::TextureCubeMap*> FCubeMaps;
 

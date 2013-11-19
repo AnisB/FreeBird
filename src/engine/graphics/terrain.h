@@ -17,28 +17,48 @@ class Terrain
 		Terrain();
 		~Terrain();
 
+		// Methods to create the terain
 		void createTerrain(std::string parFolderName,  Root * parNode);
-		void createTerrainVR(std::string parFolderName,  Root * parNode);
+
+		//Getters
 		SceneNode *  GetNode() {return FTerrain;};
 		SceneNode *  GetWater() {return FWater;};
 
+		// Update scene
 		void Update(osg::Vec3f parAirplanePos);
 		void UpdateVR(osg::Matrixd parWaterMatrix, float parDisplacement);
 		void InitVR();
 		
-		protected:
-			void Palmiers();
-			void House();
-			void PalmiersVR();
-			void HouseVR();
+	protected:
+
+		// Chargment du terrain
+		void LoadTerrain();
+		void LoadShader();
+
+		// Chargment de l'eau
+		void LoadWater();
+		void LoadWaterShader();
+
+		// Creation des decors
+		void LoadDecors();
+		void Palmiers();
+		void House();
+		void PalmiersVR();
+		void HouseVR();
 
 	protected:
+
+		// Terrain
 		SceneObject* FTerrain;
+		int FShaderId;
+
+		//Decors
 		SceneNode* FDecors;
 		SceneObject* FPorteAvion;
+
+		//Water management
 		SceneObject* FWater;
 		SceneNode* FWaterVR;
-		int FShaderId;
 		int FWaterShaderId;
 
 };

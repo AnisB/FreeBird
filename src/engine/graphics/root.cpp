@@ -78,13 +78,12 @@ void Root::CreateTerrain()
 	FTerrain->createTerrain("data/terrain/test", this);
 }
 
-void Root::CreateTerrainVR()
+
+void Root::RemoveModel(SceneNode * parNode)
 {
-	FTerrain = new Terrain();
-	FTerrain->createTerrainVR("data/terrain/test", this);
+	PRINT_ORANGE<<mNavModelGroup->removeChild(parNode->GetNode())<<END_PRINT_COLOR;
+	FSons.remove(parNode);
 }
-
-
 void Root::AddModel(SceneNode * parNode)
 {
 	parNode->SetParent(this);

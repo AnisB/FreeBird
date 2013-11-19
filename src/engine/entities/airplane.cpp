@@ -22,8 +22,11 @@ void Airplane::Build(Root * parRootNode)
 	FModelNode->InitObject();
 	FNode =  new SceneNode();
 	FNode->InitObject();
-	//FNode->Translate(osg::Vec3f(0,-200,0));
 	FNode->AddChild(FModelNode);
+	//FBoum = new FXExplosion();
+	//FBoum->InitFX();
+
+	//parRootNode->AddModel(FBoum->GetNode());
 	parRootNode->AddModel(FNode);
 }
 
@@ -31,32 +34,32 @@ void Airplane::Build(Root * parRootNode)
 void Airplane::Roll(AirplaneRotation::Type parType, float parTime)
 {
 	if(parType == AirplaneRotation::CLOCKWISE)
-		FModelNode->Roll(0.03);	
+		FModelNode->Roll(1.2*parTime);	
 	else
-		FModelNode->Roll(-0.03);	
+		FModelNode->Roll(-1.2*parTime);	
 
 }
 void Airplane::Pitch(AirplaneRotation::Type parType, float parTime)
 {
 	if(parType == AirplaneRotation::CLOCKWISE)
-		FModelNode->Pitch(0.02);	
+		FModelNode->Pitch(1.0*parTime);	
 	else
-		FModelNode->Pitch(-0.02);
+		FModelNode->Pitch(-1.0*parTime);
 }
 
 void Airplane::Yaw(AirplaneRotation::Type parType, float parTime)
 {
 	if(parType == AirplaneRotation::CLOCKWISE)
-		FModelNode->Yaw(0.005);	
+		FModelNode->Yaw(0.3*parTime);	
 	else
-		FModelNode->Yaw(-0.005);
+		FModelNode->Yaw(-0.3*parTime);
 }
 
 void Airplane::ForceTransformation(osg::Matrix parForceTransformation)
 {
 	FModelNode->GetNode()->setMatrix(parForceTransformation);
 }
-void Airplane::Avance_Debug(double time)
+void Airplane::Avance_Debug(double parTime)
 {
-	FNode->Translate(osg::Vec3f(0,0,10) * FModelNode->GetTransformation());
+	FNode->Translate(osg::Vec3f(0,0,500*parTime) * FModelNode->GetTransformation());
 }

@@ -21,7 +21,7 @@ class SceneObject : public SceneNode
 {
 	public:		
 		SceneObject(const std::string& parModelName);
-		~SceneObject();	
+		virtual ~SceneObject();	
     public:
 		void InitObject();
 
@@ -35,7 +35,7 @@ class SceneObject : public SceneNode
 
 	protected:
 		std::string FModelName;
-		osg::Node* FModel;
+		osg::ref_ptr<osg::Node> FModel;
 
 };
 #endif //SCENE_OBJECT_FREE_BIRD

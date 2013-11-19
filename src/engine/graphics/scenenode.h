@@ -34,6 +34,7 @@ class SceneNode
 	public:
 		virtual void Translate(const osg::Vec3f& parVec);
 		virtual void Rotate(float parAngle, const osg::Vec3f& parAxe);
+		virtual void Rotate(const osg::Matrix& parMatrixRotation);
 
 		virtual void Yaw(float parRadian, TransformationSpace::Type parTrans = TransformationSpace::TS_LOCAL);
 		virtual void Pitch(float parRadian, TransformationSpace::Type parTrans = TransformationSpace::TS_LOCAL);
@@ -43,6 +44,7 @@ class SceneNode
 
 		virtual osg::Vec3f GetPosition(TransformationSpace::Type parTrans = TransformationSpace::TS_LOCAL);
 		virtual osg::Matrix GetTransformation(TransformationSpace::Type parTrans = TransformationSpace::TS_LOCAL);
+		virtual void SetTransformation(const osg::Matrix& parMatrix);
 
 		virtual osg::Matrix GetLocalTransformation();
 		virtual osg::Matrix GetParentRelativeTransformation();
@@ -64,7 +66,7 @@ class SceneNode
 		osg::Vec3f FScaleVect;
 
 	protected:
-		osg::MatrixTransform* FModelTrans;
+		osg::ref_ptr<osg::MatrixTransform> FModelTrans;
 
 		SceneNode * FParentNode;
 		std::list<SceneNode*> FSons;

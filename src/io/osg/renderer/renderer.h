@@ -5,12 +5,16 @@
 #include <graphics/root.h>
 #include <graphics/sceneobject.h>
 #include <graphics/cameraman.h>
+
+// physics includes
+#include <physics/engine.h>
 // Include defines
 #include <input/defines.h>
 #include <input/inputeventhandler.h>
 
 //Inlcude Entities
 #include <entities/airplane.h>
+#include <entities/bullet.h>
 // Project includes
 #include <osgViewer/Viewer>
 
@@ -37,11 +41,22 @@ class Renderer : public Singleton<Renderer>
 
 	public:
 		//Input Methods
-		void KeyReleased(Key::Type parKey);
-		void KeyPressed(Key::Type parKey);
+		void HandleKeyReleased(Key::Type parKey);
+		void HandleKeyPressed(Key::Type parKey);
+
+		void HandleMousePressed(Button::Type parButton);
+		void HandleMouseReleased(Button::Type parButton);
 
 		void MousePressed(Button::Type parButton);
 		void MouseReleased(Button::Type parButton);
+
+
+		void KeyReleased(Key::Type parKey);
+		void KeyPressed(Key::Type parKey);
+
+
+
+
 	
 	protected:
 		// Init
@@ -62,11 +77,13 @@ class Renderer : public Singleton<Renderer>
 		// Scene objetcs
 		Root* FRoot;
 		Airplane * FAirplane;
-		SceneObject * FAirplane2;
-		SceneObject * FTerrain;
+		std::list<Projectile*> FProjectile;
+
 		// OSG Viewer
 		osgViewer::Viewer FViewer;
 
+		// Physics
+		PhysicsEngine FPhysicsEngine;
 		// Input Handler
 		InputEventHandler * FInputHandler;
 
@@ -75,10 +92,10 @@ class Renderer : public Singleton<Renderer>
 
 		// Camera
 		osg::Camera * FCamera;
-
 		CameraMan * FCameraMan;
-
 		Skybox*	  FSkybox;
+
+		double FLastFrameTime;
 
 };
 #endif //RENDERER_FREE_BIRD

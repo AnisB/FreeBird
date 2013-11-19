@@ -70,6 +70,14 @@ int ShaderManager::CreateShaderTess(std::string parVertexShader, std::string par
 }
 #endif
 
+
+
+void LoadBaseShader(osg::Node * parNode)
+{
+    int shaderId = ShaderManager::Instance().CreateShader("data/shaders/baseVertex.glsl","data/shaders/baseFragment.glsl");
+    ShaderManager::Instance().ActivateShader(parNode, shaderId);
+}
+
 void BindTexture(osg::Node * parNode, const std::string& parVarName, const std::string& parImg, size_t parIndex)
 {
     osg::StateSet* brickState = parNode->getOrCreateStateSet();

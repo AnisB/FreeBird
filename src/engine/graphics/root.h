@@ -18,7 +18,6 @@ class Root : public SceneNode
 
 		void InitRoot();
 		void CreateTerrain();
-		void CreateTerrainVR();
 		void CreateSkybox(SceneNode* toFollow);
 
 		osg::Group* GetRoot(){ return FRoot;}
@@ -27,7 +26,9 @@ class Root : public SceneNode
 		osg::MatrixTransform* GetDynamicModels(){ return mNavModelGroup;}
 		osg::MatrixTransform* GetStaticModels(){ return mNoNavModelGroup;}
 
+		void RemoveModel(SceneNode * parNode);
 		void AddModel(SceneNode * parNode);
+		
 		void AddStaticModel(SceneNode * parNode);
 		void AddNode(osg::Node * parNode);
 		void AddLight();

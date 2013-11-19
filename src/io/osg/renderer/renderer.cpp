@@ -5,6 +5,8 @@
 
 Renderer::Renderer() 
 : FViewer()
+, FPhysicsEngine()
+, FLastFrameTime(0.0)
 {
 	FInputHandler = new InputEventHandler();
 }
@@ -13,14 +15,11 @@ Renderer::~Renderer()
 {
 	delete FRoot;
 	delete FAirplane;
-	delete FAirplane2;
-	delete FTerrain;
 	delete FCameraMan;
 }
 
 void Renderer::UpdateScene(float parDelta)
 {	
-	FCameraMan->Update();
 	if(FKeyHandler[Key::FOWARD])
 	{
 		FAirplane->Pitch(AirplaneRotation::ANTICLOCKWISE,parDelta);
@@ -61,16 +60,48 @@ void Renderer::UpdateScene(float parDelta)
 	{
 		FCameraMan->ChangeFocalLength(false);
 	}
+	FCameraMan->Update();
 
 
 	FRoot->UpdateTerrain(FAirplane->GetNode()->GetPosition());
 	FRoot->UpdateSkybox();
+	if(FPhysicsEngine.IsLandCollision(FAirplane->GetNode()->GetPosition()))
+	{
+		PRINT_ORANGE<<"COLLISION DUDE"<<END_PRINT_COLOR;
+	}
+
+	// Mise a jour des porjectiles
+	std::list<std::list<Projectile*>::iterator> toRemove;
+	foreach(proj, FProjectile)
+	{
+		// On update
+		(*proj)->Update(parDelta);
+		// Collsion avec le sol?
+		if(FPhysicsEngine.IsLandCollision((*proj)->GetNode()->GetPosition()))
+		{
+			PRINT_ORANGE<<"Projectile a detuire(Sol)"<<END_PRINT_COLOR;
+			toRemove.push_back(proj);
+		}
+		// trop loin, on le detruit
+		else if(FPhysicsEngine.IsTooFarCollision(FAirplane->GetNode()->GetPosition(), (*proj)->GetNode()->GetPosition()))
+		{
+			PRINT_ORANGE<<"Projectile a detuire(Trop loin)"<<END_PRINT_COLOR;
+			toRemove.push_back(proj);
+		}
+	}
+	// destruction réelle
+	foreach(proj, toRemove)
+	{
+		FRoot->RemoveModel((*(*proj))->GetNode());
+		FProjectile.erase(*proj);
+		PRINT_ORANGE<<"Projectile détruit"<<END_PRINT_COLOR;
+		delete *(*proj);
+	}
 }
 
 
 void Renderer::Run()
 {
-
 	if(!FViewer.isRealized())
 	    FViewer.realize();
 	InitCamera();
@@ -78,8 +109,10 @@ void Renderer::Run()
 
 	while( !FViewer.done() )
 	{
-	   UpdateScene(FViewer.elapsedTime());
-	   FViewer.frame();
+		double delta = FViewer.elapsedTime() - FLastFrameTime;
+	    UpdateScene(delta);
+	    FLastFrameTime =  FViewer.elapsedTime();
+	    FViewer.frame();
 	}
 	QuittingRun();
 }
@@ -88,7 +121,7 @@ void Renderer::QuittingRun()
 {
 	FViewer.removeEventHandler(FInputHandler);
 }
-void Renderer::KeyReleased(Key::Type parKey)
+void Renderer::HandleKeyReleased(Key::Type parKey)
 {
 	tryget(it,FKeyHandler, parKey);
 	if (it!=FKeyHandler.end())
@@ -100,14 +133,17 @@ void Renderer::KeyReleased(Key::Type parKey)
 		else
 		{	
 			it->second = false;
+			KeyReleased(parKey);
 		}
 	}
 	else
 	{
 		FKeyHandler[parKey] = false;
+		KeyReleased(parKey);
+
 	}
 }
-void Renderer::KeyPressed(Key::Type parKey)
+void Renderer::HandleKeyPressed(Key::Type parKey)
 {
 	tryget(it,FKeyHandler, parKey);
 	if (it!=FKeyHandler.end())
@@ -120,15 +156,21 @@ void Renderer::KeyPressed(Key::Type parKey)
 		else
 		{	
 			it->second = true;
+			KeyPressed(parKey);
 		}
 	}
 	else
 	{
 		FKeyHandler[parKey] = true;
+		KeyPressed(parKey);
+
 	}
 }
 
-void Renderer::MousePressed(Button::Type parButton)
+
+
+
+void Renderer::HandleMousePressed(Button::Type parButton)
 {
 	tryget(it,FButtonHandler, parButton);
 	if (it!=FButtonHandler.end())
@@ -140,15 +182,17 @@ void Renderer::MousePressed(Button::Type parButton)
 		else
 		{	
 			it->second = true;
+			MousePressed(parButton);
 		}
 	}
 	else
 	{
 		FButtonHandler[parButton] = true;
+		MousePressed(parButton);
 	}
 }
 
-void Renderer::MouseReleased(Button::Type parButton)
+void Renderer::HandleMouseReleased(Button::Type parButton)
 {
 	tryget(it,FButtonHandler, parButton);
 	if (it!=FButtonHandler.end())
@@ -161,12 +205,50 @@ void Renderer::MouseReleased(Button::Type parButton)
 		else
 		{	
 			it->second = false;
+			MouseReleased(parButton);
 		}
 	}
 	else
 	{
 		FButtonHandler[parButton] = false;
+		MouseReleased(parButton);
 	}
+}
+
+
+void Renderer::KeyReleased(Key::Type parKey)
+{
+}
+void Renderer::KeyPressed(Key::Type parKey)
+{
+	switch(parKey)
+	{
+		break;
+		default:
+		break;
+	};
+
+}
+
+void Renderer::MousePressed(Button::Type parButton)
+{
+	switch(parButton)
+	{
+		case Button::RIGHT:
+			{
+		        Bullet * newBullet = new Bullet(FAirplane->GetNode()->GetPosition(), FAirplane->GetModel()->GetTransformation(TransformationSpace::TS_WORLD),500.0);
+		        FRoot->AddModel(newBullet->GetNode());
+		        FProjectile.push_back(newBullet);
+		    }
+		break;
+		default:
+		break;
+	};
+}
+
+void Renderer::MouseReleased(Button::Type parButton)
+{
+
 }
 
 void Renderer::Init()
@@ -179,116 +261,20 @@ void Renderer::Init()
 
 void Renderer::InitCamera()
 {
-	#ifndef TESS
 	std::vector<osg::Camera*> cameraList;
 	FViewer.getCameras(cameraList, true);
 	FCamera = cameraList[0];
 	FCameraMan->SetCamera(FCamera);
 	FCameraMan->Update();
-	#endif
 }
 
 
 void Renderer::InitRenderToTexture()
 {
-	/*
-	float width  = 1440 * 0.35f;
-	float height = 900 * 0.35f;
-	// Create the texture to render to
-	osg::Texture2D* renderTexture = new osg::Texture2D;
-	renderTexture->setTextureSize(1440, 900);
-	renderTexture->setInternalFormat(GL_RGBA);
-	renderTexture->setFilter(osg::Texture2D::MIN_FILTER, osg::Texture2D::LINEAR);
-	renderTexture->setFilter(osg::Texture2D::MAG_FILTER, osg::Texture2D::LINEAR);
 
-	osg::ref_ptr<osg::Geometry> screenQuad;
-	screenQuad = osg::createTexturedQuadGeometry(osg::Vec3(),
-                                             osg::Vec3(width, 0.0, 0.0),
-                                             osg::Vec3(0.0, height, 0.0));
-	osg::ref_ptr<osg::Geode> quadGeode = new osg::Geode;
-	quadGeode->addDrawable(screenQuad.get());
-	osg::StateSet *quadState = quadGeode->getOrCreateStateSet();
-	quadState->setTextureAttributeAndModes(0, renderTexture, osg::StateAttribute::ON);
-
-
-	osg::ref_ptr<osg::Camera> textureCamera = new osg::Camera;
-	textureCamera->setReferenceFrame(osg::Transform::ABSOLUTE_RF);
-	textureCamera->setClearMask(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	textureCamera->setViewport(0, 0, 1440, 900);
-
-	// Frame buffer objects are the best option
-	textureCamera->setRenderTargetImplementation(osg::Camera::FRAME_BUFFER_OBJECT);
-
-	// We need to render to the texture BEFORE we render to the screen
-	textureCamera->setRenderOrder(osg::Camera::PRE_RENDER);
-
-	// The camera will render into the texture that we created earlier
-	textureCamera->attach(osg::Camera::COLOR_BUFFER, renderTexture);
-
-	// Add whatever children you want drawn to the texture
-	textureCamera->addChild(FAirplane->GetModel()->GetModel());
-
-
-	osg::ref_ptr<osg::Camera> orthoCamera = new osg::Camera;
-
-	// We don't want to apply perspective, just overlay using orthographic
-	orthoCamera->setProjectionMatrix(osg::Matrix::ortho2D(0, width, 0, height));
-
-	orthoCamera->setReferenceFrame(osg::Transform::ABSOLUTE_RF);
-	orthoCamera->setViewMatrix(osg::Matrix::identity());
-
-	// Choose a good spot on the screen to overlay the quad
-	float xPos = 1440 * 0.635f;
-	float yPos = 900 * 0.625f;
-
-	orthoCamera->setViewport(xPos, yPos, width, height);
-
-	// Make sure to render this after rendering the scene
-	// in order to overlay the quad on top
-	orthoCamera->setRenderOrder(osg::Camera::POST_RENDER);
-
-	// Render only the quad
-	orthoCamera->addChild(quadGeode.get());
-
-	FRoot->GetRoot()->addChild(textureCamera.get());
-	FRoot->GetRoot()->addChild(orthoCamera.get());	
-	*/
 }
 void Renderer::OSGInit()
 {
-	#ifdef TESS
-	const int width( 1280 ), height( 720 );
-    const std::string version( "4.1" );
-    osg::ref_ptr< osg::GraphicsContext::Traits > traits = new osg::GraphicsContext::Traits();
-    traits->x = 20; traits->y = 30;
-    traits->width = width; traits->height = height;
-    traits->windowDecoration = true;
-    traits->doubleBuffer = true;
-    traits->glContextVersion = version;
-    osg::ref_ptr< osg::GraphicsContext > gc = osg::GraphicsContext::createGraphicsContext( traits.get() );
-    if( !gc.valid() )
-    {
-        PRINT_RED<< "Unable to create OpenGL v" << version << " context." << END_PRINT_COLOR;
-        exit(1) ;
-    }
-    else
-    {
-        PRINT_GREEN<< "OpenGL current context is: " << version << END_PRINT_COLOR;
-
-    }
-
-    // Create a Camera that uses the above OpenGL context.
-    FCamera = new osg::Camera;
-    FCamera->setGraphicsContext( gc.get() );
-    // Must set perspective projection for fovy and aspect.
-    FCamera->setProjectionMatrix( osg::Matrix::perspective( 30., (double)width/(double)height, 1., 100. ) );
-    // Unlike OpenGL, OSG viewport does *not* default to window dimensions.
-    FCamera->setViewport( new osg::Viewport( 0, 0, width, height ) );
-
-	FCameraMan->SetCamera(FCamera);
-	FCameraMan->Update();
-	FViewer.setCamera(FCamera);
-	#endif
 	FViewer.setSceneData( FRoot->GetRoot() );
 	FViewer.addEventHandler(FInputHandler);
 }
@@ -301,8 +287,6 @@ void Renderer::SceneInit()
 
 	FAirplane= new Airplane();
 	FAirplane->Build(FRoot);
-	FAirplane->GetNode()->SetPosition(osg::Vec3f(6000,950,600.0));
-	FAirplane->GetNode()->Yaw(MathTools::PI);
 	
 	FRoot->CreateSkybox(FAirplane->GetNode());
 	FRoot->CreateTerrain();

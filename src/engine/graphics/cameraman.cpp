@@ -81,7 +81,7 @@ void CameraMan::CameraInits()
 	PRINT(FNear);
 	PRINT(FFar);
 	PRINT(FFocalLength);
-	FFar = 6000;
+	FFar = 5000;
 	FFocalLength = 900.0/(tan(FFovy*MathTools::PI/MathTools::FULL_ANGLE)*2.0);
 	FFovy = atan(900/ 2.0 / FFocalLength)*360.0/MathTools::PI; 
 	FCamera->setProjectionMatrixAsPerspective(FFovy, FAspectRatio, FNear, FFar); 
