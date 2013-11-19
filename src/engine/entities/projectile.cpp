@@ -10,6 +10,7 @@ Projectile::Projectile(osg::Vec3f parInitialPosition, osg::Matrix parDirection, 
 	FNode = new SceneNode();
 	FNode->InitObject();
 	FNode->SetTransformation(parDirection);
+	FNode->GetNode()->postMult(osg::Matrix::translate(parInitialPosition));
 
 	FModel = new SceneObject(parModelName);
 	FModel->InitObject();

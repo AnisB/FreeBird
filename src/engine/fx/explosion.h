@@ -16,14 +16,13 @@ class FXExplosion
 		~FXExplosion();
 		SceneNode * GetNode() {return FAttachedSceneNode;};
 
-		void InitFX();
+		void InitFX(const osg::Vec3f& parPosition);
 
 	protected:
-		osgParticle::ExplosionEffect* FExplosion;
-		osgParticle::ExplosionDebrisEffect* FExplosionDebri;
+		osg::ref_ptr<osgParticle::ExplosionEffect> FExplosion;
+		osg::ref_ptr<osgParticle::ExplosionDebrisEffect> FExplosionDebri;
 
 		SceneNode * FAttachedSceneNode;
-		SceneNode * R;
 };
 
 #endif //FX_EXPLOSION

@@ -51,7 +51,7 @@ bool PhysicsEngine::IsLandCollision(const osg::Vec3f& planePosition)
 bool PhysicsEngine::IsTooFarCollision(const osg::Vec3f& parObjectPos, const osg::Vec3f& parPlane)
 {
 	osg::Vec3f distance = parObjectPos - parPlane;
-	PRINT_ORANGE<<distance.length()<<END_PRINT_COLOR;
+	//PRINT_ORANGE<<distance.length()<<END_PRINT_COLOR;
 	if((distance.length())>5000)
 	{
 		PRINT_ORANGE<<"Collision"<<END_PRINT_COLOR;

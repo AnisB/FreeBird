@@ -2,9 +2,11 @@
 #define PHYSICS_ENGINE
 
 #include <osg/Image>
+
+#include <common/singleton.h>
 #include <resources/resourcemanager.h>
 
-class PhysicsEngine
+class PhysicsEngine: public Singleton<PhysicsEngine>
 {
 public:
 	PhysicsEngine();

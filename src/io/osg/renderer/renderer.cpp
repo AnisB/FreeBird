@@ -70,33 +70,7 @@ void Renderer::UpdateScene(float parDelta)
 		PRINT_ORANGE<<"COLLISION DUDE"<<END_PRINT_COLOR;
 	}
 
-	// Mise a jour des porjectiles
-	std::list<std::list<Projectile*>::iterator> toRemove;
-	foreach(proj, FProjectile)
-	{
-		// On update
-		(*proj)->Update(parDelta);
-		// Collsion avec le sol?
-		if(FPhysicsEngine.IsLandCollision((*proj)->GetNode()->GetPosition()))
-		{
-			PRINT_ORANGE<<"Projectile a detuire(Sol)"<<END_PRINT_COLOR;
-			toRemove.push_back(proj);
-		}
-		// trop loin, on le detruit
-		else if(FPhysicsEngine.IsTooFarCollision(FAirplane->GetNode()->GetPosition(), (*proj)->GetNode()->GetPosition()))
-		{
-			PRINT_ORANGE<<"Projectile a detuire(Trop loin)"<<END_PRINT_COLOR;
-			toRemove.push_back(proj);
-		}
-	}
-	// destruction réelle
-	foreach(proj, toRemove)
-	{
-		FRoot->RemoveModel((*(*proj))->GetNode());
-		FProjectile.erase(*proj);
-		PRINT_ORANGE<<"Projectile détruit"<<END_PRINT_COLOR;
-		delete *(*proj);
-	}
+	FMitrailleuse.Update(parDelta);
 }
 
 
@@ -236,9 +210,7 @@ void Renderer::MousePressed(Button::Type parButton)
 	{
 		case Button::RIGHT:
 			{
-		        Bullet * newBullet = new Bullet(FAirplane->GetNode()->GetPosition(), FAirplane->GetModel()->GetTransformation(TransformationSpace::TS_WORLD),5000.0);
-		        FRoot->AddModel(newBullet->GetNode());
-		        FProjectile.push_back(newBullet);
+		        FMitrailleuse.SetActive(true);
 		    }
 		break;
 		default:
@@ -248,7 +220,16 @@ void Renderer::MousePressed(Button::Type parButton)
 
 void Renderer::MouseReleased(Button::Type parButton)
 {
-
+	switch(parButton)
+	{
+		case Button::RIGHT:
+			{
+		        FMitrailleuse.SetActive(false);
+		    }
+		break;
+		default:
+		break;
+	};
 }
 
 void Renderer::Init()
@@ -295,6 +276,10 @@ void Renderer::SceneInit()
 	FCameraMan->InitObject();
 	FCameraMan->SetDistance(osg::Vec3f(0,-10,-50));
 	FCameraMan->Follow(FAirplane->GetModel());
+
+	FMitrailleuse.SetRoot(FRoot);
+	FMitrailleuse.SetAirplaneModel(FAirplane->GetModel());
+	FMitrailleuse.SetAirplaneNode(FAirplane->GetNode());
 
 	PRINT_GREEN<<"[RENDERER] Scene successfully created"<<END_PRINT_COLOR;
 }

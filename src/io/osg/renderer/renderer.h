@@ -15,6 +15,7 @@
 //Inlcude Entities
 #include <entities/airplane.h>
 #include <entities/bullet.h>
+#include <entities/mitrailleuse.h>
 // Project includes
 #include <osgViewer/Viewer>
 
@@ -70,14 +71,11 @@ class Renderer : public Singleton<Renderer>
 		void InitRenderToTexture();
 
 
-
-
-
 	protected:
 		// Scene objetcs
 		Root* FRoot;
 		Airplane * FAirplane;
-		std::list<Projectile*> FProjectile;
+		Mitrailleuse FMitrailleuse;
 
 		// OSG Viewer
 		osgViewer::Viewer FViewer;
