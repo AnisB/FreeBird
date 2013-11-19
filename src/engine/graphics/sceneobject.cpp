@@ -23,7 +23,7 @@ void SceneObject::InitObject()
 	{
 		FIsValid = true;
 		FModelTrans = new osg::MatrixTransform();
-		FModelTrans->addChild(FModel);
+		FModelTrans->addChild(FModel.get());
 
 	}
 	else

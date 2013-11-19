@@ -236,7 +236,7 @@ void Renderer::MousePressed(Button::Type parButton)
 	{
 		case Button::RIGHT:
 			{
-		        Bullet * newBullet = new Bullet(FAirplane->GetNode()->GetPosition(), FAirplane->GetModel()->GetTransformation(TransformationSpace::TS_WORLD),500.0);
+		        Bullet * newBullet = new Bullet(FAirplane->GetNode()->GetPosition(), FAirplane->GetModel()->GetTransformation(TransformationSpace::TS_WORLD),5000.0);
 		        FRoot->AddModel(newBullet->GetNode());
 		        FProjectile.push_back(newBullet);
 		    }

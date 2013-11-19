@@ -19,8 +19,6 @@ Projectile::Projectile(osg::Vec3f parInitialPosition, osg::Matrix parDirection, 
 
 Projectile::~Projectile()
 {
-	delete FNode;
-	delete FModel;
 }
 
 

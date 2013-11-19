@@ -25,7 +25,7 @@ class SceneObject : public SceneNode
     public:
 		void InitObject();
 
-		osg::Node* GetModel() {return FModel;}
+		osg::Node* GetModel() {return FModel.get();}
 
 		void SetDynamic() 
 		{

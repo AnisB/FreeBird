@@ -8,7 +8,8 @@
 
 
 
-#define FIRST_FRAME
+#define FIRST_FRAME 10
+
 Renderer::Renderer(vrj::Kernel * parKernel) 
 : vrj::OsgApp(parKernel)
 , FB0State(gadget::Digital::OFF)

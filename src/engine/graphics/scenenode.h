@@ -56,7 +56,7 @@ class SceneNode
 		virtual void AddChild(SceneNode * parNode);
 		void SetParent(SceneNode * parNode);
 
-		osg::MatrixTransform* GetNode() {return FModelTrans;};
+		osg::MatrixTransform* GetNode() {return FModelTrans.get();};
     public:
 		virtual void InitObject();
 
