@@ -109,8 +109,8 @@ void Terrain::LoadDecors()
     HouseVR();
 
 #else
-    Palmiers();
-    House();
+    //Palmiers();
+    //House();
 
 #endif
 

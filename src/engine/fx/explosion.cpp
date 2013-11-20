@@ -9,22 +9,16 @@ FXExplosion::FXExplosion()
 
 FXExplosion::~FXExplosion()
 {
-	delete FAttachedSceneNode;
 }
 
 
-void FXExplosion::InitFX(const osg::Vec3f& parPosition)
+void FXExplosion::InitFX(const osg::Vec3f& parPosition,  double parFloat)
 {
-	osg::Vec3 wind(0.0f,0.0f,0.0f); 
-	FExplosion = new osgParticle::ExplosionEffect(osg::Vec3f(0.0,0.0,0.0), 10.0f, 100.0f);
-	FExplosionDebri = new osgParticle::ExplosionDebrisEffect(osg::Vec3f(0.0,0.0,0.0), 10.0f, 1.00f);
+	osg::Vec3 wind(0.0f,-1.0f,0.0f); 
+	FExplosion = new osgParticle::ExplosionEffect(parPosition+osg::Vec3f(0.0,-10,0.0), 10.0f*parFloat, 10.0f*parFloat);
 
-	FExplosion->setEmitterDuration(100);
-	FExplosion->setParticleDuration(100);
+	FExplosion->setWind(wind);
 
-	FAttachedSceneNode = new SceneNode();
-	FAttachedSceneNode->InitObject();
-	FAttachedSceneNode->GetNode()->addChild(FExplosion);
-	FAttachedSceneNode->GetNode()->addChild(FExplosionDebri);
-	FAttachedSceneNode->SetPosition(parPosition);
+	FAttachedSceneNode.InitObject();
+	FAttachedSceneNode.GetNode()->addChild(FExplosion);
 }

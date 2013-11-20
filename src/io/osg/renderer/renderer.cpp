@@ -48,10 +48,7 @@ void Renderer::UpdateScene(float parDelta)
 		FAirplane->Yaw(AirplaneRotation::CLOCKWISE,parDelta);
 	}
 
-	if(FButtonHandler[Button::LEFT])
-	{
-		FAirplane->Avance_Debug(parDelta);
-	}
+
 	if(FKeyHandler[Key::DEBUG0])
 	{
 		FCameraMan->ChangeFocalLength(true);
@@ -60,16 +57,22 @@ void Renderer::UpdateScene(float parDelta)
 	{
 		FCameraMan->ChangeFocalLength(false);
 	}
+
+	if(FButtonHandler[Button::LEFT])
+	{
+		FAirplane->Avance_Debug(parDelta);
+	}
 	FCameraMan->Update();
 
 
 	FRoot->UpdateTerrain(FAirplane->GetNode()->GetPosition());
 	FRoot->UpdateSkybox();
+	/*
 	if(FPhysicsEngine.IsLandCollision(FAirplane->GetNode()->GetPosition()))
 	{
 		PRINT_ORANGE<<"COLLISION DUDE"<<END_PRINT_COLOR;
 	}
-
+	*/
 	FMitrailleuse.Update(parDelta);
 }
 
@@ -77,10 +80,10 @@ void Renderer::UpdateScene(float parDelta)
 void Renderer::Run()
 {
 	if(!FViewer.isRealized())
+	{
 	    FViewer.realize();
+	}
 	InitCamera();
-    PRINT_GREEN<< "GLSL current context is: "<<(char*)glGetString(GL_SHADING_LANGUAGE_VERSION)<< END_PRINT_COLOR;
-
 	while( !FViewer.done() )
 	{
 		double delta = FViewer.elapsedTime() - FLastFrameTime;
@@ -95,6 +98,7 @@ void Renderer::QuittingRun()
 {
 	FViewer.removeEventHandler(FInputHandler);
 }
+
 void Renderer::HandleKeyReleased(Key::Type parKey)
 {
 	tryget(it,FKeyHandler, parKey);
@@ -195,12 +199,6 @@ void Renderer::KeyReleased(Key::Type parKey)
 }
 void Renderer::KeyPressed(Key::Type parKey)
 {
-	switch(parKey)
-	{
-		break;
-		default:
-		break;
-	};
 
 }
 
@@ -212,6 +210,11 @@ void Renderer::MousePressed(Button::Type parButton)
 			{
 		        FMitrailleuse.SetActive(true);
 		    }
+		break;
+		case Button::MID:
+		{
+	        FMitrailleuse.TirerMissile();
+	    }
 		break;
 		default:
 		break;
@@ -266,7 +269,7 @@ void Renderer::SceneInit()
 	FRoot = new Root();
 	FRoot->InitRoot();
 
-	FAirplane= new Airplane();
+	FAirplane = new Airplane();
 	FAirplane->Build(FRoot);
 	
 	FRoot->CreateSkybox(FAirplane->GetNode());

@@ -127,6 +127,7 @@ vec3 fnormal(in vec3 normal)
 
 void main (void) 
 {
+
     if (gl_FrontFacing)
     {
       vec4 grassMap = texture2D(heightMap,gl_TexCoord[0].st);

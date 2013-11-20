@@ -2,27 +2,22 @@
 #define FX_EXPLOSION
 
 #include <graphics/scenenode.h>
-
+#include "fxbase.h"
 #include <osgParticle/ExplosionEffect>
-#include <osgParticle/ExplosionDebrisEffect>
-#include <osgParticle/SmokeEffect>
-#include <osgParticle/SmokeTrailEffect>
-#include <osgParticle/FireEffect>
 
-class FXExplosion
+class FXExplosion : public FXBase
 {
 	public:
 		FXExplosion();
 		~FXExplosion();
-		SceneNode * GetNode() {return FAttachedSceneNode;};
+		SceneNode& GetNode() {return FAttachedSceneNode;};
 
-		void InitFX(const osg::Vec3f& parPosition);
+		void InitFX(const osg::Vec3f& parPosition, double parFloat);
 
 	protected:
 		osg::ref_ptr<osgParticle::ExplosionEffect> FExplosion;
-		osg::ref_ptr<osgParticle::ExplosionDebrisEffect> FExplosionDebri;
 
-		SceneNode * FAttachedSceneNode;
+		SceneNode FAttachedSceneNode;
 };
 
 #endif //FX_EXPLOSION

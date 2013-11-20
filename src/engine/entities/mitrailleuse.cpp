@@ -3,13 +3,20 @@
 #include <physics/engine.h>
 #include <common/random.h>
 
-#define BALLE_VITESSE 5000.0
-#define DUREE_COOLDOWN 0.1
+#define BALLE_VITESSE 2000.0
+#define DUREE_COOLDOWN 0.2
+#define BULLET_SCALE 0.5
+
+#define MISSILE_VITESSE 1000.0
+#define DUREE_COOLDOWN_MISS 1.0
+#define MISSILE_SCALE 10.0
 
 
 Mitrailleuse::Mitrailleuse()
 : FCoolDown(0.0)
 , FActive(false)
+, FCoolDownMiss(0.0)
+, FRight(false)
 {
 
 }
@@ -21,6 +28,7 @@ Mitrailleuse::~Mitrailleuse()
 }
 void Mitrailleuse::Update(double parDelta)
 {
+	FCoolDownMiss -= parDelta;
 	if(FActive)
 	{
 		FCoolDown -= parDelta; 
@@ -32,9 +40,15 @@ void Mitrailleuse::Update(double parDelta)
 
 		}
 	}
+	UpdateBullet(parDelta);	
+	UpdateMissile(parDelta);
+}
+
+void Mitrailleuse::UpdateBullet(double parDelta)
+{
 	PhysicsEngine & FPhysicsEngine = PhysicsEngine::Instance();
 	// Mise a jour des porjectiles
-	std::list<std::list<Projectile*>::iterator> toRemove;
+	std::list<std::list<Bullet*>::iterator> toRemove;
 	foreach(proj, FProjectiles)
 	{
 		// On update
@@ -42,16 +56,14 @@ void Mitrailleuse::Update(double parDelta)
 		// Collsion avec le sol?
 		if(FPhysicsEngine.IsLandCollision((*proj)->GetNode()->GetPosition()))
 		{
-			PRINT_ORANGE<<"Projectile a detuire(Sol)"<<END_PRINT_COLOR;
-			//FXExplosion explosion = FXExplosion();
-			//explosion.InitFX((*proj)->GetNode()->GetPosition());
-			//FRootNode->AddModel(explosion.GetNode());
+			FXExplosion explosion;
+			explosion.InitFX((*proj)->GetNode()->GetPosition(),BULLET_SCALE);
+			FRootNode->GetRoot()->addChild(explosion.GetNode().GetNode());
 			toRemove.push_back(proj);
 		}
 		// trop loin, on le detruit
 		else if(FPhysicsEngine.IsTooFarCollision(FAirplaneNode->GetPosition(), (*proj)->GetNode()->GetPosition()))
 		{
-			PRINT_ORANGE<<"Projectile a detuire(Trop loin)"<<END_PRINT_COLOR;
 			toRemove.push_back(proj);
 		}
 	}
@@ -62,8 +74,38 @@ void Mitrailleuse::Update(double parDelta)
 		delete *(*proj);
 		FProjectiles.erase(*proj);
 	}
+}
 
-	
+void Mitrailleuse::UpdateMissile(double parDelta)
+{
+	PhysicsEngine & FPhysicsEngine = PhysicsEngine::Instance();
+	// Mise a jour des porjectiles
+	std::list<std::list<Missile*>::iterator> toRemove;
+	foreach(proj, FMissiles)
+	{
+		// On update
+		(*proj)->Update(parDelta);
+		// Collsion avec le sol?
+		if(FPhysicsEngine.IsLandCollision((*proj)->GetNode()->GetPosition()))
+		{
+			FXExplosion explosion;
+			explosion.InitFX((*proj)->GetNode()->GetPosition(),MISSILE_SCALE);
+			FRootNode->GetRoot()->addChild(explosion.GetNode().GetNode());
+			toRemove.push_back(proj);
+		}
+		// trop loin, on le detruit
+		else if(FPhysicsEngine.IsTooFarCollision(FAirplaneNode->GetPosition(), (*proj)->GetNode()->GetPosition()))
+		{
+			toRemove.push_back(proj);
+		}
+	}
+	// destruction réelle
+	foreach(proj, toRemove)
+	{
+		FRootNode->RemoveModel((*(*proj))->GetNode());
+		delete *(*proj);
+		FMissiles.erase(*proj);
+	}
 }
 
 void Mitrailleuse::TirerBalle()
@@ -73,4 +115,27 @@ void Mitrailleuse::TirerBalle()
 	Bullet * newBullet = new Bullet(randPos, transf,BALLE_VITESSE);
     FRootNode->AddModel(newBullet->GetNode());
     FProjectiles.push_back(newBullet);
+}
+
+
+void Mitrailleuse::TirerMissile()
+{
+	if(FCoolDownMiss<=0)
+	{
+		FCoolDownMiss =  DUREE_COOLDOWN_MISS;
+		osg::Vec3f randPos;
+		if(FRight)
+		{
+			randPos = osg::Vec3f(3,1,0.0);
+		}
+		else
+		{
+			randPos = osg::Vec3f(-3,1,0.0);
+		}
+		FRight=(!FRight);
+		const osg::Matrix& transf = FAirplaneModel->GetTransformation(TransformationSpace::TS_WORLD);
+		Missile * newBullet = new Missile(randPos, transf,MISSILE_VITESSE);
+	    FRootNode->AddModel(newBullet->GetNode());
+	    FMissiles.push_back(newBullet);
+	}
 }

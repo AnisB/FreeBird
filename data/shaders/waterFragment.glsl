@@ -2,7 +2,6 @@
 uniform sampler2D normalMap;
 uniform samplerCube skybox;
 
-
 vec4 colorVal;
 
 vec4 Ambient;
@@ -68,7 +67,6 @@ void flight(in vec3 normal, in vec4 ecPosition)
     Diffuse  = vec4 (0.0);
     Specular = vec4 (0.0);
 
-
     directionalLight(0, normal);
 
     color = gl_FrontLightModelProduct.sceneColor +
@@ -82,7 +80,8 @@ void main (void)
 {
     if (gl_FrontFacing)
     {
-        vec2 lol = vec2(mod(planePosition.x + gl_TexCoord[0].x, 1.0), mod(planePosition.y +gl_TexCoord[0].y, 1.0));
+        //vec2 lol = vec2(mod(planePosition.x + gl_TexCoord[0].x, 1.0), mod(planePosition.y +gl_TexCoord[0].y, 1.0));
+        vec2 lol = vec2(planePosition.x + gl_TexCoord[0].x, planePosition.y +gl_TexCoord[0].y);
         vec4 normal = texture2D(normalMap,lol);
         vec4 blue = vec4(0.3,0.4,0.6,1.0);
         vec3 inci = normalize(-ecPosition.xyz);
