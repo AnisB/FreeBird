@@ -58,7 +58,7 @@ void Renderer::UpdateScene(float parDelta)
 		FCameraMan->ChangeFocalLength(false);
 	}
 
-	if(FButtonHandler[Button::LEFT])
+	//if(FButtonHandler[Button::LEFT])
 	{
 		FAirplane->Avance_Debug(parDelta);
 	}
@@ -207,14 +207,14 @@ void Renderer::MousePressed(Button::Type parButton)
 	switch(parButton)
 	{
 		case Button::RIGHT:
-			{
+		{
 		        FMitrailleuse.SetActive(true);
-		    }
+	        }
 		break;
-		case Button::MID:
+		case Button::LEFT:
 		{
 	        FMitrailleuse.TirerMissile();
-	    }
+	    	}
 		break;
 		default:
 		break;

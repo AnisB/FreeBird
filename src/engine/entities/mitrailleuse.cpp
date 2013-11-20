@@ -2,12 +2,13 @@
 
 #include <physics/engine.h>
 #include <common/random.h>
+#include <graphics/helper.h>
 
 #define BALLE_VITESSE 2000.0
 #define DUREE_COOLDOWN 0.2
 #define BULLET_SCALE 0.5
 
-#define MISSILE_VITESSE 1000.0
+#define MISSILE_VITESSE 100.0
 #define DUREE_COOLDOWN_MISS 1.0
 #define MISSILE_SCALE 10.0
 
@@ -94,7 +95,11 @@ void Mitrailleuse::UpdateMissile(double parDelta)
 			toRemove.push_back(proj);
 		}
 		// trop loin, on le detruit
+		#ifdef VRJUGGLER
+		else if(FPhysicsEngine.IsTooFarCollision(FAirplaneNode->GetPositionInv(), (*proj)->GetNode()->GetPosition()))
+		#else
 		else if(FPhysicsEngine.IsTooFarCollision(FAirplaneNode->GetPosition(), (*proj)->GetNode()->GetPosition()))
+		#endif
 		{
 			toRemove.push_back(proj);
 		}
@@ -111,8 +116,16 @@ void Mitrailleuse::UpdateMissile(double parDelta)
 void Mitrailleuse::TirerBalle()
 {
 	osg::Vec3f randPos(RandomDet(),RandomDet(),0.0);
+	#ifdef VRJUGGLER
+	osg::Matrix transf = FAirplaneNode->GetTransformation();
+	transf =osg::Matrix::inverse(transf);
+	transf.preMult(osg::Matrix::rotate(MathTools::PI,0.0,1.0,0.0));
+	transf.postMult(osg::Matrix::translate(randPos));
+	Bullet * newBullet = new Bullet(randPos, transf,BALLE_VITESSE);
+	#else
 	const osg::Matrix& transf = FAirplaneModel->GetTransformation(TransformationSpace::TS_WORLD);
 	Bullet * newBullet = new Bullet(randPos, transf,BALLE_VITESSE);
+	#endif
     FRootNode->AddModel(newBullet->GetNode());
     FProjectiles.push_back(newBullet);
 }
@@ -133,8 +146,17 @@ void Mitrailleuse::TirerMissile()
 			randPos = osg::Vec3f(-3,1,0.0);
 		}
 		FRight=(!FRight);
+		#ifdef VRJUGGLER
+		osg::Vec3f deplace(0.0,4.0,1.0);
+		osg::Matrix transform = FAirplaneNode->GetTransformation();
+		transform =osg::Matrix::inverse(transform);
+		transform.preMult(osg::Matrix::rotate(MathTools::PI,0.0,1.0,0.0));
+		transform.postMult(osg::Matrix::translate(deplace));
+		Missile * newBullet = new Missile(randPos, transform,MISSILE_VITESSE);
+		#else
 		const osg::Matrix& transf = FAirplaneModel->GetTransformation(TransformationSpace::TS_WORLD);
 		Missile * newBullet = new Missile(randPos, transf,MISSILE_VITESSE);
+		#endif
 	    FRootNode->AddModel(newBullet->GetNode());
 	    FMissiles.push_back(newBullet);
 	}

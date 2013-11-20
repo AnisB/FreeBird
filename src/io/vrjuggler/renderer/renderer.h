@@ -9,8 +9,11 @@
 #include <graphics/skybox.h>
 #include <graphics/sceneobject.h>
 
-#include <input/defines.h>
+//Mitrailleuse
+#include <entities/mitrailleuse.h>
 
+//INPUT && NAV
+#include <input/defines.h>
 #include <input/nav.h>
 
 //External icludess
@@ -58,6 +61,7 @@ class Renderer : public vrj::OsgApp
 		Root* FRoot;
 		SceneObject * FAirPlane;
 		Skybox * FSkybox;
+		Mitrailleuse FMitrailleuse;
 		// Displacement
 		osg::Vec3f FPosition;
 

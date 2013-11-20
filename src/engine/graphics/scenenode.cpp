@@ -93,6 +93,11 @@ osg::Vec3f SceneNode::GetPosition(TransformationSpace::Type parTrans)
 	return GetTransformation(parTrans).getTrans();
 }
 
+osg::Vec3f SceneNode::GetPositionInv(TransformationSpace::Type parTrans)
+{
+	return osg::Matrix::inverse(GetTransformation(parTrans)).getTrans();
+}
+
 void SceneNode::SetTransformation(const osg::Matrix& parMatrix)
 {	
 	FModelTrans->setMatrix(parMatrix);

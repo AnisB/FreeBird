@@ -110,12 +110,8 @@ void Renderer::UpdateScene(float parDelta)
 	wandRotation = osg::Matrix::inverse(wandRotation);
 
 	osg::Matrix rotationMatrix = Interpolate(wandRotation, parDelta);
-
-	FRoot->GetTerrain()->UpdateVR(rotationMatrix,PLANE_SPEED*parDelta );
-	osg::Matrix currentSkyboxMatrix = FRoot->GetSkybox()->GetNode()->GetNode()->getMatrix();
-	currentSkyboxMatrix.postMult(rotationMatrix);
-	FRoot->GetSkybox()->GetNode()->GetNode()->setMatrix(currentSkyboxMatrix);
-
+	FRoot->UpdateVR(rotationMatrix,PLANE_SPEED*parDelta);
+    FMitrailleuse.Update(parDelta);
 }
 
 // Input Methods
@@ -154,9 +150,13 @@ void Renderer::ButtonReleased(Button::Type parButton)
 		break;
 		
 		case Button::BUTTON1:
+		{
+			
+		}
 		break;
 		
 		case Button::BUTTON2:
+			FMitrailleuse.SetActive(false);
 		break;
 		//Unhandled
 	};
@@ -173,9 +173,13 @@ void Renderer::ButtonPressed(Button::Type parButton)
 		break;
 		
 		case Button::BUTTON1:
+		{
+			FMitrailleuse.TirerMissile();
+		}
 		break;
 		
 		case Button::BUTTON2:
+			FMitrailleuse.SetActive(true);
 		break;
 		//Unhandled
 	};
@@ -216,11 +220,15 @@ void Renderer::Init()
 	mNavigator.init();
 
 	const gmtl::Matrix44f head_matrix( FHead->getData(getDrawScaleFactor()));
-    mHeadInitPos = GmtlToOsg(head_matrix);
-    FAirPlane->GetNode()->setMatrix(mHeadInitPos);
-    FAirPlane->Pitch(MathTools::PI);
+        mHeadInitPos = GmtlToOsg(head_matrix);
+        FAirPlane->GetNode()->setMatrix(mHeadInitPos);
+        FAirPlane->Pitch(MathTools::PI);
 	FAirPlane->Translate(osg::Vec3f(-0.11,0.0,12));
 	FRoot->AddStaticModel(FAirPlane);
+
+	FMitrailleuse.SetRoot(FRoot);
+	FMitrailleuse.SetAirplaneModel(FAirPlane);
+	FMitrailleuse.SetAirplaneNode(FRoot->GetDynamicModels());
 }
 
 

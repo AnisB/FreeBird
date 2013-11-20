@@ -14,7 +14,6 @@
 
 //Inlcude Entities
 #include <entities/airplane.h>
-#include <entities/bullet.h>
 #include <entities/mitrailleuse.h>
 // Project includes
 #include <osgViewer/Viewer>

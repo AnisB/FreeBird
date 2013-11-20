@@ -37,11 +37,13 @@ void Root::InitRoot()
 	mLightGroup = new osg::Group();
 	FRoot->addChild( mLightGroup );
 
-    mNavModelGroup = new osg::MatrixTransform();
-	mNoNavModelGroup = new osg::MatrixTransform();
-	
-	mLightGroup->addChild( mNavModelGroup );
-	mLightGroup->addChild( mNoNavModelGroup );
+    mNavModelGroup = new SceneNode();
+	mNavModelGroup->InitObject();
+	mNoNavModelGroup = new SceneNode();
+	mNoNavModelGroup->InitObject();
+
+	mLightGroup->addChild( mNavModelGroup->GetNode() );
+	mLightGroup->addChild( mNoNavModelGroup->GetNode() );
 	osg::LightSource * lightsource = new osg::LightSource();
 	osg::Light* light = new osg::Light();
 	#ifndef VRJUGGLER
@@ -81,27 +83,27 @@ void Root::CreateTerrain()
 
 void Root::RemoveModel(SceneNode * parNode)
 {
-	PRINT_ORANGE<<mNavModelGroup->removeChild(parNode->GetNode())<<END_PRINT_COLOR;
+	PRINT_ORANGE<<mNavModelGroup->GetNode()->removeChild(parNode->GetNode())<<END_PRINT_COLOR;
 	FSons.remove(parNode);
 }
 void Root::AddModel(SceneNode * parNode)
 {
 	parNode->SetParent(this);
-	mNavModelGroup->addChild(parNode->GetNode());
+	mNavModelGroup->AddChild(parNode);
 	FSons.push_back(parNode);
 }
 
 void Root::AddStaticModel(SceneNode * parNode)
 {
 	parNode->SetParent(this);
-	mNoNavModelGroup->addChild(parNode->GetNode());
+	mNoNavModelGroup->AddChild(parNode);
 	FSons.push_back(parNode);
 }
 
 
 void Root::AddNode(osg::Node * parNode)
 {
-	mNavModelGroup->addChild(parNode);
+	mNavModelGroup->GetNode()->addChild(parNode);
 
 }
 
@@ -119,3 +121,12 @@ void Root::UpdateSkybox()
 {
 	FSkybox->Update();
 }
+
+void Root::UpdateVR(osg::Matrixd parRotationMatrix, float parDisplacement)
+{
+    osg::Matrix currentMatrix = mNavModelGroup->GetNode()->getMatrix();
+    currentMatrix.postMult(parRotationMatrix);
+    currentMatrix.postMult(osg::Matrix::translate(osg::Vec3f(0.0,0.0,parDisplacement)));
+    mNavModelGroup->GetNode()->setMatrix(currentMatrix);
+}
+

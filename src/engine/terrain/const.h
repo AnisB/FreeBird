@@ -20,12 +20,14 @@ namespace TerrainConst
 	const double WaterHeight = 101.0;
 	const double PorteAvionX = 600.0;
 	const double PorteAvionZ = 0.0;
+	const double TailleBoite = 500;
 #else
 	const double WorldScale = 10.0;
 	const double TerrainSize = 10000.0;
 	const double WaterHeight = 1200;
 	const double PorteAvionX = 6000.0;
 	const double PorteAvionZ = 0.0;
+	const double TailleBoite = 5000;
 #endif
 }
 

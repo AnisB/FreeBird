@@ -1,5 +1,5 @@
 #include "random.h"
-#include <ctgmath>
+#include <math.h>
 
 static float SEED = 666;
 
@@ -7,6 +7,6 @@ static float SEED = 666;
 float RandomDet()
 {
 	SEED*=(666*333);
-	SEED = std::fmod(SEED,1000);
-	return std::cos(SEED);
+	SEED = fmod(SEED,1000);
+	return cos(SEED);
 }

@@ -47,7 +47,7 @@ ADD_DEFINITIONS("-m32 -g -Wall -fexceptions -pthread -Wall -DHAVE_CONFIG_H -DJUG
 
 
 #Setting the libs to link
-set(CORELIBS GL GLU m pthread vrj-2_2 vrj_ogl-2_2 gadget-1_2 jccl-1_2 vpr-2_0 cppdom-0_7_10 OpenThreads  osg osgDB osgUtil osgGA)
+set(CORELIBS GL GLU m pthread vrj-2_2 vrj_ogl-2_2 gadget-1_2 jccl-1_2 vpr-2_0 cppdom-0_7_10 OpenThreads  osg osgDB osgUtil osgGA osgParticle)
 
 
 include_directories(${IO} ${ENGINE})

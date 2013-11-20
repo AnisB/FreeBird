@@ -23,8 +23,9 @@ class Root : public SceneNode
 		osg::Group* GetRoot(){ return FRoot;}
 		Terrain* GetTerrain(){ return FTerrain;}
 		Skybox* GetSkybox(){ return FSkybox;}
-		osg::MatrixTransform* GetDynamicModels(){ return mNavModelGroup;}
-		osg::MatrixTransform* GetStaticModels(){ return mNoNavModelGroup;}
+		SceneNode* GetDynamicModels(){ return mNavModelGroup;}
+		SceneNode* GetStaticModels(){ return mNoNavModelGroup;}
+		void UpdateVR(osg::Matrixd parRotationMatrix, float parDisplacement);
 
 		void RemoveModel(SceneNode * parNode);
 		void AddModel(SceneNode * parNode);
@@ -38,8 +39,8 @@ class Root : public SceneNode
 		void UpdateSkybox();
 	protected:
 		osg::Group*   FRoot;
-		osg::MatrixTransform*   mNavModelGroup;
-		osg::MatrixTransform*   mNoNavModelGroup;
+		SceneNode*   mNavModelGroup;
+		SceneNode*   mNoNavModelGroup;
 		osg::Group*   mLightGroup;
 
 		Terrain * FTerrain;

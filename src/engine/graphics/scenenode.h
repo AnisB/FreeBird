@@ -43,6 +43,7 @@ class SceneNode
 		virtual void SetPosition(osg::Vec3f parPosition);
 
 		virtual osg::Vec3f GetPosition(TransformationSpace::Type parTrans = TransformationSpace::TS_LOCAL);
+		virtual osg::Vec3f GetPositionInv(TransformationSpace::Type parTrans = TransformationSpace::TS_LOCAL);
 		virtual osg::Matrix GetTransformation(TransformationSpace::Type parTrans = TransformationSpace::TS_LOCAL);
 		virtual void SetTransformation(const osg::Matrix& parMatrix);
 

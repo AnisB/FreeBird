@@ -20,5 +20,5 @@ void FXSplash::InitFX(const osg::Vec3f& parPosition)
 	FExplosionDebri->setWind(wind);
 
 	FAttachedSceneNode.InitObject();
-	FAttachedSceneNode.GetNode()->addChild(FExplosionDebri);
+	FAttachedSceneNode.GetNode()->addChild(FExplosionDebri.get());
 }
