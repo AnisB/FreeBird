@@ -1,5 +1,6 @@
 #include "scenenode.h"
 
+#include <common/defines.h>
 
 
 

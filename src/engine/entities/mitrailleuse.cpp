@@ -4,14 +4,19 @@
 #include <common/random.h>
 #include <graphics/helper.h>
 
-#define BALLE_VITESSE 2000.0
 #define DUREE_COOLDOWN 0.2
 #define BULLET_SCALE 0.5
 
-#define MISSILE_VITESSE 100.0
 #define DUREE_COOLDOWN_MISS 1.0
 #define MISSILE_SCALE 10.0
 
+#ifndef VRJUGGLER
+#define BALLE_VITESSE 2000.0
+#define MISSILE_VITESSE 1000.0
+#else
+#define BALLE_VITESSE 200.0
+#define MISSILE_VITESSE 100.0
+#endif
 
 Mitrailleuse::Mitrailleuse()
 : FCoolDown(0.0)

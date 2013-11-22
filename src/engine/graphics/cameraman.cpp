@@ -77,13 +77,9 @@ void CameraMan::Roll(float parRadian, TransformationSpace::Type parTrans)
 void CameraMan::CameraInits()
 {
 	FCamera->getProjectionMatrixAsPerspective(FFovy, FAspectRatio,FNear,FFar);
-	
-	PRINT(FNear);
-	PRINT(FFar);
-	PRINT(FFocalLength);
 	FFar = 5000;
 	FFocalLength = 900.0/(tan(FFovy*MathTools::PI/MathTools::FULL_ANGLE)*2.0);
-	FFovy = atan(900/ 2.0 / FFocalLength)*360.0/MathTools::PI; 
+	FFovy = atan(900/ 2.0 / FFocalLength)*MathTools::FULL_ANGLE/MathTools::PI; 
 	FCamera->setProjectionMatrixAsPerspective(FFovy, FAspectRatio, FNear, FFar); 
 
 }

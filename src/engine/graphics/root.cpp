@@ -37,9 +37,9 @@ void Root::InitRoot()
 	mLightGroup = new osg::Group();
 	FRoot->addChild( mLightGroup );
 
-    mNavModelGroup = new SceneNode();
+    mNavModelGroup = new SceneNode(NodeType::ROOT);
 	mNavModelGroup->InitObject();
-	mNoNavModelGroup = new SceneNode();
+	mNoNavModelGroup = new SceneNode(NodeType::ROOT);
 	mNoNavModelGroup->InitObject();
 
 	mLightGroup->addChild( mNavModelGroup->GetNode() );
