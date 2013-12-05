@@ -18,7 +18,8 @@ Airplane::~Airplane()
 
 void Airplane::Build(Root * parRootNode)
 {
-	FModelNode =  new SceneObject("data/DRC/DRC.obj");
+	//FModelNode =  new SceneObject("data/DRC/DRC.obj");
+	FModelNode =  new SceneObject("data/cockpit/cockpit.obj");
 	FModelNode->InitObject();
 	FNode =  new SceneNode();
 	FNode->InitObject();
