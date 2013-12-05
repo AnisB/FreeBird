@@ -17,14 +17,12 @@ int main( int argc, char **argv )
     }
     else
     {
-	vrKernel->loadConfigFile(argv[1]);
-	for ( int i = 2; i < argc; ++i )
-	{
-	    vrKernel->loadConfigFile( argv[i] );
-	}
+		vrKernel->loadConfigFile(argv[1]);
+		for ( int i = 2; i < argc; ++i )
+		{
+			vrKernel->loadConfigFile( argv[i] );
+		}
     }
-    
-
 
     vrKernel->start();
     vrKernel->setApplication(renderer);

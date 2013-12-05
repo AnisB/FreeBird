@@ -20,8 +20,9 @@ bool PhysicsEngine::IsLandCollision(const osg::Vec3f& planePosition)
 {
 	// On convertit la position de l'avion en coordonnées texture centralisée
 	osg::Vec2f position = ComputeRelativePosition(planePosition);
-	//PRINT_ORANGE<<position.x()<<" "<position.y()<<END_PRINT_COLOR;
-	//PRINT_ORANGE<<VEC3_TO_STREAM(planePosition)<<planePosition.y()<<END_PRINT_COLOR;
+	//PRINT_ORANGE<<"Position centralisé "<<position.x()<<" "<position.y()<<END_PRINT_COLOR;
+	//PRINT_ORANGE<<"Position centralisé "<<VEC2_TO_STREAM(position)<<END_PRINT_COLOR;
+	//PRINT_ORANGE<<"Hateur de l'objet "<<planePosition.y()<<END_PRINT_COLOR;
 	if(position.x()>0.5 || position.y()>0.5 || position.x()<-0.5 || position.y()<-0.5)
 	{
 		// on est en decors de la map de base, il suffit de tester la hauteur
@@ -35,7 +36,8 @@ bool PhysicsEngine::IsLandCollision(const osg::Vec3f& planePosition)
 			return true;
 		}
 	}  
-	else
+	
+    else
 	{
 		// On convertit en coordonnées texture opengl
 		#ifndef VRJUGGLER
@@ -53,24 +55,25 @@ bool PhysicsEngine::IsLandCollision(const osg::Vec3f& planePosition)
 		height = TerrainConst::WaterHeight-height;
 		#else
 		height*=100;
+		height = height-TerrainConst::WaterHeight;
 		#endif
 
 		
-
-		#ifdef VRJUGGLER
-		double compareTo = -planePosition.y();
-		#else
 		double compareTo = planePosition.y();
-		#endif
-		PRINT_ORANGE<<compareTo<<"VS"<<height<<END_PRINT_COLOR;
+		//PRINT_ORANGE<<"Compare " <<compareTo<<" VS "<<height<<END_PRINT_COLOR;
 		// Sommes nous en dessous du terrain?
+		#ifdef VRJUGGLER
+		if((height) > compareTo)
+		#else
 		if((height) < compareTo)
+		#endif
 		{
-			PRINT_ORANGE<<"Collision sol"<<END_PRINT_COLOR;
+			//PRINT_ORANGE<<"Collision sol"<<END_PRINT_COLOR;
 			// Collision
 			return true;
 		}
 	}
+
 	return false;
 }
 

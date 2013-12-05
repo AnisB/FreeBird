@@ -54,7 +54,7 @@ class Renderer : public vrj::OsgApp
 		void ButtonReleased(Button::Type parButton);
 		void ButtonPressed(Button::Type parButton);
 		// Personnal
-		void Init();
+		void InitSceneContent();
 
 	protected:
 		// Generic

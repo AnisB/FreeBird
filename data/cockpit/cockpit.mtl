@@ -7,7 +7,7 @@ Ka 0.470400 0.470400 0.470400
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd /Users/Anis/Downloads/rtbpdgf28k-FA38-2/Joystick.tga
+map_Kd Joystick.tga
 
 newmtl Material__26.005
 Ns 7.843137
@@ -15,7 +15,7 @@ Ka 0.470400 0.470400 0.470400
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd /Users/Anis/Downloads/rtbpdgf28k-FA38-2/Interior.tga
+map_Kd Interior.png
 
 newmtl Tex_0333_0_dds.005
 Ns 7.843137
@@ -23,7 +23,7 @@ Ka 0.470400 0.470400 0.470400
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd /Users/Anis/Downloads/rtbpdgf28k-FA38-2/Interior.tga
+map_Kd Interior.tga
 
 newmtl Tex_0333_1_dds.005
 Ns 7.843137
@@ -39,7 +39,7 @@ Ka 0.470400 0.470400 0.470400
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd /Users/Anis/Downloads/rtbpdgf28k-FA38-2/Interior.tga
+map_Kd Interior.tga
 
 newmtl Tex_0560_0_dds.003
 Ns 7.843137
@@ -47,7 +47,7 @@ Ka 0.470400 0.470400 0.470400
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd /Users/Anis/Downloads/rtbpdgf28k-FA38-2/Tex_0560_0.tga
+map_Kd Tex_0560_0.tga
 
 newmtl Tex_0646_0_dds.005
 Ns 7.843137
@@ -55,7 +55,7 @@ Ka 0.470400 0.470400 0.470400
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd /Users/Anis/Downloads/rtbpdgf28k-FA38-2/Screen.tga
+map_Kd Screen.png
 
 newmtl Tex_0659_0_dds.005
 Ns 7.843137
@@ -63,7 +63,7 @@ Ka 0.470400 0.470400 0.470400
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd /Users/Anis/Downloads/rtbpdgf28k-FA38-2/Markings.tga
+map_Kd Markings.tga
 
 newmtl Tex_0661_0_dds.005
 Ns 7.843137
@@ -71,7 +71,7 @@ Ka 0.470400 0.470400 0.470400
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd /Users/Anis/Downloads/rtbpdgf28k-FA38-2/Tex_0661_0.tga
+map_Kd Tex_0661_0.tga
 
 newmtl Tex_0667_0_dds.005
 Ns 7.843137
@@ -79,7 +79,7 @@ Ka 0.470400 0.470400 0.470400
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd /Users/Anis/Downloads/rtbpdgf28k-FA38-2/Tex_0667_0.tga
+map_Kd Tex_0667_0.tga
 
 newmtl Tex_0668_0_dds.005
 Ns 7.843137
@@ -87,7 +87,7 @@ Ka 0.470400 0.470400 0.470400
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd /Users/Anis/Downloads/rtbpdgf28k-FA38-2/Tex_0668_0.tga
+map_Kd Tex_0668_0.tga
 
 newmtl Tex_0669_0_dds.005
 Ns 7.843137
@@ -95,7 +95,7 @@ Ka 0.470400 0.470400 0.470400
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd /Users/Anis/Downloads/rtbpdgf28k-FA38-2/Tex_0669_0.tga
+map_Kd Tex_0669_0.tga
 
 newmtl Tex_0670_0_dds.005
 Ns 7.843137
@@ -103,7 +103,7 @@ Ka 0.470400 0.470400 0.470400
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd /Users/Anis/Downloads/rtbpdgf28k-FA38-2/Tex_0670_0.tga
+map_Kd Tex_0670_0.tga
 
 newmtl Tex_0671_0_dds.005
 Ns 7.843137
@@ -111,7 +111,7 @@ Ka 0.470400 0.470400 0.470400
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd /Users/Anis/Downloads/rtbpdgf28k-FA38-2/Tex_0671_0.tga
+map_Kd Tex_0671_0.tga
 
 newmtl Tex_0672_0_dds.005
 Ns 7.843137
@@ -119,7 +119,7 @@ Ka 0.470400 0.470400 0.470400
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd /Users/Anis/Downloads/rtbpdgf28k-FA38-2/Tex_0672_0.tga
+map_Kd Tex_0672_0.tga
 
 newmtl Tex_0790_0_dds.005
 Ns 7.843137
@@ -127,7 +127,7 @@ Ka 0.470400 0.470400 0.470400
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd /Users/Anis/Downloads/rtbpdgf28k-FA38-2/Markings.tga
+map_Kd Markings.tga
 
 newmtl Tex_0793_0_dds.003
 Ns 7.843137
@@ -135,4 +135,4 @@ Ka 0.470400 0.470400 0.470400
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd /Users/Anis/Downloads/rtbpdgf28k-FA38-2/Tex_0661_0.tga
+map_Kd Tex_0661_0.tga

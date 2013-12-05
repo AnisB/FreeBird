@@ -10,7 +10,7 @@ class FXExplosion : public FXBase
 	public:
 		FXExplosion();
 		~FXExplosion();
-		SceneNode& GetNode() {return FAttachedSceneNode;};
+		SceneNode* GetNode() {return &FAttachedSceneNode;};
 
 		void InitFX(const osg::Vec3f& parPosition, double parFloat);
 

@@ -7,8 +7,9 @@
 #include <osg/Quat>
 
 
-
 #define FIRST_FRAME 10
+static float PLANE_SPEED =  20.0;
+#define HYPER_SPEED 5.0
 
 Renderer::Renderer(vrj::Kernel * parKernel) 
 : vrj::OsgApp(parKernel)
@@ -21,8 +22,7 @@ Renderer::Renderer(vrj::Kernel * parKernel)
 	
 }
 
-static float PLANE_SPEED =  20.0;
-#define HYPER_SPEED 5.0
+
 Renderer::~Renderer()
 {
 	
@@ -46,6 +46,7 @@ void Renderer::preFrame()
 	}
 	UpdateScene(delta);
 }
+
 void Renderer::latePreFrame()
 {
     // Obtenir la transformation courante (gérée dans nav.h): room to world
@@ -54,9 +55,6 @@ void Renderer::latePreFrame()
     // Obtenir la transformation inverse: world to room
     gmtl::Matrix44f world_transform_Trw;
     gmtl::invert( world_transform_Trw, curPos_Twr ); // inverse la seconde matrice dans la première
-
-    // Obtenir un pointeur sur le tableaux des 16 valeurs
-    const float *mat_Trw = world_transform_Trw.getData();
 
     // Finish updating the scene graph.
     vrj::OsgApp::latePreFrame();
@@ -188,7 +186,7 @@ void Renderer::ButtonPressed(Button::Type parButton)
 void Renderer::initScene()
 {
 	VRInit();
-	Init();
+	InitSceneContent();
 }
 
 osg::Group* Renderer::getScene()
@@ -206,12 +204,14 @@ void Renderer::VRInit()
 }
 
 
-void Renderer::Init()
+void Renderer::InitSceneContent()
 {
+
 	FRoot = new Root();
 	FRoot->InitRoot();
 
 	FAirPlane = new SceneObject("data/DRC/DRC.obj");
+	//FAirPlane = new SceneObject("data/cockpit/cockpit.obj");
 	FAirPlane->InitObject();
 	FRoot->CreateSkybox(FAirPlane);
 	
@@ -220,15 +220,17 @@ void Renderer::Init()
 	mNavigator.init();
 
 	const gmtl::Matrix44f head_matrix( FHead->getData(getDrawScaleFactor()));
-        mHeadInitPos = GmtlToOsg(head_matrix);
-        FAirPlane->GetNode()->setMatrix(mHeadInitPos);
-        FAirPlane->Pitch(MathTools::PI);
+	mHeadInitPos = GmtlToOsg(head_matrix);
+	FAirPlane->GetNode()->setMatrix(mHeadInitPos);
+	FAirPlane->Pitch(MathTools::PI);
 	FAirPlane->Translate(osg::Vec3f(-0.11,0.0,12));
+	//FAirPlane->Translate(osg::Vec3f(-0.11,,60));
 	FRoot->AddStaticModel(FAirPlane);
 
 	FMitrailleuse.SetRoot(FRoot);
 	FMitrailleuse.SetAirplaneModel(FAirPlane);
 	FMitrailleuse.SetAirplaneNode(FRoot->GetDynamicModels());
+	PRINT_GREEN<<"Scene well initiated "<<END_PRINT_COLOR;
 }
 
 

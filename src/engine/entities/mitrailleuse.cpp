@@ -64,7 +64,11 @@ void Mitrailleuse::UpdateBullet(double parDelta)
 		{
 			FXExplosion explosion;
 			explosion.InitFX((*proj)->GetNode()->GetPosition(),BULLET_SCALE);
-			FRootNode->GetRoot()->addChild(explosion.GetNode().GetNode());
+			#ifndef VR_JUGGLER
+			FRootNode->GetDynamicModels()->GetNode()->addChild(explosion.GetNode()->GetNode());
+			#else
+			FRootNode->GetDynamicModels()->AddChild(explosion.GetNode());
+			#endif
 			toRemove.push_back(proj);
 		}
 		// trop loin, on le detruit
@@ -96,7 +100,11 @@ void Mitrailleuse::UpdateMissile(double parDelta)
 		{
 			FXExplosion explosion;
 			explosion.InitFX((*proj)->GetNode()->GetPosition(),MISSILE_SCALE);
-			FRootNode->GetRoot()->addChild(explosion.GetNode().GetNode());
+			#ifndef VR_JUGGLER
+			FRootNode->GetDynamicModels()->GetNode()->addChild(explosion.GetNode()->GetNode());
+			#else
+			FRootNode->GetDynamicModels()->AddChild(explosion.GetNode());
+			#endif
 			toRemove.push_back(proj);
 		}
 		// trop loin, on le detruit
