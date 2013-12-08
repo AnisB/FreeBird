@@ -29,7 +29,7 @@ Ks 1.000000 1.000000 1.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd Interior.tga
+map_Kd Interior.png
 
 newmtl Tex_0333_1_dds.005
 Ns 3.921569
@@ -69,7 +69,7 @@ Ks 1.000000 1.000000 1.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd Screen.png
+map_Kd Screen.tga
 
 newmtl Tex_0659_0_dds.005
 Ns 3.921569
@@ -160,6 +160,7 @@ Ni 1.000000
 d 1.000000
 illum 2
 map_Kd Markings.tga
+
 
 newmtl Tex_0793_0_dds.003
 Ns 3.921569
