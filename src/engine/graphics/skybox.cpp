@@ -132,9 +132,17 @@ void Skybox::createSkybox(std::string parFolderName, SceneNode * parNode, Root* 
     FNode->InitObject();
     FNode->GetNode()->addChild(node);
     FFollowedNode = parNode;
-    parRoot->AddModel(FNode);
+	#ifdef VRJUGGLER
+	parRoot->AddStaticModel(FNode);
+	#else
+    parRoot->AddModel(FNode);	
+	#endif
 }
 
+void Skybox::SetRotation(const osg::Matrix& parRot)
+{
+	FNode->GetNode()->setMatrix(parRot);
+}
 
 void Skybox::Update()
 {

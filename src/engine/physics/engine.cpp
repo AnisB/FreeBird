@@ -11,7 +11,6 @@
 #define SURFACE 15
 inline float clamp(float x, float a, float b)
 {
-
     return x < a ? a : (x > b ? b : x);
 }
 
@@ -21,12 +20,13 @@ inline float CoefPortance(float parAngle)
 }
 
 PhysicsEngine::PhysicsEngine()
+: FDetruit (0)
 {
 	FTerrainHeight = ResourceManager::Instance().LoadTexture("data/terrain/base/heightmap.png")->getImage();
 }
 PhysicsEngine::~PhysicsEngine()
 {
-
+	
 }
 
 Intersect PhysicsEngine::IsLandCollision(const osg::Vec3f& planePosition)
@@ -112,7 +112,10 @@ Intersect PhysicsEngine::IsTooFarCollision(const osg::Vec3f& parObjectPos, const
 
 bool PhysicsEngine::Degats(int parCible, float parVal)
 {
-	return FHouses[parCible]->Degats(parVal);
+	bool retVal = FHouses[parCible]->Degats(parVal);
+	if(retVal)
+		FDetruit++;
+	return retVal;
 }
 
 void PhysicsEngine::AddHouse(House* parHouse)

@@ -80,7 +80,11 @@ class Renderer : public vrj::OsgAppCustom
 		int frameCounter;
 		double timePassed;
 		bool FIsAlive;
-		
+
+		std::string FTimeString;
+		std::string FScoreString;
+		float FTimer;
+
 		// Input handeling
 		gadget::PositionInterface FWand;
 		gadget::PositionInterface FHead;

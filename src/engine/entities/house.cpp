@@ -60,11 +60,14 @@ bool House::IsIntersect(const osg::Vec3f& parPosition)
 
 bool House::Degats(float parVal)
 {
-	mPV-=parVal;
-	if(mPV<=0)
+	if(FIsAlive)
 	{
-		Destroy();
-		return true;
+		mPV-=parVal;
+		if(mPV<=0)
+		{
+			Destroy();
+			return true;
+		}
 	}
 	return false;
 }

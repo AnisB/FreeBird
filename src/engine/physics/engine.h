@@ -24,6 +24,8 @@ public:
 	PhysicsEngine();
 	~PhysicsEngine();
 	
+	int GetDetruits() {return FDetruit;}
+	int GetNbCibles() {return FHouses.size();}
 	void AddHouse(House* parHouse);
 	bool Degats(int parCible, float parVal);
 	int IsHouseCollision(const osg::Vec3f& planePosition);
@@ -36,6 +38,7 @@ public:
 protected:
 	osg::Image * FTerrainHeight;
 	std::vector<House*> FHouses;
+	int FDetruit;
 };
 
 #endif

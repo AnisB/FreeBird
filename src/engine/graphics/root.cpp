@@ -70,8 +70,13 @@ void Root::InitRoot()
 
 void Root::CreateSkybox(SceneNode* toFollow)
 {
+	#ifndef VRJUGGLER
 	FSkybox = new Skybox();
 	FSkybox->createSkybox("data/skybox/sky4", toFollow, this);
+	#else
+	FSkybox = new Skybox();
+	FSkybox->createSkybox("data/skybox/sky4", toFollow, this);
+	#endif
 }
 
 void Root::CreateTerrain()
@@ -127,14 +132,18 @@ void Root::UpdateSkybox()
 {
 	FSkybox->Update();
 }
-
-void Root::UpdateVR(osg::Matrixd parRotationMatrix, const osg::Vec3f& parDirectionfloat, float parSpeed, float parTime)
+void Root::SkyboxVR(const osg::Matrix& parTransf)
+{
+	FSkybox->SetRotation(parTransf);
+}
+void Root::UpdateVR(osg::Matrixd parRotationMatrix, const osg::Vec3f& parDirectionfloat, float  parSpeed, float parTime)
 {
     osg::Matrix currentMatrix = mNavModelGroup->GetNode()->getMatrix();
     currentMatrix.postMult(parRotationMatrix);
     currentMatrix.postMult(osg::Matrix::translate(osg::Vec3f(0.0,0.0,parSpeed*parTime)));
 	//currentMatrix.postMult(osg::Matrix::translate(parDirection*parDisplacement));
     mNavModelGroup->GetNode()->setMatrix(currentMatrix);
+	FTerrain->UpdateVR(parRotationMatrix, parSpeed*parTime);
 	FTerrain->Animation(parTime);
 }
 

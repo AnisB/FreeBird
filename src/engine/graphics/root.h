@@ -19,7 +19,7 @@ class Root : public SceneNode
 		void InitRoot();
 		void CreateTerrain();
 		void CreateSkybox(SceneNode* toFollow);
-
+		void SkyboxVR(const osg::Matrix& parTransf);
 		osg::Group* GetRoot(){ return FRoot;}
 		Terrain* GetTerrain(){ return FTerrain;}
 		Skybox* GetSkybox(){ return FSkybox;}

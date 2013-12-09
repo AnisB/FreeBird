@@ -30,21 +30,10 @@ Terrain::~Terrain()
 
 void Terrain::UpdateVR(osg::Matrixd parRotationMatrix, float parDisplacement)
 {
-	/*
-    FTerrain->Rotate(parRotationMatrix);
-	osg::Matrix currentMatrix = FTerrain->GetNode()->getMatrix();
-	currentMatrix.postMult(osg::Matrix::translate(osg::Vec3f(0.0,0.0,parDisplacement)));
-	FTerrain->GetNode()->setMatrix(currentMatrix);
-
 	osg::Matrix currentWaterMatrix = FWaterVR->GetNode()->getMatrix();
 	currentWaterMatrix.postMult(parRotationMatrix);
 	currentWaterMatrix.postMult(osg::Matrix::translate(osg::Vec3f(0.0,0.0,parDisplacement)));
 	FWaterVR->GetNode()->setMatrix(currentWaterMatrix);
-
-	osg::Matrix currentDecorsMatrix = FDecors->GetNode()->getMatrix();
-	currentDecorsMatrix.postMult(parRotationMatrix);
-	currentDecorsMatrix.postMult(osg::Matrix::translate(osg::Vec3f(0.0,0.0,parDisplacement)));
-	FDecors->GetNode()->setMatrix(currentDecorsMatrix);
 
 	osg::Vec3f scale = currentWaterMatrix.getScale();
 	osg::Vec3f transPrime = -(osg::Matrix::inverse(currentWaterMatrix).getTrans());
@@ -55,10 +44,8 @@ void Terrain::UpdateVR(osg::Matrixd parRotationMatrix, float parDisplacement)
 	finalMatrix.preMult(osg::Matrix::scale(scale));
 	FWater->GetNode()->setMatrix(finalMatrix);
 
-    osg::Vec2f relativePos = ComputeRelativePosition(-transPrime);
-    InjectVec2(FWater->GetNode(), relativePos, "planePosition");
-	*/
-	
+    osg::Vec2f relativePos = ComputeRelativePosition2(-transPrime);
+    InjectVec2(FWater->GetNode(), relativePos, "planePosition");	
 }
 void Terrain::Animation(float parTime)
 {
@@ -193,7 +180,7 @@ void Terrain::createTerrain(std::string parFolderName, Root * parNode)
 
     LoadWater();
     LoadWaterShader();
-    parNode->AddModel(FWater);
+    parNode->AddStaticModel(FWater);
 }
 
 void Terrain::Palmiers()

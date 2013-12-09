@@ -3,6 +3,7 @@
 
 #include "helper.h"
 #include <common/defines.h>
+#include <common/helper.h>	
 #include <physics/engine.h>
 
 #include <osgText/Font>
@@ -11,7 +12,7 @@
 #define FIRST_FRAME 10
 static float PLANE_SPEED =  30.0;
 #define HYPER_SPEED 2.0
-
+static float TOTAL_TIME =  120.0;
 Renderer::Renderer(vrj::Kernel * parKernel) 
 : vrj::OsgAppCustom(parKernel)
 , FB0State(gadget::Digital::OFF)
@@ -121,11 +122,12 @@ void Renderer::UpdateScene(float parDelta)
 		}
 		*/
 		FRoot->UpdateVR(rotationMatrix,FSpeed,PLANE_SPEED,parDelta);
+		FRoot->SkyboxVR(osg::Matrix::rotate(FRoot->GetDynamicModels()->GetNode()->getMatrix().getRotate()));
 		FMitrailleuse.Update(parDelta);
 		osg::Matrix toWorld;
 		toWorld=osg::Matrix::inverse(FRoot->GetDynamicModels()->GetNode()->getMatrix());
 		//toWorld.postMult(FAirPlane->GetNode()->getMatrix());
-		toWorld.postMult(osg::Matrix::translate(osg::Vec3f(0.0,4.0,-3.0)));
+		toWorld.preMult(FAirPlane->GetNode()->getMatrix());
 		//PRINT_ORANGE<<VEC3_TO_STREAM(osg::Matrix::inverse(FRoot->GetDynamicModels()->GetNode()->getMatrix()).getTrans())<<END_PRINT_COLOR;
 		Intersect inter = PhysicsEngine::Instance().IsLandCollision(toWorld.getTrans());
 		if(inter.isValid)
@@ -145,7 +147,16 @@ void Renderer::UpdateScene(float parDelta)
 			FIsAlive = false;
 			
 		}
+		FTimer-=parDelta;
+		FTimeString= "Temps restant: ";
+		FTimeString+=ConvertFloatToString(FTimer);
+		PRINT_ORANGE<<FTimeString<<END_PRINT_COLOR;
+		FScoreString =  ConvertIntToString(PhysicsEngine::Instance().GetDetruits());
+		FScoreString+= "/";
+		FScoreString+= ConvertIntToString(PhysicsEngine::Instance().GetNbCibles());
+		PRINT_ORANGE<<FScoreString<<END_PRINT_COLOR;
 	}
+	
 	
 }
 
@@ -296,6 +307,7 @@ void Renderer::InitSceneContent()
     geode->addDrawable(FObjectif);
     FRoot->GetStaticModels()->GetNode()->addChild(geode);
 */
+	FTimer =  TOTAL_TIME;
 }
 
 

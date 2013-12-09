@@ -22,7 +22,7 @@ class Skybox
 		void createSkybox(std::string parFolderName,  SceneNode * parNode, Root* parRoot);	
 		SceneNode* GetNode(){return FNode;};
 		void Update();
-
+		void SetRotation(const osg::Matrix& parRot);
 	protected:
 		osg::Geometry * GenerateBox();
 		
