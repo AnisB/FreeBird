@@ -1,17 +1,12 @@
-# Wavefront material library
-# Tue Aug 03 07:54:08 1999
-# Created with Viewpoint Interchange www.viewpoint.com
+# Blender MTL File: 'None'
+# Material Count: 1
 
 newmtl eg2_body
-  Ka 0 0 0
-  Kd 0 0 0
-  Ks 0 0 0
-  illum 2
-  map_Kd eagle2.png
-
-newmtl eg2_eye
-  Ka 0 0 0
-  Kd 0 0 0
-  Ks 0 0 0
-  illum 2
-  map_Kd eye_brn3.tif
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd eagle2.png
