@@ -23,6 +23,10 @@
 #include <osgText/Font>
 #include <osgText/Text>
 
+
+
+extern FMOD_SYSTEM *systemSound;
+
 class Renderer : public vrj::OsgAppCustom
 {
 	public:		
@@ -85,8 +89,15 @@ class Renderer : public vrj::OsgAppCustom
 
 		std::string FTimeString;
 		std::string FScoreString;
-		float FTimer;
+		FMOD_SOUND * sonTheme;
 
+		FMOD_SOUND *sonControlTower;
+
+		FMOD_SOUND *sonMort;
+		float FTimer;
+		bool FIsMaitre;
+
+	protected:
 		// Input handeling
 		gadget::PositionInterface FWand;
 		gadget::PositionInterface FHead;

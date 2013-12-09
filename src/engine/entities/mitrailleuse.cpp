@@ -3,7 +3,7 @@
 #include <physics/engine.h>
 #include <common/random.h>
 #include <graphics/helper.h>
-
+#include <renderer/renderer.h>
 #define DUREE_COOLDOWN 0.2
 #define BULLET_SCALE 0.5
 
@@ -25,8 +25,9 @@ Mitrailleuse::Mitrailleuse()
 , FActive(false)
 , FCoolDownMiss(0.0)
 , FRight(false)
+, FIsMaitre(false)
 {
-
+	
 }
 
 
@@ -77,6 +78,12 @@ void Mitrailleuse::UpdateBullet(double parDelta)
 			
 			if(FPhysicsEngine.Degats(result,3))
 			{
+				if(FIsMaitre)
+				{	
+					#ifdef VRJUGGLER
+					FMOD_System_PlaySound(systemSound, FMOD_CHANNEL_FREE, sonExplosion, 0, NULL);
+					#endif
+				}	
 				FXExplosion explosion;
 				#ifndef VR_JUGGLER
 				explosion.InitFX((*proj)->GetNode()->GetPosition(),HOUSE_SCALE);
@@ -94,12 +101,13 @@ void Mitrailleuse::UpdateBullet(double parDelta)
 		// Collsion avec le sol?
 		else if(FPhysicsEngine.IsLandCollision((*proj)->GetNode()->GetPosition()).isValid)
 		{
+			
 			FXExplosion explosion;
 			#ifndef VR_JUGGLER
 			explosion.InitFX((*proj)->GetNode()->GetPosition(),BULLET_SCALE);
 			FRootNode->GetDynamicModels()->GetNode()->addChild(explosion.GetNode()->GetNode());
 			#else
-			//FRootNode->GetDynamicModels()->AddChild(explosion.GetNode());
+			//FRootNode->GetDynamicModels()FIsMaitre->AddChild(explosion.GetNode());
 			//FRootNode->GetDynamicModels()->GetNode()->addChild(explosion.GetNode()->GetNode());			
 			#endif
 			PRINT_ORANGE<<"Collision avec sol"<<END_PRINT_COLOR;
@@ -127,6 +135,19 @@ void Mitrailleuse::UpdateBullet(double parDelta)
 	}
 }
 
+
+void Mitrailleuse::Init(bool parVal)
+{
+	FIsMaitre = parVal;
+	if(FIsMaitre)
+	{
+		#ifdef VRJUGGLER
+		FMOD_System_CreateSound(systemSound, "data/son/missile3.mp3", FMOD_CREATESAMPLE, 0, &sonMissile);
+		FMOD_System_CreateSound(systemSound, "data/son/mitraille.mp3", FMOD_CREATESAMPLE, 0, &sonBalle);
+		FMOD_System_CreateSound(systemSound, "data/son/explosion.mp3", FMOD_CREATESAMPLE, 0, &sonExplosion);
+		#endif
+	}
+}
 void Mitrailleuse::UpdateMissile(double parDelta)
 {
 	PhysicsEngine & FPhysicsEngine = PhysicsEngine::Instance();
@@ -151,6 +172,12 @@ void Mitrailleuse::UpdateMissile(double parDelta)
 			
 			if(FPhysicsEngine.Degats(result,30))
 			{
+				if(FIsMaitre)
+				{	
+					#ifdef VRJUGGLER
+					FMOD_System_PlaySound(systemSound, FMOD_CHANNEL_FREE, sonExplosion, 0, NULL);
+					#endif
+				}	
 				FXExplosion explosion;
 				//explosion.InitFX((*proj)->GetNode()->GetPosition(),HOUSE_SCALE);
 				explosion.InitFX((*proj)->GetNode()->GetPosition(),MISSILE_SCALE);
@@ -198,8 +225,14 @@ void Mitrailleuse::UpdateMissile(double parDelta)
 
 void Mitrailleuse::TirerBalle()
 {
+	if(FIsMaitre)
+	{	
 	#ifdef VRJUGGLER
-	osg::Vec3f randPos(RandomDet(),RandomDet() + 2.0,0.0);
+		FMOD_System_PlaySound(systemSound, FMOD_CHANNEL_FREE, sonBalle, 0, NULL);
+	#endif
+	}
+	#ifdef VRJUGGLER
+	osg::Vec3f randPos(0.0,0.0 +2.0,0.0);
 	osg::Matrix transf = FAirplaneNode->GetTransformation();
 	transf =osg::Matrix::inverse(transf);
 	transf.preMult(osg::Matrix::rotate(MathTools::PI,0.0,1.0,0.0));
@@ -219,6 +252,12 @@ void Mitrailleuse::TirerMissile()
 {
 	if(FCoolDownMiss<=0)
 	{
+		if(FIsMaitre)
+		{
+#ifdef VRJUGGLER
+			FMOD_System_PlaySound(systemSound, FMOD_CHANNEL_FREE, sonMissile, 0, NULL);
+#endif
+		}
 		FCoolDownMiss =  DUREE_COOLDOWN_MISS;
 		osg::Vec3f randPos;
 		if(FRight)
@@ -229,6 +268,7 @@ void Mitrailleuse::TirerMissile()
 		{
 			randPos = osg::Vec3f(-3,1,0.0);
 		}
+		PRINT_ORANGE<<"COUCOU5"<<END_PRINT_COLOR;
 		FRight=(!FRight);
 		#ifdef VRJUGGLER
 		osg::Vec3f deplace(0.0,2.0,1.0);
@@ -236,12 +276,17 @@ void Mitrailleuse::TirerMissile()
 		transform =osg::Matrix::inverse(transform);
 		transform.preMult(osg::Matrix::rotate(MathTools::PI,0.0,1.0,0.0));
 		transform.postMult(osg::Matrix::translate(deplace));
+		PRINT_ORANGE<<"COUCOU6"<<END_PRINT_COLOR;
 		Missile * newBullet = new Missile(randPos, transform,MISSILE_VITESSE);
 		#else
+		PRINT_ORANGE<<"COUCOU7"<<END_PRINT_COLOR;
 		const osg::Matrix& transf = FAirplaneModel->GetTransformation(TransformationSpace::TS_WORLD);
 		Missile * newBullet = new Missile(randPos, transf,MISSILE_VITESSE);
 		#endif
+		PRINT_ORANGE<<"COUCOU8"<<END_PRINT_COLOR;
 	    FRootNode->AddModel(newBullet->GetNode());
+		PRINT_ORANGE<<"COUCOU9"<<END_PRINT_COLOR;
 	    FMissiles.push_back(newBullet);
+		PRINT_ORANGE<<"COUCOU10"<<END_PRINT_COLOR;
 	}
 }

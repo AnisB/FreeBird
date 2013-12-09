@@ -11,12 +11,16 @@
 #include <entities/bullet.h>
 #include <entities/missile.h>
 
+#ifdef VRJUGGLER
+#include<fmod.h>
+#endif
+
 class Mitrailleuse
 {
 	public:
 		Mitrailleuse();
 		~Mitrailleuse();
-
+		void Init(bool parFlag);
 		void SetActive(bool parFlag)
 		{
 			FActive = parFlag;
@@ -43,7 +47,12 @@ class Mitrailleuse
 		// Gestion de la mitrailleuse
 		bool FActive;
 		double FCoolDown;
-
+		#ifdef VRJUGGLER
+		FMOD_SOUND *sonBalle;
+		FMOD_SOUND *sonMissile;
+		FMOD_SOUND *sonExplosion;
+		#endif
+		bool FIsMaitre;
 		// Gestion des missile
 		bool FRight;
 		double FCoolDownMiss;

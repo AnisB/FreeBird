@@ -13,6 +13,10 @@
 static float PLANE_SPEED =  30.0;
 #define HYPER_SPEED 2.0
 static float TOTAL_TIME =  120.0;
+FMOD_SYSTEM *systemSound;
+
+
+
 Renderer::Renderer(vrj::Kernel * parKernel) 
 : vrj::OsgAppCustom(parKernel)
 , FB0State(gadget::Digital::OFF)
@@ -21,8 +25,9 @@ Renderer::Renderer(vrj::Kernel * parKernel)
 , frameCounter(0)
 , timePassed(0.0)
 , FIsAlive(false)
+, FIsMaitre(false)
 {
-	
+
 }
 
 
@@ -144,6 +149,7 @@ void Renderer::UpdateScene(float parDelta)
 			
 			FIsAlive = false;
 			FObjectif->setColor(osg::Vec4(1.0f,0.0f,0.0f,1.0f));
+			FMOD_System_PlaySound(systemSound, FMOD_CHANNEL_FREE, sonMort, 0, NULL);
 		}
 		FTimer-=parDelta;
 		if(PhysicsEngine::Instance().GetDetruits()==PhysicsEngine::Instance().GetNbCibles())
@@ -270,6 +276,12 @@ void Renderer::VRInit()
 
 void Renderer::InitSceneContent()
 {
+	FMOD_RESULT res = FMOD_System_Create(&systemSound);
+	res = FMOD_System_Init(systemSound, 5	, FMOD_INIT_NORMAL, NULL);
+	if(res== FMOD_OK)
+	{
+		FIsMaitre=true;
+	}
 
 	FRoot = new Root();
 	FRoot->InitRoot();
@@ -324,6 +336,18 @@ void Renderer::InitSceneContent()
 	mHudTransform->addChild(mHudGeode);
 	FRoot->GetRoot()->addChild(mHudTransform);
 	FTimer =  TOTAL_TIME;
+	FMitrailleuse.Init(FIsMaitre);
+	if(FIsMaitre)
+	{
+		res = FMOD_System_CreateSound(systemSound, "data/son/theme.mp3", FMOD_CREATESAMPLE, 0, &sonTheme);
+		ERRCHECK(res);
+		FMOD_System_CreateSound(systemSound, "data/son/explosion.mp3", FMOD_CREATESAMPLE, 0, &sonMort);
+		res = FMOD_System_CreateSound(systemSound, "data/son/controltower.mp3", FMOD_CREATESAMPLE, 0, &sonControlTower);
+		ERRCHECK(res);
+		res = FMOD_System_PlaySound(systemSound, FMOD_CHANNEL_FREE, sonTheme, 0, NULL);
+		ERRCHECK(res);
+		FMOD_System_PlaySound(systemSound, FMOD_CHANNEL_FREE, sonControlTower, 0, NULL);
+	}
 }
 
 

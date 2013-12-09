@@ -4,9 +4,12 @@
 
 #include<string>
 
+#include<fmod.h>
 
 std::string ConvertFloatToString(float parVal);
 
 std::string ConvertIntToString(int parVal);
+
+void ERRCHECK(FMOD_RESULT result);
 
 #endif
