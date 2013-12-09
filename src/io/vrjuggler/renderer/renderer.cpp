@@ -126,9 +126,7 @@ void Renderer::UpdateScene(float parDelta)
 		FMitrailleuse.Update(parDelta);
 		osg::Matrix toWorld;
 		toWorld=osg::Matrix::inverse(FRoot->GetDynamicModels()->GetNode()->getMatrix());
-		//toWorld.postMult(FAirPlane->GetNode()->getMatrix());
 		toWorld.preMult(FAirPlane->GetNode()->getMatrix());
-		//PRINT_ORANGE<<VEC3_TO_STREAM(osg::Matrix::inverse(FRoot->GetDynamicModels()->GetNode()->getMatrix()).getTrans())<<END_PRINT_COLOR;
 		Intersect inter = PhysicsEngine::Instance().IsLandCollision(toWorld.getTrans());
 		if(inter.isValid)
 		{
@@ -139,22 +137,40 @@ void Renderer::UpdateScene(float parDelta)
 			transf = osg::Matrix::inverse(transf);
 
 			FEpave->GetNode()->setMatrix(transf);
-			FEpave->Translate(osg::Vec3f(0.0,2.0,-10.0));
+			FEpave->Translate(osg::Vec3f(0.0,3.0,-10.0));
 			
 			//FEpave->Translate(-inter.position);
 			FRoot->AddModel(FEpave);
 			
 			FIsAlive = false;
-			
+			FObjectif->setColor(osg::Vec4(1.0f,0.0f,0.0f,1.0f));
 		}
 		FTimer-=parDelta;
-		FTimeString= "Temps restant: ";
-		FTimeString+=ConvertFloatToString(FTimer);
-		PRINT_ORANGE<<FTimeString<<END_PRINT_COLOR;
-		FScoreString =  ConvertIntToString(PhysicsEngine::Instance().GetDetruits());
-		FScoreString+= "/";
-		FScoreString+= ConvertIntToString(PhysicsEngine::Instance().GetNbCibles());
-		PRINT_ORANGE<<FScoreString<<END_PRINT_COLOR;
+		if(PhysicsEngine::Instance().GetDetruits()==PhysicsEngine::Instance().GetNbCibles())
+		{
+			FIsAlive = false;
+			FObjectif->setColor(osg::Vec4(0.0f,0.0f,1.0f,1.0f));
+		}
+		if(FTimer<=0)
+		{
+			FIsAlive = false;
+			FObjectif->setColor(osg::Vec4(1.0f,0.0f,0.0f,1.0f));
+		}
+		FTimeString= "Temps restant (sec): ";
+		FTimeString+=ConvertIntToString(int(FTimer));
+		FTimeString+= "\nScore :";
+		FTimeString+=  ConvertIntToString(PhysicsEngine::Instance().GetDetruits());
+		FTimeString+= "/";
+		FTimeString+= ConvertIntToString(PhysicsEngine::Instance().GetNbCibles());
+		FObjectif->setText(FTimeString);
+	}
+	else
+	{
+		FTimeString= "\nScore final:";
+		FTimeString+=  ConvertIntToString(PhysicsEngine::Instance().GetDetruits());
+		FTimeString+= "/";
+		FTimeString+= ConvertIntToString(PhysicsEngine::Instance().GetNbCibles());
+		FObjectif->setText(FTimeString);
 	}
 	
 	
@@ -284,29 +300,29 @@ void Renderer::InitSceneContent()
 	PRINT_GREEN<<"Scene well initiated "<<END_PRINT_COLOR;
 	FIsAlive = true;
 	FSpeed = osg::Vec3f(0.0,0.0,PLANE_SPEED);
-	/*
-	osgText::Text * FObjectif = new osgText::Text;
-	osgText::Text * FTime = new osgText::Text;
-    osg::Group* rootNode = new osg::Group;
 
-    osgText::Font* font = osgText::readFontFile("fonts/arial.ttf");
 
-    osg::Geode* geode  = new osg::Geode;
-    rootNode->addChild(geode);
+	osg::Geode * mHudGeode = new osg::Geode();
+	osg::MatrixTransform * mHudTransform = new osg::MatrixTransform();
+	osg::StateSet * mHudStateSet = new osg::StateSet();
 
-    FObjectif->setFont(font);
-    FObjectif->setColor(osg::Vec4(1.0,1.0,1.0,1.0));
-    FObjectif->setCharacterSize(20);
-    FObjectif->setPosition(osg::Vec3(20,20,0.0f));
-	
-    // right to left layouts would be used for hebrew or arabic fonts.
-    FObjectif->setLayout(osgText::Text::RIGHT_TO_LEFT);
-    //FObjectif->setAlignment(osgText::TextBase::SCREEN);
-  
-    FObjectif->setText("time");
-    geode->addDrawable(FObjectif);
-    FRoot->GetStaticModels()->GetNode()->addChild(geode);
-*/
+	FObjectif = new  osgText::Text;
+	mHudGeode->addDrawable( FObjectif );
+
+	mHudStateSet->setMode(GL_DEPTH_TEST,osg::StateAttribute::OFF);
+	mHudGeode->setStateSet(mHudStateSet);
+
+	FObjectif->setColor(osg::Vec4(0.0f,0.0f,0.0f,0.8f));
+	FObjectif->setLineSpacing(0.7);
+	FObjectif->setCharacterSize(5.0);
+	FObjectif->setPosition(osg::Vec3(0.f,15.0f,-30.0f));
+	FObjectif->setAlignment(osgText::Text::CENTER_CENTER);
+	FObjectif->setBackdropColor(osg::Vec4(1.0f,1.0f,1.0f,0.6f));
+	FObjectif->setBackdropType(osgText::Text::OUTLINE);
+
+
+	mHudTransform->addChild(mHudGeode);
+	FRoot->GetRoot()->addChild(mHudTransform);
 	FTimer =  TOTAL_TIME;
 }
 

@@ -88,27 +88,27 @@ void Root::CreateTerrain()
 
 void Root::RemoveStaticModel(SceneNode * parNode)
 {
-	PRINT_ORANGE<<mNoNavModelGroup->GetNode()->removeChild(parNode->GetNode())<<END_PRINT_COLOR;
-	FSons.remove(parNode);
+	PRINT_ORANGE<<"Remove static model "<<mNoNavModelGroup->GetNode()->removeChild(parNode->GetNode())<<END_PRINT_COLOR;
+	//FSons.remove(parNode);
 }
 
 void Root::RemoveModel(SceneNode * parNode)
 {
-	PRINT_ORANGE<<mNavModelGroup->GetNode()->removeChild(parNode->GetNode())<<END_PRINT_COLOR;
-	FSons.remove(parNode);
+	PRINT_ORANGE<<"Remove dynamic model "<<mNavModelGroup->GetNode()->removeChild(parNode->GetNode())<<END_PRINT_COLOR;
+	//FSons.remove(parNode);
 }
 void Root::AddModel(SceneNode * parNode)
 {
 	parNode->SetParent(this);
 	mNavModelGroup->AddChild(parNode);
-	FSons.push_back(parNode);
+	//FSons.push_back(parNode);
 }
 
 void Root::AddStaticModel(SceneNode * parNode)
 {
 	parNode->SetParent(this);
 	mNoNavModelGroup->AddChild(parNode);
-	FSons.push_back(parNode);
+	//FSons.push_back(parNode);
 }
 
 

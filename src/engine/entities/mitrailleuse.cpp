@@ -61,7 +61,7 @@ void Mitrailleuse::UpdateBullet(double parDelta)
 	{
 		// On update
 		(*proj)->Update(parDelta);
-
+		
 		// Collision avec une maison
 		int result = FPhysicsEngine.IsHouseCollision((*proj)->GetNode()->GetPosition());
 		if(result>=0)
@@ -86,12 +86,13 @@ void Mitrailleuse::UpdateBullet(double parDelta)
 				//FRootNode->GetDynamicModels()->GetNode()->addChild(explosion.GetNode()->GetNode());	
 				#endif
 			}
+			PRINT_ORANGE<<"Collision avec maison"<<END_PRINT_COLOR;
 			toRemove.push_back(proj);
 		}
 
 
 		// Collsion avec le sol?
-		if(FPhysicsEngine.IsLandCollision((*proj)->GetNode()->GetPosition()).isValid)
+		else if(FPhysicsEngine.IsLandCollision((*proj)->GetNode()->GetPosition()).isValid)
 		{
 			FXExplosion explosion;
 			#ifndef VR_JUGGLER
@@ -101,6 +102,7 @@ void Mitrailleuse::UpdateBullet(double parDelta)
 			//FRootNode->GetDynamicModels()->AddChild(explosion.GetNode());
 			//FRootNode->GetDynamicModels()->GetNode()->addChild(explosion.GetNode()->GetNode());			
 			#endif
+			PRINT_ORANGE<<"Collision avec sol"<<END_PRINT_COLOR;
 			toRemove.push_back(proj);
 
 		}
@@ -111,12 +113,14 @@ void Mitrailleuse::UpdateBullet(double parDelta)
 		else if(FPhysicsEngine.IsTooFarCollision(FAirplaneNode->GetPosition(), (*proj)->GetNode()->GetPosition()).isValid)
 		#endif
 		{
+			PRINT_ORANGE<<"Collision avec loin"<<END_PRINT_COLOR;
 			toRemove.push_back(proj);
 		}
 	}
 	// destruction réelle
 	foreach(proj, toRemove)
 	{
+		PRINT_ORANGE<<"SUPRESSIONDUDE"<<END_PRINT_COLOR;
 		FRootNode->RemoveModel((*(*proj))->GetNode());
 		delete *(*proj);
 		FProjectiles.erase(*proj);
@@ -142,7 +146,7 @@ void Mitrailleuse::UpdateMissile(double parDelta)
 			FRootNode->GetDynamicModels()->GetNode()->addChild(explosion.GetNode()->GetNode());
 			#else
 			//FRootNode->GetDynamicModels()->AddChild(explosion.GetNode());
-			FRootNode->GetDynamicModels()->GetNode()->addChild(explosion.GetNode()->GetNode());			
+			//FRootNode->GetDynamicModels()->GetNode()->addChild(explosion.GetNode()->GetNode());			
 			#endif
 			
 			if(FPhysicsEngine.Degats(result,30))
@@ -154,14 +158,14 @@ void Mitrailleuse::UpdateMissile(double parDelta)
 				FRootNode->GetDynamicModels()->GetNode()->addChild(explosion.GetNode()->GetNode());
 				#else
 				//FRootNode->GetDynamicModels()->AddChild(explosion.GetNode());
-				FRootNode->GetDynamicModels()->GetNode()->addChild(explosion.GetNode()->GetNode());	
+				//FRootNode->GetDynamicModels()->GetNode()->addChild(explosion.GetNode()->GetNode());	
 				#endif
 			}
 			
 			toRemove.push_back(proj);
 		}
 		// Collsion avec le sol?
-		if(FPhysicsEngine.IsLandCollision((*proj)->GetNode()->GetPosition()).isValid)
+		else if(FPhysicsEngine.IsLandCollision((*proj)->GetNode()->GetPosition()).isValid)
 		{
 			FXExplosion explosion;
 			explosion.InitFX((*proj)->GetNode()->GetPosition(),MISSILE_SCALE);
@@ -169,7 +173,7 @@ void Mitrailleuse::UpdateMissile(double parDelta)
 			FRootNode->GetDynamicModels()->GetNode()->addChild(explosion.GetNode()->GetNode());
 			#else
 			//FRootNode->GetDynamicModels()->AddChild(explosion.GetNode());
-			FRootNode->GetDynamicModels()->GetNode()->addChild(explosion.GetNode()->GetNode());			
+			//FRootNode->GetDynamicModels()->GetNode()->addChild(explosion.GetNode()->GetNode());			
 			#endif
 			toRemove.push_back(proj);
 		}

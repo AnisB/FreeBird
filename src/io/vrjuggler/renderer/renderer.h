@@ -20,7 +20,8 @@
 #include "osgapp.h"
 #include <vrj/Draw/OSG/OsgApp.h>
 
-
+#include <osgText/Font>
+#include <osgText/Text>
 
 class Renderer : public vrj::OsgAppCustom
 {
@@ -66,7 +67,8 @@ class Renderer : public vrj::OsgAppCustom
 		// Displacement
 		osg::Vec3f FPosition;
 		osg::Vec3f FSpeed;
-
+		osgText::Text * FObjectif;
+		osgText::Text * FTimeRemaining;
 
 		//VRJ
 		osg::Matrix mHeadInitPos;
