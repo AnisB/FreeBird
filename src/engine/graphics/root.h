@@ -28,6 +28,7 @@ class Root : public SceneNode
 		void UpdateVR(osg::Matrixd parRotationMatrix, float parDisplacement);
 
 		void RemoveModel(SceneNode * parNode);
+		void RemoveStaticModel(SceneNode * parNode);
 		void AddModel(SceneNode * parNode);
 		
 		void AddStaticModel(SceneNode * parNode);

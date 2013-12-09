@@ -3,7 +3,7 @@
 
 #include "helper.h"
 #include <common/defines.h>
-
+#include <physics/engine.h>
 #include <osg/Quat>
 
 
@@ -18,6 +18,7 @@ Renderer::Renderer(vrj::Kernel * parKernel)
 , FB2State(gadget::Digital::OFF)
 , frameCounter(0)
 , timePassed(0.0)
+, FIsAlive(false)
 {
 	
 }
@@ -108,8 +109,33 @@ void Renderer::UpdateScene(float parDelta)
 	wandRotation = osg::Matrix::inverse(wandRotation);
 
 	osg::Matrix rotationMatrix = Interpolate(wandRotation, parDelta);
-	FRoot->UpdateVR(rotationMatrix,PLANE_SPEED*parDelta);
-    FMitrailleuse.Update(parDelta);
+	if(FIsAlive)
+	{
+		FRoot->UpdateVR(rotationMatrix,PLANE_SPEED*parDelta);
+		FMitrailleuse.Update(parDelta);
+		osg::Matrix toWorld;
+		toWorld=osg::Matrix::inverse(FRoot->GetDynamicModels()->GetNode()->getMatrix());
+		toWorld.postMult(FEpave->GetNode()->getMatrix());
+		//PRINT_ORANGE<<VEC3_TO_STREAM(osg::Matrix::inverse(FRoot->GetDynamicModels()->GetNode()->getMatrix()).getTrans())<<END_PRINT_COLOR;
+		if(PhysicsEngine::Instance().IsLandCollision(toWorld.getTrans()))
+		{
+			FRoot->RemoveStaticModel(FAirPlane);
+			
+			//osg::Matrix epaveMatrix = FEpave->GetNode()->getMatrix();
+			//osg::Quat rotation(FRoot->GetDynamicModels()->GetNode()->getMatrix().getRotate());
+			osg::Matrix transf(FRoot->GetDynamicModels()->GetNode()->getMatrix());
+			transf =osg::Matrix::inverse(transf);
+			//PRINT_ORANGE<<VEC3_TO_STREAM(translation)<<END_PRINT_COLOR;
+			//epaveMatrix.postMult(osg::Matrix::translate(-translation));			
+			//epaveMatrix.postMult(osg::Matrix::inverse(osg::Matrix::rotate(rotation)));
+			FEpave->GetNode()->setMatrix(transf);
+			FEpave->Translate(osg::Vec3f(0.0,5,-10.0));
+			FRoot->AddModel(FEpave);
+			//epaveMatrix.postMult(osg::Matrix::translate(osg::Vec3f(0.0,-5.0,0.0)));
+			
+			FIsAlive = false;
+		}
+	}
 }
 
 // Input Methods
@@ -211,6 +237,8 @@ void Renderer::InitSceneContent()
 	FRoot->InitRoot();
 
 	FAirPlane = new SceneObject("data/DRC/DRC.obj");
+	FEpave = new SceneObject("data/DRC/destroy.obj");
+	FEpave->InitObject();
 	//FAirPlane = new SceneObject("data/cockpit/cockpit.obj");
 	FAirPlane->InitObject();
 	FRoot->CreateSkybox(FAirPlane);
@@ -224,13 +252,15 @@ void Renderer::InitSceneContent()
 	FAirPlane->GetNode()->setMatrix(mHeadInitPos);
 	FAirPlane->Pitch(MathTools::PI);
 	FAirPlane->Translate(osg::Vec3f(-0.11,0.0,12));
-	//FAirPlane->Translate(osg::Vec3f(-0.11,,60));
+
+	FEpave->GetNode()->setMatrix(mHeadInitPos);
 	FRoot->AddStaticModel(FAirPlane);
 
 	FMitrailleuse.SetRoot(FRoot);
 	FMitrailleuse.SetAirplaneModel(FAirPlane);
 	FMitrailleuse.SetAirplaneNode(FRoot->GetDynamicModels());
 	PRINT_GREEN<<"Scene well initiated "<<END_PRINT_COLOR;
+	FIsAlive = true;
 }
 
 

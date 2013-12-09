@@ -60,6 +60,7 @@ class Renderer : public vrj::OsgApp
 		// Generic
 		Root* FRoot;
 		SceneObject * FAirPlane;
+		SceneObject * FEpave;
 		Skybox * FSkybox;
 		Mitrailleuse FMitrailleuse;
 		// Displacement
@@ -76,6 +77,7 @@ class Renderer : public vrj::OsgApp
 		
 		int frameCounter;
 		double timePassed;
+		bool FIsAlive;
 		
 		// Input handeling
 		gadget::PositionInterface FWand;

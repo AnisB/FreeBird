@@ -81,6 +81,12 @@ void Root::CreateTerrain()
 }
 
 
+void Root::RemoveStaticModel(SceneNode * parNode)
+{
+	PRINT_ORANGE<<mNoNavModelGroup->GetNode()->removeChild(parNode->GetNode())<<END_PRINT_COLOR;
+	FSons.remove(parNode);
+}
+
 void Root::RemoveModel(SceneNode * parNode)
 {
 	PRINT_ORANGE<<mNavModelGroup->GetNode()->removeChild(parNode->GetNode())<<END_PRINT_COLOR;

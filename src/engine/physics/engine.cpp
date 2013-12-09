@@ -54,8 +54,8 @@ bool PhysicsEngine::IsLandCollision(const osg::Vec3f& planePosition)
 		height *=1000.0;
 		height = TerrainConst::WaterHeight-height;
 		#else
-		height*=100;
-		height = height-TerrainConst::WaterHeight;
+		height*=TerrainConst::WaterHeight;
+		height = height-TerrainConst::WaterHeight+1;
 		#endif
 
 		
