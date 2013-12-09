@@ -25,7 +25,7 @@ class Root : public SceneNode
 		Skybox* GetSkybox(){ return FSkybox;}
 		SceneNode* GetDynamicModels(){ return mNavModelGroup;}
 		SceneNode* GetStaticModels(){ return mNoNavModelGroup;}
-		void UpdateVR(osg::Matrixd parRotationMatrix, float parDisplacement);
+		void UpdateVR(osg::Matrixd parRotationMatrix, const osg::Vec3f& parDirection, float parSpeed, float parTime);
 
 		void RemoveModel(SceneNode * parNode);
 		void RemoveStaticModel(SceneNode * parNode);

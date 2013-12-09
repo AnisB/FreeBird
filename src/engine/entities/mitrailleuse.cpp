@@ -227,7 +227,7 @@ void Mitrailleuse::TirerMissile()
 		}
 		FRight=(!FRight);
 		#ifdef VRJUGGLER
-		osg::Vec3f deplace(0.0,4.0,1.0);
+		osg::Vec3f deplace(0.0,2.0,1.0);
 		osg::Matrix transform = FAirplaneNode->GetTransformation();
 		transform =osg::Matrix::inverse(transform);
 		transform.preMult(osg::Matrix::rotate(MathTools::PI,0.0,1.0,0.0));

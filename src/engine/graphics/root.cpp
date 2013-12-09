@@ -128,11 +128,13 @@ void Root::UpdateSkybox()
 	FSkybox->Update();
 }
 
-void Root::UpdateVR(osg::Matrixd parRotationMatrix, float parDisplacement)
+void Root::UpdateVR(osg::Matrixd parRotationMatrix, const osg::Vec3f& parDirectionfloat, float parSpeed, float parTime)
 {
     osg::Matrix currentMatrix = mNavModelGroup->GetNode()->getMatrix();
     currentMatrix.postMult(parRotationMatrix);
-    currentMatrix.postMult(osg::Matrix::translate(osg::Vec3f(0.0,0.0,parDisplacement)));
+    currentMatrix.postMult(osg::Matrix::translate(osg::Vec3f(0.0,0.0,parSpeed*parTime)));
+	//currentMatrix.postMult(osg::Matrix::translate(parDirection*parDisplacement));
     mNavModelGroup->GetNode()->setMatrix(currentMatrix);
+	FTerrain->Animation(parTime);
 }
 

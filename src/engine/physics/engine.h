@@ -30,6 +30,7 @@ public:
 	void DestroyHouse(int parHouse);
 	Intersect IsLandCollision(const osg::Vec3f& planePosition);
 	Intersect IsTooFarCollision(const osg::Vec3f& parObjectPos, const osg::Vec3f& parPlane);
+	osg::Vec3f ComputeNewSpeed(const osg::Vec3f& parCurrentPlaneSped,const osg::Matrix& parTransform,  const osg::Quat& , double parDelta);
 
 
 protected:

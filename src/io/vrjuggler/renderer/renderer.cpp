@@ -4,12 +4,13 @@
 #include "helper.h"
 #include <common/defines.h>
 #include <physics/engine.h>
-#include <osg/Quat>
 
+#include <osgText/Font>
+#include <osgText/Text>
 
 #define FIRST_FRAME 10
-static float PLANE_SPEED =  20.0;
-#define HYPER_SPEED 5.0
+static float PLANE_SPEED =  30.0;
+#define HYPER_SPEED 2.0
 
 Renderer::Renderer(vrj::Kernel * parKernel) 
 : vrj::OsgAppCustom(parKernel)
@@ -111,7 +112,15 @@ void Renderer::UpdateScene(float parDelta)
 	osg::Matrix rotationMatrix = Interpolate(wandRotation, parDelta);
 	if(FIsAlive)
 	{
-		FRoot->UpdateVR(rotationMatrix,PLANE_SPEED*parDelta);
+		/*
+		FSpeed = PhysicsEngine::Instance().ComputeNewSpeed(FSpeed,osg::Matrix::inverse(FRoot->GetDynamicModels()->GetNode()->getMatrix()),rotationMatrix.getRotate(),parDelta);
+		if(FSpeed.length ()>=30)
+		{
+			FSpeed/=FSpeed.length();
+			FSpeed*=30;
+		}
+		*/
+		FRoot->UpdateVR(rotationMatrix,FSpeed,PLANE_SPEED,parDelta);
 		FMitrailleuse.Update(parDelta);
 		osg::Matrix toWorld;
 		toWorld=osg::Matrix::inverse(FRoot->GetDynamicModels()->GetNode()->getMatrix());
@@ -137,6 +146,7 @@ void Renderer::UpdateScene(float parDelta)
 			
 		}
 	}
+	
 }
 
 // Input Methods
@@ -262,6 +272,30 @@ void Renderer::InitSceneContent()
 	FMitrailleuse.SetAirplaneNode(FRoot->GetDynamicModels());
 	PRINT_GREEN<<"Scene well initiated "<<END_PRINT_COLOR;
 	FIsAlive = true;
+	FSpeed = osg::Vec3f(0.0,0.0,PLANE_SPEED);
+	/*
+	osgText::Text * FObjectif = new osgText::Text;
+	osgText::Text * FTime = new osgText::Text;
+    osg::Group* rootNode = new osg::Group;
+
+    osgText::Font* font = osgText::readFontFile("fonts/arial.ttf");
+
+    osg::Geode* geode  = new osg::Geode;
+    rootNode->addChild(geode);
+
+    FObjectif->setFont(font);
+    FObjectif->setColor(osg::Vec4(1.0,1.0,1.0,1.0));
+    FObjectif->setCharacterSize(20);
+    FObjectif->setPosition(osg::Vec3(20,20,0.0f));
+	
+    // right to left layouts would be used for hebrew or arabic fonts.
+    FObjectif->setLayout(osgText::Text::RIGHT_TO_LEFT);
+    //FObjectif->setAlignment(osgText::TextBase::SCREEN);
+  
+    FObjectif->setText("time");
+    geode->addDrawable(FObjectif);
+    FRoot->GetStaticModels()->GetNode()->addChild(geode);
+*/
 }
 
 

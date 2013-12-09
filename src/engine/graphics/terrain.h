@@ -25,6 +25,7 @@ class Terrain
 		SceneNode *  GetWater() {return FWater;};
 
 		// Update scene
+		void Animation(float parTime);
 		void Update(osg::Vec3f parAirplanePos);
 		void UpdateVR(osg::Matrixd parWaterMatrix, float parDisplacement);
 		void InitVR();
@@ -51,7 +52,7 @@ class Terrain
 		// Terrain
 		SceneObject* FTerrain;
 		int FShaderId;
-
+		std::vector<SceneObject * > FBirds;
 		//Decors
 		SceneNode* FDecors;
 		SceneObject* FPorteAvion;

@@ -78,7 +78,7 @@ void Renderer::UpdateScene(float parDelta)
 			FEpave->InitObject();
 			FEpave->Translate(inter.position);
 			FEpave->Scale(osg::Vec3f(3.0,3.0,3.0));
-			FEpave->Yaw(MathTools::PI);
+			FEpave->Yaw(MathTools::PI	);
 			FRoot->AddModel(FEpave);
 			FXExplosion explosion;
 			explosion.InitFX(inter.position+osg::Vec3f(0.0,5.0,0.0),3);

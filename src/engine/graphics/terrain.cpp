@@ -30,6 +30,7 @@ Terrain::~Terrain()
 
 void Terrain::UpdateVR(osg::Matrixd parRotationMatrix, float parDisplacement)
 {
+	/*
     FTerrain->Rotate(parRotationMatrix);
 	osg::Matrix currentMatrix = FTerrain->GetNode()->getMatrix();
 	currentMatrix.postMult(osg::Matrix::translate(osg::Vec3f(0.0,0.0,parDisplacement)));
@@ -56,9 +57,20 @@ void Terrain::UpdateVR(osg::Matrixd parRotationMatrix, float parDisplacement)
 
     osg::Vec2f relativePos = ComputeRelativePosition(-transPrime);
     InjectVec2(FWater->GetNode(), relativePos, "planePosition");
-  
+	*/
+	
 }
+void Terrain::Animation(float parTime)
+{
+	osg::Matrix mat = FBirds[0]->GetNode()->getMatrix();
+	mat.postMult(osg::Matrix::rotate(0.1*parTime, osg::Vec3f(0.0,1.0,0.0)));
+	FBirds[0]->GetNode()->setMatrix(mat);
 
+	osg::Matrix mat2 = FBirds[1]->GetNode()->getMatrix();
+	mat2.postMult(osg::Matrix::rotate(-0.05*parTime, osg::Vec3f(0.0,1.0,0.0)));
+	FBirds[1]->GetNode()->setMatrix(mat2);
+
+}
 void Terrain::InitVR()
 {
 	
@@ -131,6 +143,17 @@ void Terrain::LoadDecors()
     LoadBaseShader(FPorteAvion->GetNode());
     FDecors->AddChild(FPorteAvion);
 
+	SceneObject * bird =  new SceneObject("data/models/bird/birds.3ds");
+	bird->InitObject();
+	bird->Translate(osg::Vec3f(200,0.0,200.0));
+	FDecors->AddChild(bird);
+	FBirds.push_back(bird);
+	SceneObject * bird2 =  new SceneObject("data/models/bird/eagle.obj");
+	bird2->InitObject();
+	bird2->Translate(osg::Vec3f(200,0.0,400.0));
+	bird2->Scale(osg::Vec3f(10,10,10));
+	FDecors->AddChild(bird2);
+	FBirds.push_back(bird2);
 }
 
 

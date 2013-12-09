@@ -6,6 +6,20 @@
 
 #include <common/defines.h>
 
+
+#define MASS_VOL 1.2
+#define SURFACE 15
+inline float clamp(float x, float a, float b)
+{
+
+    return x < a ? a : (x > b ? b : x);
+}
+
+inline float CoefPortance(float parAngle)
+{
+	return 0.1*parAngle+0.5;
+}
+
 PhysicsEngine::PhysicsEngine()
 {
 	FTerrainHeight = ResourceManager::Instance().LoadTexture("data/terrain/base/heightmap.png")->getImage();
@@ -14,7 +28,6 @@ PhysicsEngine::~PhysicsEngine()
 {
 
 }
-
 
 Intersect PhysicsEngine::IsLandCollision(const osg::Vec3f& planePosition)
 {
@@ -124,4 +137,38 @@ int PhysicsEngine::IsHouseCollision(const osg::Vec3f& planePosition)
 void PhysicsEngine::DestroyHouse(int parHouse)
 {
 	FHouses[parHouse]->Destroy();
+}
+
+osg::Vec3f PhysicsEngine::ComputeNewSpeed(const osg::Vec3f& parCurrentPlaneSpeed, const osg::Matrix& parTransform, const osg::Quat& parQuat, double parDelta)
+{
+	osg::Vec3f finalSpeed = parCurrentPlaneSpeed;
+	// Conversion du quaternion en angles
+	float q0,q1,q2,q3;
+	q0 = parQuat.x();
+	q1 = parQuat.y();
+	q2 = parQuat.z();
+	q3 = parQuat.w();
+	double teta = atan(2*(q0*q1+q2*q3)/(1-2*q1*q1+q2*q2))-5;
+	double gho = asin(2*(q0*q2-q3*q1));
+	double phi = atan(2*(q0*q3+q1*q2)/(1-2*q3*q3+q2*q2)) - 5;
+	
+	teta*=180/3.14; 
+	PRINT_ORANGE<<"Les trois angles sont: "<<teta<<" "<<gho<<" "<<phi<<END_PRINT_COLOR;
+	// Limitation des angles dans l'intervalle de la portance
+	teta = clamp(teta,-5,25*180/3.14);
+	gho = clamp(gho,-5,25);
+	phi = clamp(phi,-5,25);	
+	PRINT_ORANGE<<"Les angles clampés sont: "<<teta<<" "<<gho<<" "<<phi<<END_PRINT_COLOR;
+	osg::Vec3f poids(0.0,5,0.0);
+	poids = poids*parTransform;
+	osg::Vec3f acceleration = poids;
+	PRINT_ORANGE<<"Le vecteur poids est: "<<VEC3_TO_STREAM(acceleration)<<END_PRINT_COLOR;
+	//acceleration.x() += ( MASS_VOL*parCurrentPlaneSpeed.length2()*SURFACE*CoefPortance(teta)/2.0)*0.1;
+	acceleration.y() -= ( MASS_VOL*parCurrentPlaneSpeed.length2()*SURFACE*CoefPortance(teta)/2.0)*0.1;
+	//acceleration.z() += ( MASS_VOL*parCurrentPlaneSpeed.length2()*SURFACE*CoefPortance(phi)/2.0)*0.1;
+	acceleration*=0.1;
+	PRINT_ORANGE<<"Le vecteur acceleration est: "<<VEC3_TO_STREAM(acceleration)<<END_PRINT_COLOR;
+	finalSpeed += acceleration*parDelta*0.5;
+
+	return finalSpeed;
 }

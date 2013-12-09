@@ -65,6 +65,8 @@ class Renderer : public vrj::OsgAppCustom
 		Mitrailleuse FMitrailleuse;
 		// Displacement
 		osg::Vec3f FPosition;
+		osg::Vec3f FSpeed;
+
 
 		//VRJ
 		osg::Matrix mHeadInitPos;

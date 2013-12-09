@@ -20,7 +20,8 @@
 
 
 #include <graphics/skybox.h>
-
+#include <osgText/Font>
+#include <osgText/Text>
 
 class InputEventHandler;
 
@@ -75,7 +76,8 @@ class Renderer : public Singleton<Renderer>
 		Root* FRoot;
 		Airplane * FAirplane;
 		Mitrailleuse FMitrailleuse;
-
+		osgText::Text * FObjectif;
+		osgText::Text * FTime;
 		bool FIsAlive;
 		// OSG Viewer
 		osgViewer::Viewer FViewer;
