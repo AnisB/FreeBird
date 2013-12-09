@@ -139,7 +139,7 @@ void Renderer::UpdateScene(float parDelta)
 			transf = osg::Matrix::inverse(transf);
 
 			FEpave->GetNode()->setMatrix(transf);
-			FEpave->Translate(osg::Vec3f(0.0,5,-10.0));
+			FEpave->Translate(osg::Vec3f(0.0,2.0,-10.0));
 			
 			//FEpave->Translate(-inter.position);
 			FRoot->AddModel(FEpave);
