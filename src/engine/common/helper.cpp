@@ -25,7 +25,7 @@ std::string ConvertIntToString(int parVal)
 	sStream>>result;
 	return result;
 }
-
+#ifdef VRJUGGLER
 void ERRCHECK(FMOD_RESULT result)
 {
     if (result != FMOD_OK)
@@ -34,4 +34,4 @@ void ERRCHECK(FMOD_RESULT result)
         return;
     }
 }
-
+#endif
