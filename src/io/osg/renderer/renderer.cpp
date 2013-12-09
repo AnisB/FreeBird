@@ -68,7 +68,7 @@ void Renderer::UpdateScene(float parDelta)
 	FRoot->UpdateTerrain(FAirplane->GetNode()->GetPosition());
 	FRoot->UpdateSkybox();
 	
-	if(FPhysicsEngine.IsLandCollision(FAirplane->GetNode()->GetPosition()))
+	if(FPhysicsEngine.IsLandCollision(FAirplane->GetNode()->GetPosition()).isValid)
 	{
 		PRINT_ORANGE<<"COLLISION DUDE"<<END_PRINT_COLOR;
 	}

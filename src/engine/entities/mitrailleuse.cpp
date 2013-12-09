@@ -134,14 +134,15 @@ void Mitrailleuse::UpdateMissile(double parDelta)
 
 void Mitrailleuse::TirerBalle()
 {
-	osg::Vec3f randPos(RandomDet(),RandomDet(),0.0);
 	#ifdef VRJUGGLER
+	osg::Vec3f randPos(RandomDet(),RandomDet() + 2.0,0.0);
 	osg::Matrix transf = FAirplaneNode->GetTransformation();
 	transf =osg::Matrix::inverse(transf);
 	transf.preMult(osg::Matrix::rotate(MathTools::PI,0.0,1.0,0.0));
 	transf.postMult(osg::Matrix::translate(randPos));
 	Bullet * newBullet = new Bullet(randPos, transf,BALLE_VITESSE);
 	#else
+	osg::Vec3f randPos(RandomDet(),RandomDet(),0.0);
 	const osg::Matrix& transf = FAirplaneModel->GetTransformation(TransformationSpace::TS_WORLD);
 	Bullet * newBullet = new Bullet(randPos, transf,BALLE_VITESSE);
 	#endif

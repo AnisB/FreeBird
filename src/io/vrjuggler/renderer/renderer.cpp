@@ -115,8 +115,8 @@ void Renderer::UpdateScene(float parDelta)
 		FMitrailleuse.Update(parDelta);
 		osg::Matrix toWorld;
 		toWorld=osg::Matrix::inverse(FRoot->GetDynamicModels()->GetNode()->getMatrix());
-		toWorld.postMult(FEpave->GetNode()->getMatrix());
-		toWorld.postMult(osg::Matrix::translate(osg::Vec3f(0.0,-3.0,0.0)));
+		//toWorld.postMult(FAirPlane->GetNode()->getMatrix());
+		toWorld.postMult(osg::Matrix::translate(osg::Vec3f(0.0,4.0,-3.0)));
 		//PRINT_ORANGE<<VEC3_TO_STREAM(osg::Matrix::inverse(FRoot->GetDynamicModels()->GetNode()->getMatrix()).getTrans())<<END_PRINT_COLOR;
 		Intersect inter = PhysicsEngine::Instance().IsLandCollision(toWorld.getTrans());
 		if(inter.isValid)

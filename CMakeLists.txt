@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.6)
  
 project(FreeBird)
 
-set(CMAKE_BUILD_TYPE "Release")
+set(CMAKE_BUILD_TYPE "Debug")
 #Setting the cmake module math
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/;${CMAKE_MODULE_PATH}")
 set(ENGINE "${PROJECT_SOURCE_DIR}/src/engine")

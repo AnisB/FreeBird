@@ -27,5 +27,4 @@ void FXExplosion::InitFX(const osg::Vec3f& parPosition,  double parFloat)
 	lol->SetPosition(parPosition);
 	FAttachedSceneNode.AddChild(lol);
 */
-	FAttachedSceneNode.GetNode()->addChild(FExplosion.get());
 }
