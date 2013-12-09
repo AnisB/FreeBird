@@ -63,7 +63,7 @@ void Renderer::preFrame()
 void Renderer::latePreFrame()
 {
     // Finish updating the scene graph.
-    vrj::OsgAppCustom::latePreFrame();
+    vrj::OsgApp::latePreFrame();
 }
 
 void Renderer::intraFrame()
@@ -345,10 +345,10 @@ void Renderer::InitSceneContent()
 	FTransform = new osg::MatrixTransform();
 	FStateSet = new osg::StateSet();
 	FObjectif = new  osgText::Text;
-	mHudGeode->addDrawable( FObjectif );
+	FGeode->addDrawable( FObjectif );
 
-	mHudStateSet->setMode(GL_DEPTH_TEST,osg::StateAttribute::OFF);
-	mHudGeode->setStateSet(mHudStateSet);
+	FStateSet->setMode(GL_DEPTH_TEST,osg::StateAttribute::OFF);
+	FGeode->setStateSet(FStateSet.get());
 
 	FObjectif->setColor(osg::Vec4(0.0f,0.0f,0.0f,0.8f));
 	FObjectif->setLineSpacing(0.7);
@@ -359,8 +359,8 @@ void Renderer::InitSceneContent()
 	FObjectif->setBackdropType(osgText::Text::OUTLINE);
 
 
-	mHudTransform->addChild(mHudGeode);
-	FRoot->GetRoot()->addChild(mHudTransform);
+	FTransform->addChild(FGeode.get());
+	FRoot->GetRoot()->addChild(FTransform.get());
 	FTimer =  TOTAL_TIME;
 	FMitrailleuse.Init(FIsMaitre);
 	// Si on est dans cv maitre crée les son etc
