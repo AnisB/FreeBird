@@ -1,3 +1,4 @@
+// Include du header
 #include "helper.h"
 
 osg::Matrix GmtlToOsg(const gmtl::Matrix44f& parMatrix)

@@ -1,7 +1,10 @@
 #ifndef RENDERER_FREE_BIRD
 #define RENDERER_FREE_BIRD
 
-//Rendering includes
+// Ce renderer est uniquement réservé 
+// au simulateur version openscenegraph
+
+//graphics includes
 #include <graphics/root.h>
 #include <graphics/sceneobject.h>
 #include <graphics/cameraman.h>
@@ -15,29 +18,32 @@
 //Inlcude Entities
 #include <entities/airplane.h>
 #include <entities/mitrailleuse.h>
-// Project includes
+
+// Osg includes
 #include <osgViewer/Viewer>
-
-
 #include <graphics/skybox.h>
 #include <osgText/Font>
 #include <osgText/Text>
 
+// Predeclaration
 class InputEventHandler;
 
+// Class principale pour le rendu en osg uniquement
 class Renderer : public Singleton<Renderer>
 {
 	public:		
+		// Constructeur
 		Renderer();
+		// Destructeur
 		~Renderer();
 
-		// Time handling
+		// Mise a jour de la scene
 		void UpdateScene(float parDelta);
 
-		// Personnal
+		// Init du renderer
 		void Init();
+		// Lancement du rendering
 		void Run();
-
 
 
 	public:
@@ -51,14 +57,9 @@ class Renderer : public Singleton<Renderer>
 		void MousePressed(Button::Type parButton);
 		void MouseReleased(Button::Type parButton);
 
-
 		void KeyReleased(Key::Type parKey);
 		void KeyPressed(Key::Type parKey);
 
-
-
-
-	
 	protected:
 		// Init
 		void OSGInit();
@@ -68,7 +69,6 @@ class Renderer : public Singleton<Renderer>
 		void InitCamera();
 
 		void QuittingRun();
-		void InitRenderToTexture();
 
 
 	protected:

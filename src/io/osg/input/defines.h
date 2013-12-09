@@ -1,10 +1,10 @@
 #ifndef DEFINES_INPUT_FREE_BIRD
 #define DEFINES_INPUT_FREE_BIRD
 
-
+//Include osg
 #include <osgGA/GUIEventAdapter>
 
-
+// Declaration d'un mappage de touches clavier avec osg
 namespace Key
 {
   enum Type
@@ -17,7 +17,6 @@ namespace Key
   	,DIAGONAL_RIGHT = osgGA::GUIEventAdapter::KEY_E
 
     //DEBUG
-    
     ,DEBUG0 = osgGA::GUIEventAdapter::KEY_R
     ,DEBUG1 = osgGA::GUIEventAdapter::KEY_T
     ,DEBUG2 = osgGA::GUIEventAdapter::KEY_Y
@@ -27,7 +26,7 @@ namespace Key
 }
 
 
-
+// Declaration d'un mappage de bouttons souris avec osg
 namespace Button
 {
   enum Type
