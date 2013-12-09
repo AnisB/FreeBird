@@ -1,6 +1,7 @@
 #ifndef DEFINES_INPUT_FREE_BIRD
 #define DEFINES_INPUT_FREE_BIRD
 
+// Enum des 3 boutons de la wand
 namespace Button
 {
   enum Type
@@ -10,6 +11,7 @@ namespace Button
   	BUTTON2 = 2,
   };
 }
+// Les noms des input de la cave
 #define WAND_NAME_STR "VJWand"
 #define HEAD_NAME_STR "VJHead"
 #define B0_NAME_STR "VJButton0"

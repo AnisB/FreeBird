@@ -1,8 +1,11 @@
+
+
 #include "renderer.h"
 
-
+// Include projet
 #include <common/defines.h>
 
+// Constructeur
 Renderer::Renderer() 
 : FViewer()
 , FPhysicsEngine()
@@ -12,17 +15,23 @@ Renderer::Renderer()
 	FInputHandler = new InputEventHandler();
 }
 
+
+// Destructeur
 Renderer::~Renderer()
 {
 	delete FRoot;
 	delete FAirplane;
 	delete FCameraMan;
+	delete FInputHandler;
 }
 
+// Mise à jour de la scene
 void Renderer::UpdateScene(float parDelta)
 {	
+	// Si l'airplane est vivant
 	if(FIsAlive)
 	{
+		// On se déplace et on tourne en fonction des entrée clavier et souris
 		if(FKeyHandler[Key::FOWARD])
 		{
 			FAirplane->Pitch(AirplaneRotation::ANTICLOCKWISE,parDelta);
@@ -51,7 +60,6 @@ void Renderer::UpdateScene(float parDelta)
 			FAirplane->Yaw(AirplaneRotation::CLOCKWISE,parDelta);
 		}
 
-
 		if(FKeyHandler[Key::DEBUG0])
 		{
 			FCameraMan->ChangeFocalLength(true);
@@ -67,19 +75,26 @@ void Renderer::UpdateScene(float parDelta)
 		}
 		FCameraMan->Update();
 
-
+		// Mise a jour du terrain
 		FRoot->UpdateTerrain(FAirplane->GetNode()->GetPosition());
+		// Mise a jour du skybox
 		FRoot->UpdateSkybox();
+		// Test de l'intersection
 		Intersect inter = FPhysicsEngine.IsLandCollision(FAirplane->GetNode()->GetPosition());
+		// Si intersection de l'avion avec le sol il y a
 		if(inter.isValid)
 		{
+			// On supprime l'avion
 			FRoot->RemoveModel(FAirplane->GetNode());
+			//ON crée l'epave
 			SceneObject * FEpave = new SceneObject("data/DRC/destroy.obj");
+			// On l'initialise
 			FEpave->InitObject();
 			FEpave->Translate(inter.position);
 			FEpave->Scale(osg::Vec3f(3.0,3.0,3.0));
 			FEpave->Yaw(MathTools::PI	);
 			FRoot->AddModel(FEpave);
+			// On crée une exploson
 			FXExplosion explosion;
 			explosion.InitFX(inter.position+osg::Vec3f(0.0,5.0,0.0),3);
 			FRoot->GetDynamicModels()->GetNode()->addChild(explosion.GetNode()->GetNode());			
@@ -93,26 +108,37 @@ void Renderer::UpdateScene(float parDelta)
 
 void Renderer::Run()
 {
+	// On vérifie que le viewer est instancié
 	if(!FViewer.isRealized())
 	{
+		// Sinon on l'instancie
 	    FViewer.realize();
 	}
+	// ON initialize la camera
 	InitCamera();
+	// Tant que l'on a pas fini de render
 	while( !FViewer.done() )
 	{
+		// On calcule le temps entre cette frame et celle d'avant
 		double delta = FViewer.elapsedTime() - FLastFrameTime;
+		// On met à jour le scene
 	    UpdateScene(delta);
+	    // On met à jour le temps de la frame précédete
 	    FLastFrameTime =  FViewer.elapsedTime();
+	    // On produit une frame
 	    FViewer.frame();
 	}
+	// Fin du run
 	QuittingRun();
 }
 
 void Renderer::QuittingRun()
 {
+	//suppression du handler
 	FViewer.removeEventHandler(FInputHandler);
 }
 
+// Gestion des touches
 void Renderer::HandleKeyReleased(Key::Type parKey)
 {
 	tryget(it,FKeyHandler, parKey);
@@ -251,14 +277,16 @@ void Renderer::MouseReleased(Button::Type parButton)
 
 void Renderer::Init()
 {
+	// Creation de la scene
 	SceneInit();
+	// Init osg
     OSGInit();	
-    InitRenderToTexture();
 }
 
 
 void Renderer::InitCamera()
 {
+	// Récupération de camera et attribution au cameraman
 	std::vector<osg::Camera*> cameraList;
 	FViewer.getCameras(cameraList, true);
 	FCamera = cameraList[0];
@@ -267,10 +295,6 @@ void Renderer::InitCamera()
 }
 
 
-void Renderer::InitRenderToTexture()
-{
-
-}
 void Renderer::OSGInit()
 {
 	FViewer.setSceneData( FRoot->GetRoot() );
@@ -279,21 +303,21 @@ void Renderer::OSGInit()
 
 void Renderer::SceneInit()
 {
-	
+	// Création du root
 	FRoot = new Root();
 	FRoot->InitRoot();
-
+	// Création de l'airplane
 	FAirplane = new Airplane();
 	FAirplane->Build(FRoot);
-	
+	//Création du skybox
 	FRoot->CreateSkybox(FAirplane->GetNode());
 	FRoot->CreateTerrain();
-
+	// Création du cameraman
 	FCameraMan = new CameraMan();
 	FCameraMan->InitObject();
 	FCameraMan->SetDistance(osg::Vec3f(0,-10,-50));
 	FCameraMan->Follow(FAirplane->GetModel());
-
+	// Création de la mitrailleuse
 	FMitrailleuse.SetRoot(FRoot);
 	FMitrailleuse.SetAirplaneModel(FAirplane->GetModel());
 	FMitrailleuse.SetAirplaneNode(FAirplane->GetNode());
