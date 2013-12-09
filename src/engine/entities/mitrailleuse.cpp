@@ -24,6 +24,7 @@
 #define MISSILE_VITESSE 100.0
 #endif
 
+#define SOUND_COOLDOWN 1.0
 
 // Constructeur
 Mitrailleuse::Mitrailleuse()
@@ -32,6 +33,7 @@ Mitrailleuse::Mitrailleuse()
 , FCoolDownMiss(0.0)
 , FRight(false)
 , FIsMaitre(false)
+, FCoolDownSound(0.0)
 {
 	
 }
@@ -48,6 +50,7 @@ void Mitrailleuse::Update(double parDelta)
 	FCoolDownMiss -= parDelta;
 	if(FActive)
 	{
+		FCoolDownSound -= parDelta;
 		FCoolDown -= parDelta; 
 		if (FCoolDown<=0.0)
 		{
@@ -95,6 +98,7 @@ void Mitrailleuse::UpdateBullet(double parDelta)
 				{	
 					#ifdef VRJUGGLER
 					FMOD_System_PlaySound(systemSound, FMOD_CHANNEL_FREE, sonExplosion, 0, NULL);
+					FCoolDownSound = SOUND_COOLDOWN;
 					#endif
 				}	
 				FXExplosion explosion;
@@ -244,7 +248,8 @@ void Mitrailleuse::TirerBalle()
 	if(FIsMaitre)
 	{	
 	#ifdef VRJUGGLER
-		FMOD_System_PlaySound(systemSound, FMOD_CHANNEL_FREE, sonBalle, 0, NULL);
+		if(FCoolDownSound<=0)
+			FMOD_System_PlaySound(systemSound, FMOD_CHANNEL_FREE, sonBalle, 0, NULL);
 	#endif
 	}
 	#ifdef VRJUGGLER

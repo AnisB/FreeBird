@@ -63,6 +63,7 @@ class Mitrailleuse
 		// Gestion de la mitrailleuse
 		bool FActive;
 		double FCoolDown;
+		double FCoolDownSound;
 		// Gestion duu son
 		#ifdef VRJUGGLER
 		FMOD_SOUND *sonBalle;
