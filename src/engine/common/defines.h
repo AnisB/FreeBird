@@ -1,7 +1,10 @@
+// Ce code est très inspiré de ma base de code personnel
+// ce sont des macro de debug et de dev plus rapide
+
 #ifndef COMMON_DEFINES
 #define COMMON_DEFINES
-#include <iostream>
 
+#include <iostream>
 
 #define foreach(IT,X) for ( typeof( X.begin() ) IT = X.begin(); IT != X.end(); ++IT )
 #define tryget(IT,LIST, ELEM) typeof( LIST.begin()) IT = LIST.find(ELEM);
@@ -31,4 +34,5 @@ namespace MathTools
 	static const double PI  = 3.14159265359;
 	static const double FULL_ANGLE = 360.0;
 }
+
 #endif //COMMON_DEFINES

@@ -1,11 +1,15 @@
 #ifndef PHYSICS_ENGINE
 #define PHYSICS_ENGINE
 
+// Include OSG
 #include <osg/Image>
 
+// include projet
 #include <common/singleton.h>
 #include <resources/resourcemanager.h>
 #include <entities/house.h>
+
+// Include autre
 #include <vector>
 
 struct Intersect

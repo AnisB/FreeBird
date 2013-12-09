@@ -10,7 +10,7 @@
 
 
 
-
+// Rotations 
 namespace AirplaneRotation
 {
 	enum Type
@@ -19,6 +19,8 @@ namespace AirplaneRotation
 		ANTICLOCKWISE
 	};
 }
+
+
 class Airplane
 {
 	public:
@@ -42,7 +44,6 @@ class Airplane
 	protected:
 			SceneNode * FModelNode;			
 			SceneNode * FNode;	
-			FXExplosion * FBoum;		
 };
 
 

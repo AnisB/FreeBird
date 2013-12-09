@@ -1,9 +1,13 @@
+// Include du header
 #include "mitrailleuse.h"
 
+// Include projet
 #include <physics/engine.h>
 #include <common/random.h>
 #include <graphics/helper.h>
 #include <renderer/renderer.h>
+
+// Définition des constances utiles au jeu
 #define DUREE_COOLDOWN 0.2
 #define BULLET_SCALE 0.5
 
@@ -20,6 +24,8 @@
 #define MISSILE_VITESSE 100.0
 #endif
 
+
+// Constructeur
 Mitrailleuse::Mitrailleuse()
 : FCoolDown(0.0)
 , FActive(false)
@@ -30,11 +36,13 @@ Mitrailleuse::Mitrailleuse()
 	
 }
 
-
+//Destructeur
 Mitrailleuse::~Mitrailleuse()
 {
 	
 }
+
+// Mise à jour
 void Mitrailleuse::Update(double parDelta)
 {
 	FCoolDownMiss -= parDelta;
@@ -53,8 +61,10 @@ void Mitrailleuse::Update(double parDelta)
 	UpdateMissile(parDelta);
 }
 
+// Mise à jour des balles
 void Mitrailleuse::UpdateBullet(double parDelta)
 {
+	// Moteur de physique
 	PhysicsEngine & FPhysicsEngine = PhysicsEngine::Instance();
 	// Mise a jour des porjectiles
 	std::list<std::list<Bullet*>::iterator> toRemove;
@@ -67,6 +77,7 @@ void Mitrailleuse::UpdateBullet(double parDelta)
 		int result = FPhysicsEngine.IsHouseCollision((*proj)->GetNode()->GetPosition());
 		if(result>=0)
 		{
+			// ON crée une explosion de taille maison
 			FXExplosion explosion;
 			#ifndef VR_JUGGLER
 			explosion.InitFX((*proj)->GetNode()->GetPosition(),HOUSE_SCALE);
@@ -78,6 +89,8 @@ void Mitrailleuse::UpdateBullet(double parDelta)
 			
 			if(FPhysicsEngine.Degats(result,3))
 			{
+				// Maison détruite explosion maison
+				// Son de destruction
 				if(FIsMaitre)
 				{	
 					#ifdef VRJUGGLER
@@ -93,7 +106,7 @@ void Mitrailleuse::UpdateBullet(double parDelta)
 				//FRootNode->GetDynamicModels()->GetNode()->addChild(explosion.GetNode()->GetNode());	
 				#endif
 			}
-			PRINT_ORANGE<<"Collision avec maison"<<END_PRINT_COLOR;
+			//PRINT_ORANGE<<"Collision avec maison"<<END_PRINT_COLOR;
 			toRemove.push_back(proj);
 		}
 
@@ -101,7 +114,7 @@ void Mitrailleuse::UpdateBullet(double parDelta)
 		// Collsion avec le sol?
 		else if(FPhysicsEngine.IsLandCollision((*proj)->GetNode()->GetPosition()).isValid)
 		{
-			
+			// Explosion sol
 			FXExplosion explosion;
 			#ifndef VR_JUGGLER
 			explosion.InitFX((*proj)->GetNode()->GetPosition(),BULLET_SCALE);
@@ -110,7 +123,7 @@ void Mitrailleuse::UpdateBullet(double parDelta)
 			//FRootNode->GetDynamicModels()FIsMaitre->AddChild(explosion.GetNode());
 			//FRootNode->GetDynamicModels()->GetNode()->addChild(explosion.GetNode()->GetNode());			
 			#endif
-			PRINT_ORANGE<<"Collision avec sol"<<END_PRINT_COLOR;
+			//PRINT_ORANGE<<"Collision avec sol"<<END_PRINT_COLOR;
 			toRemove.push_back(proj);
 
 		}
@@ -121,14 +134,13 @@ void Mitrailleuse::UpdateBullet(double parDelta)
 		else if(FPhysicsEngine.IsTooFarCollision(FAirplaneNode->GetPosition(), (*proj)->GetNode()->GetPosition()).isValid)
 		#endif
 		{
-			PRINT_ORANGE<<"Collision avec loin"<<END_PRINT_COLOR;
+			//PRINT_ORANGE<<"Collision avec loin"<<END_PRINT_COLOR;
 			toRemove.push_back(proj);
 		}
 	}
 	// destruction réelle
 	foreach(proj, toRemove)
 	{
-		PRINT_ORANGE<<"SUPRESSIONDUDE"<<END_PRINT_COLOR;
 		FRootNode->RemoveModel((*(*proj))->GetNode());
 		delete *(*proj);
 		FProjectiles.erase(*proj);
@@ -138,6 +150,7 @@ void Mitrailleuse::UpdateBullet(double parDelta)
 
 void Mitrailleuse::Init(bool parVal)
 {
+	// Si on est sur la machine qui fait du son
 	FIsMaitre = parVal;
 	if(FIsMaitre)
 	{
@@ -148,6 +161,8 @@ void Mitrailleuse::Init(bool parVal)
 		#endif
 	}
 }
+
+// Maj du missile même logique que la balle
 void Mitrailleuse::UpdateMissile(double parDelta)
 {
 	PhysicsEngine & FPhysicsEngine = PhysicsEngine::Instance();
@@ -225,6 +240,7 @@ void Mitrailleuse::UpdateMissile(double parDelta)
 
 void Mitrailleuse::TirerBalle()
 {
+	// Si maitre on fait un son
 	if(FIsMaitre)
 	{	
 	#ifdef VRJUGGLER
@@ -232,6 +248,7 @@ void Mitrailleuse::TirerBalle()
 	#endif
 	}
 	#ifdef VRJUGGLER
+	// Ontire un projectile
 	osg::Vec3f randPos(0.0,0.0 +2.0,0.0);
 	osg::Matrix transf = FAirplaneNode->GetTransformation();
 	transf =osg::Matrix::inverse(transf);
@@ -247,9 +264,10 @@ void Mitrailleuse::TirerBalle()
     FProjectiles.push_back(newBullet);
 }
 
-
+// Même logique que la balle
 void Mitrailleuse::TirerMissile()
 {
+	// Si le cooldown le permet
 	if(FCoolDownMiss<=0)
 	{
 		if(FIsMaitre)
@@ -268,7 +286,6 @@ void Mitrailleuse::TirerMissile()
 		{
 			randPos = osg::Vec3f(-3,1,0.0);
 		}
-		PRINT_ORANGE<<"COUCOU5"<<END_PRINT_COLOR;
 		FRight=(!FRight);
 		#ifdef VRJUGGLER
 		osg::Vec3f deplace(0.0,2.0,1.0);
@@ -276,17 +293,12 @@ void Mitrailleuse::TirerMissile()
 		transform =osg::Matrix::inverse(transform);
 		transform.preMult(osg::Matrix::rotate(MathTools::PI,0.0,1.0,0.0));
 		transform.postMult(osg::Matrix::translate(deplace));
-		PRINT_ORANGE<<"COUCOU6"<<END_PRINT_COLOR;
 		Missile * newBullet = new Missile(randPos, transform,MISSILE_VITESSE);
 		#else
-		PRINT_ORANGE<<"COUCOU7"<<END_PRINT_COLOR;
 		const osg::Matrix& transf = FAirplaneModel->GetTransformation(TransformationSpace::TS_WORLD);
 		Missile * newBullet = new Missile(randPos, transf,MISSILE_VITESSE);
 		#endif
-		PRINT_ORANGE<<"COUCOU8"<<END_PRINT_COLOR;
 	    FRootNode->AddModel(newBullet->GetNode());
-		PRINT_ORANGE<<"COUCOU9"<<END_PRINT_COLOR;
 	    FMissiles.push_back(newBullet);
-		PRINT_ORANGE<<"COUCOU10"<<END_PRINT_COLOR;
 	}
 }

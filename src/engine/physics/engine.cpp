@@ -1,14 +1,17 @@
+// Include header
 #include "engine.h"
 
-
+// Include projet
 #include <terrain/helper.h>
 #include <terrain/const.h>
-
 #include <common/defines.h>
 
-
+// Constantes utiles
 #define MASS_VOL 1.2
 #define SURFACE 15
+
+
+// Helpers utiles
 inline float clamp(float x, float a, float b)
 {
     return x < a ? a : (x > b ? b : x);
@@ -35,9 +38,8 @@ Intersect PhysicsEngine::IsLandCollision(const osg::Vec3f& planePosition)
 	intersection.isValid = false;
 	// On convertit la position de l'avion en coordonnées texture centralisée
 	osg::Vec2f position = ComputeRelativePosition(planePosition);
-	//PRINT_ORANGE<<"Position centralisé "<<position.x()<<" "<position.y()<<END_PRINT_COLOR;
-	//PRINT_ORANGE<<"Position centralisé "<<VEC2_TO_STREAM(position)<<END_PRINT_COLOR;
-	//PRINT_ORANGE<<"Hateur de l'objet "<<planePosition.y()<<END_PRINT_COLOR;
+
+	// On est au delas des limites du terrain c-a-d dans l'eau
 	if(position.x()>0.5 || position.y()>0.5 || position.x()<-0.5 || position.y()<-0.5)
 	{
 		// on est en decors de la map de base, il suffit de tester la hauteur
@@ -77,7 +79,6 @@ Intersect PhysicsEngine::IsLandCollision(const osg::Vec3f& planePosition)
 
 		
 		double compareTo = planePosition.y();
-		//PRINT_ORANGE<<"Compare " <<compareTo<<" VS "<<height<<END_PRINT_COLOR;
 		// Sommes nous en dessous du terrain?
 		#ifdef VRJUGGLER
 		if((height) > compareTo)
@@ -85,8 +86,7 @@ Intersect PhysicsEngine::IsLandCollision(const osg::Vec3f& planePosition)
 		if((height) < compareTo)
 		#endif
 		{
-			//PRINT_ORANGE<<"Collision sol"<<END_PRINT_COLOR;
-			
+			// Collision sol
 			intersection.isValid = true;
 			intersection.position = osg::Vec3f(planePosition.x(),height,planePosition.z());
 			return intersection;
@@ -101,7 +101,6 @@ Intersect PhysicsEngine::IsTooFarCollision(const osg::Vec3f& parObjectPos, const
 	osg::Vec3f distance = parObjectPos - parPlane;
 	Intersect intersection;
 	intersection.isValid = false;
-	//PRINT_ORANGE<<distance.length()<<END_PRINT_COLOR;
 	if((distance.length())>TerrainConst::TailleBoite)
 	{
 		//PRINT_ORANGE<<"Collision boite"<<END_PRINT_COLOR;
@@ -142,6 +141,7 @@ void PhysicsEngine::DestroyHouse(int parHouse)
 	FHouses[parHouse]->Destroy();
 }
 
+// Equation physique de l'avion, non utilisée pour l'instant
 osg::Vec3f PhysicsEngine::ComputeNewSpeed(const osg::Vec3f& parCurrentPlaneSpeed, const osg::Matrix& parTransform, const osg::Quat& parQuat, double parDelta)
 {
 	osg::Vec3f finalSpeed = parCurrentPlaneSpeed;

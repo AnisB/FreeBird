@@ -16,7 +16,6 @@ class FXSplash : public FXBase
 
 	protected:
 		osg::ref_ptr<osgParticle::ExplosionDebrisEffect> FExplosionDebri;
-
 		SceneNode FAttachedSceneNode;
 };
 

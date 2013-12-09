@@ -1,8 +1,12 @@
+//Include header
 #include "helper.h"
 
+// Include auters
 #include <sstream>
 #include <common/defines.h>
 #include <iostream>
+
+
 std::string ConvertFloatToString(float parVal)
 {
 	std::stringstream sStream;

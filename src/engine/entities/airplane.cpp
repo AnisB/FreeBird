@@ -24,10 +24,7 @@ void Airplane::Build(Root * parRootNode)
 	FNode =  new SceneNode();
 	FNode->InitObject();
 	FNode->AddChild(FModelNode);
-	//FBoum = new FXExplosion();
-	//FBoum->InitFX();
 
-	//parRootNode->AddModel(FBoum->GetNode());
 	parRootNode->AddModel(FNode);
 }
 

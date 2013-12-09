@@ -13,8 +13,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  **/
-#ifndef DONUT_SINGLETON
-#define DONUT_SINGLETON
+
+ // Ce code est tiré de ma base de code personnelle
+#ifndef SINGLETON
+#define SINGLETON
 
 #include <iostream>
 
