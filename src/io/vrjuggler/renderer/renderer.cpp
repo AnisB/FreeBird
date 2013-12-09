@@ -116,22 +116,21 @@ void Renderer::UpdateScene(float parDelta)
 		osg::Matrix toWorld;
 		toWorld=osg::Matrix::inverse(FRoot->GetDynamicModels()->GetNode()->getMatrix());
 		toWorld.postMult(FEpave->GetNode()->getMatrix());
+		toWorld.postMult(osg::Matrix::translate(osg::Vec3f(0.0,-3.0,0.0)));
 		//PRINT_ORANGE<<VEC3_TO_STREAM(osg::Matrix::inverse(FRoot->GetDynamicModels()->GetNode()->getMatrix()).getTrans())<<END_PRINT_COLOR;
-		if(PhysicsEngine::Instance().IsLandCollision(toWorld.getTrans()))
+		Intersect inter = PhysicsEngine::Instance().IsLandCollision(toWorld.getTrans());
+		if(inter.isValid)
 		{
 			FRoot->RemoveStaticModel(FAirPlane);
 			
-			//osg::Matrix epaveMatrix = FEpave->GetNode()->getMatrix();
-			//osg::Quat rotation(FRoot->GetDynamicModels()->GetNode()->getMatrix().getRotate());
 			osg::Matrix transf(FRoot->GetDynamicModels()->GetNode()->getMatrix());
-			transf =osg::Matrix::inverse(transf);
-			//PRINT_ORANGE<<VEC3_TO_STREAM(translation)<<END_PRINT_COLOR;
-			//epaveMatrix.postMult(osg::Matrix::translate(-translation));			
-			//epaveMatrix.postMult(osg::Matrix::inverse(osg::Matrix::rotate(rotation)));
+			transf = osg::Matrix::inverse(transf);
+
 			FEpave->GetNode()->setMatrix(transf);
 			FEpave->Translate(osg::Vec3f(0.0,5,-10.0));
+			
+			//FEpave->Translate(-inter.position);
 			FRoot->AddModel(FEpave);
-			//epaveMatrix.postMult(osg::Matrix::translate(osg::Vec3f(0.0,-5.0,0.0)));
 			
 			FIsAlive = false;
 		}

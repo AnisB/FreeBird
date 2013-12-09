@@ -60,19 +60,24 @@ void Mitrailleuse::UpdateBullet(double parDelta)
 		// On update
 		(*proj)->Update(parDelta);
 		// Collsion avec le sol?
-		if(FPhysicsEngine.IsLandCollision((*proj)->GetNode()->GetPosition()))
+		if(FPhysicsEngine.IsLandCollision((*proj)->GetNode()->GetPosition()).isValid)
 		{
 			FXExplosion explosion;
 			explosion.InitFX((*proj)->GetNode()->GetPosition(),BULLET_SCALE);
 			#ifndef VR_JUGGLER
 			FRootNode->GetDynamicModels()->GetNode()->addChild(explosion.GetNode()->GetNode());
 			#else
-			FRootNode->GetDynamicModels()->AddChild(explosion.GetNode());
+			//FRootNode->GetDynamicModels()->AddChild(explosion.GetNode());
+			FRootNode->GetDynamicModels()->GetNode()->addChild(explosion.GetNode()->GetNode());			
 			#endif
 			toRemove.push_back(proj);
 		}
 		// trop loin, on le detruit
-		else if(FPhysicsEngine.IsTooFarCollision(FAirplaneNode->GetPosition(), (*proj)->GetNode()->GetPosition()))
+		#ifdef VRJUGGLER
+		else if(FPhysicsEngine.IsTooFarCollision(FAirplaneNode->GetPositionInv(), (*proj)->GetNode()->GetPosition()).isValid)
+		#else
+		else if(FPhysicsEngine.IsTooFarCollision(FAirplaneNode->GetPosition(), (*proj)->GetNode()->GetPosition()).isValid)
+		#endif
 		{
 			toRemove.push_back(proj);
 		}
@@ -96,22 +101,23 @@ void Mitrailleuse::UpdateMissile(double parDelta)
 		// On update
 		(*proj)->Update(parDelta);
 		// Collsion avec le sol?
-		if(FPhysicsEngine.IsLandCollision((*proj)->GetNode()->GetPosition()))
+		if(FPhysicsEngine.IsLandCollision((*proj)->GetNode()->GetPosition()).isValid)
 		{
 			FXExplosion explosion;
 			explosion.InitFX((*proj)->GetNode()->GetPosition(),MISSILE_SCALE);
 			#ifndef VR_JUGGLER
 			FRootNode->GetDynamicModels()->GetNode()->addChild(explosion.GetNode()->GetNode());
 			#else
-			FRootNode->GetDynamicModels()->AddChild(explosion.GetNode());
+			//FRootNode->GetDynamicModels()->AddChild(explosion.GetNode());
+			FRootNode->GetDynamicModels()->GetNode()->addChild(explosion.GetNode()->GetNode());			
 			#endif
 			toRemove.push_back(proj);
 		}
 		// trop loin, on le detruit
 		#ifdef VRJUGGLER
-		else if(FPhysicsEngine.IsTooFarCollision(FAirplaneNode->GetPositionInv(), (*proj)->GetNode()->GetPosition()))
+		else if(FPhysicsEngine.IsTooFarCollision(FAirplaneNode->GetPositionInv(), (*proj)->GetNode()->GetPosition()).isValid)
 		#else
-		else if(FPhysicsEngine.IsTooFarCollision(FAirplaneNode->GetPosition(), (*proj)->GetNode()->GetPosition()))
+		else if(FPhysicsEngine.IsTooFarCollision(FAirplaneNode->GetPosition(), (*proj)->GetNode()->GetPosition()).isValid)
 		#endif
 		{
 			toRemove.push_back(proj);

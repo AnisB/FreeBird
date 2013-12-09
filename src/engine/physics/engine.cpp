@@ -16,8 +16,10 @@ PhysicsEngine::~PhysicsEngine()
 }
 
 
-bool PhysicsEngine::IsLandCollision(const osg::Vec3f& planePosition)
+Intersect PhysicsEngine::IsLandCollision(const osg::Vec3f& planePosition)
 {
+	Intersect intersection;
+	intersection.isValid = false;
 	// On convertit la position de l'avion en coordonnées texture centralisée
 	osg::Vec2f position = ComputeRelativePosition(planePosition);
 	//PRINT_ORANGE<<"Position centralisé "<<position.x()<<" "<position.y()<<END_PRINT_COLOR;
@@ -33,7 +35,9 @@ bool PhysicsEngine::IsLandCollision(const osg::Vec3f& planePosition)
 		#endif
 		{
 			PRINT_ORANGE<<"Collision eau"<<END_PRINT_COLOR;
-			return true;
+			intersection.isValid = true;
+			intersection.position = osg::Vec3f(planePosition.x(),TerrainConst::WaterHeight,planePosition.z());
+			return intersection;
 		}
 	}  
 	
@@ -55,7 +59,7 @@ bool PhysicsEngine::IsLandCollision(const osg::Vec3f& planePosition)
 		height = TerrainConst::WaterHeight-height;
 		#else
 		height*=TerrainConst::WaterHeight;
-		height = height-TerrainConst::WaterHeight+1;
+		height = height-TerrainConst::WaterHeight;
 		#endif
 
 		
@@ -69,22 +73,26 @@ bool PhysicsEngine::IsLandCollision(const osg::Vec3f& planePosition)
 		#endif
 		{
 			//PRINT_ORANGE<<"Collision sol"<<END_PRINT_COLOR;
-			// Collision
-			return true;
+			
+			intersection.isValid = true;
+			intersection.position = osg::Vec3f(planePosition.x(),height,planePosition.z());
+			return intersection;
 		}
 	}
 
-	return false;
+	return intersection;
 }
 
-bool PhysicsEngine::IsTooFarCollision(const osg::Vec3f& parObjectPos, const osg::Vec3f& parPlane)
+Intersect PhysicsEngine::IsTooFarCollision(const osg::Vec3f& parObjectPos, const osg::Vec3f& parPlane)
 {
 	osg::Vec3f distance = parObjectPos - parPlane;
+	Intersect intersection;
+	intersection.isValid = false;
 	//PRINT_ORANGE<<distance.length()<<END_PRINT_COLOR;
 	if((distance.length())>TerrainConst::TailleBoite)
 	{
 		//PRINT_ORANGE<<"Collision boite"<<END_PRINT_COLOR;
-		return true;
+		intersection.isValid = true;
 	}
-	return false;
+	return intersection;
 }

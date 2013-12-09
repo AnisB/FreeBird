@@ -6,14 +6,25 @@
 #include <common/singleton.h>
 #include <resources/resourcemanager.h>
 
+
+struct Intersect
+{
+	Intersect(bool parVal = false)
+	{
+		isValid = parVal;
+	}
+	bool isValid;
+	osg::Vec3f position;
+};
+
 class PhysicsEngine: public Singleton<PhysicsEngine>
 {
 public:
 	PhysicsEngine();
 	~PhysicsEngine();
 
-	bool IsLandCollision(const osg::Vec3f& planePosition);
-	bool IsTooFarCollision(const osg::Vec3f& parObjectPos, const osg::Vec3f& parPlane);
+	Intersect IsLandCollision(const osg::Vec3f& planePosition);
+	Intersect IsTooFarCollision(const osg::Vec3f& parObjectPos, const osg::Vec3f& parPlane);
 
 
 protected:
