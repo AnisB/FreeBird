@@ -30,8 +30,8 @@
   *
   *************** <auto-copyright.pl END do not edit this line> ***************/
  
- #ifndef _VRJ_OSG_APP_H_
- #define _VRJ_OSG_APP_H_
+ #ifndef _VRJ_OSG_APP_H2_
+ #define _VRJ_OSG_APP_H2_
  
  #include <vrj/vrjConfig.h>
  
@@ -48,22 +48,22 @@
  
  #include <osgUtil/SceneView>
  #include <osgUtil/UpdateVisitor>
- 
+ #include <gadget/Type/PositionInterface.h>
  
  namespace vrj
  {
  
- class OsgApp : public GlApp
+ class OsgAppCustom : public GlApp
  {
  public:
-    OsgApp(Kernel* kern = NULL)
+    OsgAppCustom(Kernel* kern = NULL)
        : GlApp(kern)
        , mFrameNumber(0)
     {
        ;
     }
  
-    virtual ~OsgApp()
+    virtual ~OsgAppCustom()
     {
        ;
     }
@@ -156,7 +156,7 @@
     gadget::PositionInterface mHead;
  };
  
- inline void OsgApp::contextInit()
+ inline void OsgAppCustom::contextInit()
  {
     unsigned int unique_context_id = GlDrawManager::instance()->getCurrentContext();
  
@@ -206,7 +206,7 @@
  }
  
  
- inline void OsgApp::draw()
+ inline void OsgAppCustom::draw()
  {
     glClear(GL_DEPTH_BUFFER_BIT);
  
@@ -276,7 +276,7 @@
     //Draw the scene
     // NOTE: It is not safe to call osgUtil::SceneView::update() here; it
     // should only be called by a single thread. The equivalent of calling
-    // osgUtil::SceneView::update() is in vrj::OsgApp::update().
+    // osgUtil::SceneView::update() is in vrj::OsgAppCustom::update().
     sv->cull();
     sv->draw();
  
@@ -297,4 +297,4 @@
  }
  
  
- #endif /* _VRJ_OSG_APP_H_
+ #endif /* _VRJ_OSG_APP_H_*/

@@ -12,7 +12,7 @@ static float PLANE_SPEED =  20.0;
 #define HYPER_SPEED 5.0
 
 Renderer::Renderer(vrj::Kernel * parKernel) 
-: vrj::OsgApp(parKernel)
+: vrj::OsgAppCustom(parKernel)
 , FB0State(gadget::Digital::OFF)
 , FB1State(gadget::Digital::OFF)
 , FB2State(gadget::Digital::OFF)
@@ -58,7 +58,7 @@ void Renderer::latePreFrame()
     gmtl::invert( world_transform_Trw, curPos_Twr ); // inverse la seconde matrice dans la première
 
     // Finish updating the scene graph.
-    vrj::OsgApp::latePreFrame();
+    vrj::OsgAppCustom::latePreFrame();
 }
 void Renderer::intraFrame()
 {
@@ -121,6 +121,7 @@ void Renderer::UpdateScene(float parDelta)
 		Intersect inter = PhysicsEngine::Instance().IsLandCollision(toWorld.getTrans());
 		if(inter.isValid)
 		{
+			
 			FRoot->RemoveStaticModel(FAirPlane);
 			
 			osg::Matrix transf(FRoot->GetDynamicModels()->GetNode()->getMatrix());
@@ -133,6 +134,7 @@ void Renderer::UpdateScene(float parDelta)
 			FRoot->AddModel(FEpave);
 			
 			FIsAlive = false;
+			
 		}
 	}
 }

@@ -17,12 +17,12 @@
 #include <input/nav.h>
 
 //External icludess
+#include "osgapp.h"
 #include <vrj/Draw/OSG/OsgApp.h>
 
 
 
-
-class Renderer : public vrj::OsgApp
+class Renderer : public vrj::OsgAppCustom
 {
 	public:		
 		Renderer(vrj::Kernel * parVrjKernel);

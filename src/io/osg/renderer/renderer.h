@@ -76,6 +76,7 @@ class Renderer : public Singleton<Renderer>
 		Airplane * FAirplane;
 		Mitrailleuse FMitrailleuse;
 
+		bool FIsAlive;
 		// OSG Viewer
 		osgViewer::Viewer FViewer;
 

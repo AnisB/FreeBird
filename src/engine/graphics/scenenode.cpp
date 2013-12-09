@@ -42,6 +42,13 @@ void SceneNode::AddChild(SceneNode * parNode)
 	FSons.push_back(parNode);
 }
 
+void SceneNode::RemoveChild(SceneNode * parNode)
+{
+	parNode->SetParent(NULL);
+	FModelTrans->removeChild(parNode->GetNode());
+	//FSons.erase(parNode);
+}
+
 void SceneNode::SetParent(SceneNode * parNode)
 {
 	FParentNode = parNode;

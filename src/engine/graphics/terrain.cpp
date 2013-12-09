@@ -7,7 +7,8 @@
 
 #include <terrain/const.h>
 #include <terrain/helper.h>
-
+#include <physics/engine.h>
+#include <entities/house.h>
 
 
 #include <fstream>
@@ -110,7 +111,7 @@ void Terrain::LoadDecors()
 
 #else
     Palmiers();
-    House();
+    HouseGeneration();
 
 #endif
 
@@ -191,22 +192,23 @@ void Terrain::Palmiers()
         FDecors->AddChild(palmier);
     }
 }
-void Terrain::House()
+void Terrain::HouseGeneration()
 {
     std::ifstream infile("data/terrain/base/maisons.txt");
     int a, b, c;
     while (infile >> a >> b >> c)
     {
         PRINT_ORANGE<<"Une  maison à "<< a<<" "<<b<<" "<<c<<" "<<END_PRINT_COLOR;
-        SceneObject* maison = new SceneObject(HOUSE);
-        maison->InitObject();
-        maison->Translate(osg::Vec3f((c-1024)*4.9,(1.0-(float)b/255.0)*1080+125,-(a-1024)*4.9));
-        maison->Pitch(MathTools::PI/2);
+		House* maison = new House();
+        maison->Init(osg::Vec3f((c-1024)*4.9,(1.0-(float)b/255.0)*1080+125,-(a-1024)*4.9));
+		SceneNode* node = maison->GetNode();
+        node->Pitch(MathTools::PI/2);
         float randVal = (float)(rand() % 5 +5);
         randVal /=10;
-        maison->Roll(1*randVal);
-        maison->Scale(osg::Vec3f(2,2,2));
-        FDecors->AddChild(maison);
+        node->Roll(1*randVal);
+        node->Scale(osg::Vec3f(2,2,2));
+		PhysicsEngine::Instance().AddHouse(maison);
+        FDecors->AddChild(node);
     }
 }
 
@@ -236,15 +238,17 @@ void Terrain::HouseVR()
     while (infile >> a >> b >> c)
     {
         PRINT_ORANGE<<"Une  maison à "<< a<<" "<<b<<" "<<c<<" "<<END_PRINT_COLOR;
-        SceneObject* maison = new SceneObject(HOUSE);
-        maison->InitObject();
-        maison->Translate(osg::Vec3f(-(c-1024)/2.0,-((1.0-(float)b/255.0))*TerrainConst::WaterHeight,-(a-1024)/2.0));
-        maison->Pitch(-MathTools::PI/2);
+        House* maison = new House();
+        maison->Init(osg::Vec3f(-(c-1024)/2.0,-((1.0-(float)b/255.0))*TerrainConst::WaterHeight,-(a-1024)/2.0));
+        SceneNode* node = maison->GetNode();
+		//maison->Translate(osg::Vec3f(-(c-1024)/2.0,-((1.0-(float)b/255.0))*TerrainConst::WaterHeight,-(a-1024)/2.0));
+        node->Pitch(-MathTools::PI/2);
         float randVal = (float)(rand() % 5 +5);
         randVal /=10;
-        maison->Roll(1*randVal);
-        maison->Scale(osg::Vec3f(0.5,0.5,0.5));
-        FDecors->AddChild(maison);
+        node->Roll(1*randVal);
+        node->Scale(osg::Vec3f(0.5,0.5,0.5));
+		PhysicsEngine::Instance().AddHouse(maison);
+        FDecors->AddChild(node);
     }
 }
 

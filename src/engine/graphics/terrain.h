@@ -42,7 +42,7 @@ class Terrain
 		// Creation des decors
 		void LoadDecors();
 		void Palmiers();
-		void House();
+		void HouseGeneration();
 		void PalmiersVR();
 		void HouseVR();
 

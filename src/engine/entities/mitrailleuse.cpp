@@ -7,6 +7,8 @@
 #define DUREE_COOLDOWN 0.2
 #define BULLET_SCALE 0.5
 
+#define HOUSE_SCALE 3
+
 #define DUREE_COOLDOWN_MISS 1.0
 #define MISSILE_SCALE 10.0
 
@@ -40,7 +42,7 @@ void Mitrailleuse::Update(double parDelta)
 		FCoolDown -= parDelta; 
 		if (FCoolDown<=0.0)
 		{
-			PRINT_ORANGE<<"COOLDOWN ETAT: " <<FCoolDown<<END_PRINT_COLOR;
+			//PRINT_ORANGE<<"COOLDOWN ETAT: " <<FCoolDown<<END_PRINT_COLOR;
 			TirerBalle();
 			FCoolDown = DUREE_COOLDOWN;
 
@@ -59,18 +61,48 @@ void Mitrailleuse::UpdateBullet(double parDelta)
 	{
 		// On update
 		(*proj)->Update(parDelta);
+
+		// Collision avec une maison
+		int result = FPhysicsEngine.IsHouseCollision((*proj)->GetNode()->GetPosition());
+		if(result>=0)
+		{
+			FXExplosion explosion;
+			#ifndef VR_JUGGLER
+			explosion.InitFX((*proj)->GetNode()->GetPosition(),HOUSE_SCALE);
+			FRootNode->GetDynamicModels()->GetNode()->addChild(explosion.GetNode()->GetNode());
+			#else
+			//FRootNode->GetDynamicModels()->AddChild(explosion.GetNode());
+			//FRootNode->GetDynamicModels()->GetNode()->addChild(explosion.GetNode()->GetNode());			
+			#endif
+			
+			if(FPhysicsEngine.Degats(result,3))
+			{
+				FXExplosion explosion;
+				#ifndef VR_JUGGLER
+				explosion.InitFX((*proj)->GetNode()->GetPosition(),HOUSE_SCALE);
+				FRootNode->GetDynamicModels()->GetNode()->addChild(explosion.GetNode()->GetNode());
+				#else
+				//FRootNode->GetDynamicModels()->AddChild(explosion.GetNode());
+				//FRootNode->GetDynamicModels()->GetNode()->addChild(explosion.GetNode()->GetNode());	
+				#endif
+			}
+			toRemove.push_back(proj);
+		}
+
+
 		// Collsion avec le sol?
 		if(FPhysicsEngine.IsLandCollision((*proj)->GetNode()->GetPosition()).isValid)
 		{
 			FXExplosion explosion;
-			explosion.InitFX((*proj)->GetNode()->GetPosition(),BULLET_SCALE);
 			#ifndef VR_JUGGLER
+			explosion.InitFX((*proj)->GetNode()->GetPosition(),BULLET_SCALE);
 			FRootNode->GetDynamicModels()->GetNode()->addChild(explosion.GetNode()->GetNode());
 			#else
 			//FRootNode->GetDynamicModels()->AddChild(explosion.GetNode());
-			FRootNode->GetDynamicModels()->GetNode()->addChild(explosion.GetNode()->GetNode());			
+			//FRootNode->GetDynamicModels()->GetNode()->addChild(explosion.GetNode()->GetNode());			
 			#endif
 			toRemove.push_back(proj);
+
 		}
 		// trop loin, on le detruit
 		#ifdef VRJUGGLER
@@ -100,6 +132,34 @@ void Mitrailleuse::UpdateMissile(double parDelta)
 	{
 		// On update
 		(*proj)->Update(parDelta);
+		// Collision avec une maison
+		int result = FPhysicsEngine.IsHouseCollision((*proj)->GetNode()->GetPosition());
+		if(result>=0)
+		{
+			FXExplosion explosion;
+			explosion.InitFX((*proj)->GetNode()->GetPosition(),MISSILE_SCALE);
+			#ifndef VR_JUGGLER
+			FRootNode->GetDynamicModels()->GetNode()->addChild(explosion.GetNode()->GetNode());
+			#else
+			//FRootNode->GetDynamicModels()->AddChild(explosion.GetNode());
+			FRootNode->GetDynamicModels()->GetNode()->addChild(explosion.GetNode()->GetNode());			
+			#endif
+			
+			if(FPhysicsEngine.Degats(result,30))
+			{
+				FXExplosion explosion;
+				//explosion.InitFX((*proj)->GetNode()->GetPosition(),HOUSE_SCALE);
+				explosion.InitFX((*proj)->GetNode()->GetPosition(),MISSILE_SCALE);
+				#ifndef VR_JUGGLER
+				FRootNode->GetDynamicModels()->GetNode()->addChild(explosion.GetNode()->GetNode());
+				#else
+				//FRootNode->GetDynamicModels()->AddChild(explosion.GetNode());
+				FRootNode->GetDynamicModels()->GetNode()->addChild(explosion.GetNode()->GetNode());	
+				#endif
+			}
+			
+			toRemove.push_back(proj);
+		}
 		// Collsion avec le sol?
 		if(FPhysicsEngine.IsLandCollision((*proj)->GetNode()->GetPosition()).isValid)
 		{

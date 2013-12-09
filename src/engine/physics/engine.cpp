@@ -96,3 +96,32 @@ Intersect PhysicsEngine::IsTooFarCollision(const osg::Vec3f& parObjectPos, const
 	}
 	return intersection;
 }
+
+bool PhysicsEngine::Degats(int parCible, float parVal)
+{
+	return FHouses[parCible]->Degats(parVal);
+}
+
+void PhysicsEngine::AddHouse(House* parHouse)
+{
+	FHouses.push_back(parHouse);
+}
+
+int PhysicsEngine::IsHouseCollision(const osg::Vec3f& planePosition)
+{
+	int counter = 0;
+	foreach(house,FHouses)
+	{
+		if((*house)->IsIntersect(planePosition))
+		{
+			return counter;
+		}
+		counter++;
+	}
+	return -1;
+}
+
+void PhysicsEngine::DestroyHouse(int parHouse)
+{
+	FHouses[parHouse]->Destroy();
+}

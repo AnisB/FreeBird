@@ -3,7 +3,7 @@
 
 #include <graphics/scenenode.h>
 #include "fxbase.h"
-#include <osgParticle/ExplosionEffect>
+#include "explode.h"
 
 class FXExplosion : public FXBase
 {
@@ -16,7 +16,7 @@ class FXExplosion : public FXBase
 
 	protected:
 		//osg::ref_ptr<osgParticle::ExplosionEffect> FExplosion;
-		osg::ref_ptr<osgParticle::ExplosionEffect> FExplosion;
+		osg::ref_ptr<osgParticle::Explode> FExplosion;
 		SceneNode FAttachedSceneNode;
 };
 

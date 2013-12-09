@@ -7,6 +7,7 @@ Renderer::Renderer()
 : FViewer()
 , FPhysicsEngine()
 , FLastFrameTime(0.0)
+, FIsAlive(true)
 {
 	FInputHandler = new InputEventHandler();
 }
@@ -20,59 +21,73 @@ Renderer::~Renderer()
 
 void Renderer::UpdateScene(float parDelta)
 {	
-	if(FKeyHandler[Key::FOWARD])
+	if(FIsAlive)
 	{
-		FAirplane->Pitch(AirplaneRotation::ANTICLOCKWISE,parDelta);
-	}
+		if(FKeyHandler[Key::FOWARD])
+		{
+			FAirplane->Pitch(AirplaneRotation::ANTICLOCKWISE,parDelta);
+		}
 
-	if(FKeyHandler[Key::BACKWARD])
-	{
-		FAirplane->Pitch(AirplaneRotation::CLOCKWISE,parDelta);
-	}
+		if(FKeyHandler[Key::BACKWARD])
+		{
+			FAirplane->Pitch(AirplaneRotation::CLOCKWISE,parDelta);
+		}
 
-	if(FKeyHandler[Key::LEFT])
-	{
-		FAirplane->Roll(AirplaneRotation::ANTICLOCKWISE,parDelta);
-	}
-	if(FKeyHandler[Key::RIGHT])
-	{
-		FAirplane->Roll(AirplaneRotation::CLOCKWISE,parDelta);
-	}
+		if(FKeyHandler[Key::LEFT])
+		{
+			FAirplane->Roll(AirplaneRotation::ANTICLOCKWISE,parDelta);
+		}
+		if(FKeyHandler[Key::RIGHT])
+		{
+			FAirplane->Roll(AirplaneRotation::CLOCKWISE,parDelta);
+		}
 
-	if(FKeyHandler[Key::DIAGONAL_LEFT])
-	{
-		FAirplane->Yaw(AirplaneRotation::ANTICLOCKWISE,parDelta);
-	}
-	if(FKeyHandler[Key::DIAGONAL_RIGHT])
-	{
-		FAirplane->Yaw(AirplaneRotation::CLOCKWISE,parDelta);
-	}
-
-
-	if(FKeyHandler[Key::DEBUG0])
-	{
-		FCameraMan->ChangeFocalLength(true);
-	}
-	if(FKeyHandler[Key::DEBUG1])
-	{
-		FCameraMan->ChangeFocalLength(false);
-	}
-
-	//if(FButtonHandler[Button::LEFT])
-	{
-		FAirplane->Avance_Debug(parDelta);
-	}
-	FCameraMan->Update();
+		if(FKeyHandler[Key::DIAGONAL_LEFT])
+		{
+			FAirplane->Yaw(AirplaneRotation::ANTICLOCKWISE,parDelta);
+		}
+		if(FKeyHandler[Key::DIAGONAL_RIGHT])
+		{
+			FAirplane->Yaw(AirplaneRotation::CLOCKWISE,parDelta);
+		}
 
 
-	FRoot->UpdateTerrain(FAirplane->GetNode()->GetPosition());
-	FRoot->UpdateSkybox();
-	
-	if(FPhysicsEngine.IsLandCollision(FAirplane->GetNode()->GetPosition()).isValid)
-	{
-		PRINT_ORANGE<<"COLLISION DUDE"<<END_PRINT_COLOR;
+		if(FKeyHandler[Key::DEBUG0])
+		{
+			FCameraMan->ChangeFocalLength(true);
+		}
+		if(FKeyHandler[Key::DEBUG1])
+		{
+			FCameraMan->ChangeFocalLength(false);
+		}
+
+		//if(FButtonHandler[Button::LEFT])
+		{
+			FAirplane->Avance_Debug(parDelta);
+		}
+		FCameraMan->Update();
+
+
+		FRoot->UpdateTerrain(FAirplane->GetNode()->GetPosition());
+		FRoot->UpdateSkybox();
+		Intersect inter = FPhysicsEngine.IsLandCollision(FAirplane->GetNode()->GetPosition());
+		if(inter.isValid)
+		{
+			FRoot->RemoveModel(FAirplane->GetNode());
+			SceneObject * FEpave = new SceneObject("data/DRC/destroy.obj");
+			FEpave->InitObject();
+			FEpave->Translate(inter.position);
+			FEpave->Scale(osg::Vec3f(3.0,3.0,3.0));
+			FEpave->Yaw(MathTools::PI);
+			FRoot->AddModel(FEpave);
+			FXExplosion explosion;
+			explosion.InitFX(inter.position+osg::Vec3f(0.0,5.0,0.0),3);
+			FRoot->GetDynamicModels()->GetNode()->addChild(explosion.GetNode()->GetNode());			
+			PRINT_ORANGE<<"COLLISION DUDE"<<END_PRINT_COLOR;
+			FIsAlive = false;
+		}
+		FMitrailleuse.Update(parDelta);
 	}
-	FMitrailleuse.Update(parDelta);
 }
 
 

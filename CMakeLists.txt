@@ -31,9 +31,7 @@ set(JUGGLER_DIR "${INSTDIR}/packages")
 set(VJ_BASE_DIR "${JUGGLER_DIR}/usr")
 set(VJ_PLUGIN_DIR "${JUGGLER_DIR}/usr/lib/osgPlugins-2.6.0")
 set(COMPAT_LIB "${INSTDIR}/config/libcompat/")
-set(TIFF_LIB "/net/bonne/exports/stk_bonne_fedora/demos/Rollercoaster/src")
 
-set(OSG_PLUGINS "${VJ_PLUGIN_DIR}/osgdb_png.so ${VJ_PLUGIN_DIR}/osgdb_tiff.so")
 set(PNG "${JUGGLER_DIR}/usr/lib/libpng12.so.0")
 
 #Link to data file
