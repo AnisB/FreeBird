@@ -57,6 +57,10 @@ void Terrain::Animation(float parTime)
 	mat2.postMult(osg::Matrix::rotate(-0.05*parTime, osg::Vec3f(0.0,1.0,0.0)));
 	FBirds[1]->GetNode()->setMatrix(mat2);
 
+	osg::Matrix mat3 = FBirds[2]->GetNode()->getMatrix();
+	mat3.postMult(osg::Matrix::rotate(-0.1*parTime, osg::Vec3f(0.0,1.0,0.0)));
+	FBirds[2]->GetNode()->setMatrix(mat3);
+
 }
 void Terrain::InitVR()
 {
@@ -135,12 +139,19 @@ void Terrain::LoadDecors()
 	bird->Translate(osg::Vec3f(200,0.0,200.0));
 	FDecors->AddChild(bird);
 	FBirds.push_back(bird);
+
 	SceneObject * bird2 =  new SceneObject("data/models/bird/eagle.obj");
 	bird2->InitObject();
 	bird2->Translate(osg::Vec3f(200,0.0,400.0));
 	bird2->Scale(osg::Vec3f(10,10,10));
 	FDecors->AddChild(bird2);
 	FBirds.push_back(bird2);
+
+	SceneObject * bird3 =  new SceneObject("data/models/bird/birds.3ds");
+	bird3->InitObject();
+	bird3->Translate(osg::Vec3f(130,0.0,120.0));
+	FDecors->AddChild(bird3);
+	FBirds.push_back(bird3);
 }
 
 
